@@ -8,6 +8,8 @@ describe('DomainErrorTranslator', () => {
     expect(DomainErrorTranslator.translate(new Error('REGISTER_USER.NOT_MEET_DATA_TYPE_SPECIFICATION'))).toStrictEqual(new InvariantError('tidak dapat membuat user baru karena tipe data tidak sesuai'));
     expect(DomainErrorTranslator.translate(new Error('REGISTER_USER.USERNAME_LIMIT_CHAR'))).toStrictEqual(new InvariantError('tidak dapat membuat user baru karena karakter username melebihi batas limit'));
     expect(DomainErrorTranslator.translate(new Error('REGISTER_USER.USERNAME_CONTAIN_RESTRICTED_CHARACTER'))).toStrictEqual(new InvariantError('tidak dapat membuat user baru karena username mengandung karakter terlarang'));
+    expect(DomainErrorTranslator.translate(new Error('USER_LOGIN.NOT_CONTAIN_NEEDED_PROPERTY'))).toStrictEqual(new InvariantError('harus mengirimkan username dan password'));
+    expect(DomainErrorTranslator.translate(new Error('USER_LOGIN.NOT_MEET_DATA_TYPE_SPESIFICATION'))).toStrictEqual(new InvariantError('username dan password harus string'));
   });
 
   it('should return original error when error message is not needed to translate', () => {
