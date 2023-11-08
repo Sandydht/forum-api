@@ -36,8 +36,7 @@ describe('AuthenticationRepositoryPostgres', () => {
       const token = 'token';
 
       // Action & Assert
-      await expect(authenticationRepository.checkAvailabilityToken(token))
-        .rejects.toThrow(InvariantError);
+      await expect(authenticationRepository.checkAvailabilityToken(token)).rejects.toThrow(InvariantError);
     });
 
     it('should not throw InvariantError if token available', async () => {
@@ -47,8 +46,7 @@ describe('AuthenticationRepositoryPostgres', () => {
       await AuthenticationsTableTestHelper.addToken(token);
 
       // Action & Assert
-      await expect(authenticationRepository.checkAvailabilityToken(token))
-        .resolves.not.toThrow(InvariantError);
+      await expect(authenticationRepository.checkAvailabilityToken(token)).resolves.not.toThrow(InvariantError);
     });
   });
 

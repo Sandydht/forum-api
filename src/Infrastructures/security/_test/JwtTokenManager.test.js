@@ -4,7 +4,7 @@ const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const JwtTokenManager = require('../JwtTokenManager');
 
 describe('JwtTokenManager', () => {
-  describe('createRefreshToken', () => {
+  describe('createRefreshToken function', () => {
     it('should create refreshToken correctly', async () => {
       // Arrange
       const payload = {
@@ -55,8 +55,7 @@ describe('JwtTokenManager', () => {
       const accessToken = await jwtTokenManager.createAccessToken({ username: 'dicoding' });
 
       // Action & Assert
-      await expect(jwtTokenManager.verifyRefreshToken(accessToken))
-        .rejects.toThrow(InvariantError);
+      await expect(jwtTokenManager.verifyRefreshToken(accessToken)).rejects.toThrow(InvariantError);
     });
 
     it('should not throw InvariantError when refresh token verified', async () => {
@@ -65,8 +64,7 @@ describe('JwtTokenManager', () => {
       const refreshToken = await jwtTokenManager.createRefreshToken({ username: 'dicoding' });
 
       // Action & Assert
-      await expect(jwtTokenManager.verifyRefreshToken(refreshToken))
-        .resolves.not.toThrow(InvariantError);
+      await expect(jwtTokenManager.verifyRefreshToken(refreshToken)).resolves.not.toThrow(InvariantError);
     });
   });
 

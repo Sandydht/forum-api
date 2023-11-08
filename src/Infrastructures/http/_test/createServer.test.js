@@ -5,11 +5,13 @@ describe('HTTP server', () => {
   it('should response 404 when request unregistered route', async () => {
     // Arrange
     const server = await createServer({});
+
     // Action
     const response = await server.inject({
       method: 'GET',
       url: '/unregisteredRoute',
     });
+
     // Assert
     expect(response.statusCode).toEqual(404);
   });
@@ -21,7 +23,7 @@ describe('HTTP server', () => {
       fullname: 'Dicoding Indonesia',
       password: 'super_secret',
     };
-    const server = await createServer({}); // fake injection
+    const server = await createServer({});
 
     // Action
     const response = await server.inject({

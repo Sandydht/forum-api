@@ -26,10 +26,8 @@ describe('LoginUserUseCase', () => {
 
     mockUserRepository.getPasswordByUsername = jest.fn().mockImplementation(() => Promise.resolve('encrypted_password'));
     mockPasswordHash.comparePassword = jest.fn().mockImplementation(() => Promise.resolve());
-    mockAuthenticationTokenManager.createAccessToken = jest.fn()
-      .mockImplementation(() => Promise.resolve(mockNewAuth.accessToken));
-    mockAuthenticationTokenManager.createRefreshToken = jest.fn()
-      .mockImplementation(() => Promise.resolve(mockNewAuth.refreshToken));
+    mockAuthenticationTokenManager.createAccessToken = jest.fn().mockImplementation(() => Promise.resolve(mockNewAuth.accessToken));
+    mockAuthenticationTokenManager.createRefreshToken = jest.fn().mockImplementation(() => Promise.resolve(mockNewAuth.refreshToken));
     mockUserRepository.getIdByUsername = jest.fn().mockImplementation(() => Promise.resolve('user-123'));
     mockAuthenticationRepository.addToken = jest.fn().mockImplementation(() => Promise.resolve());
 
@@ -53,6 +51,7 @@ describe('LoginUserUseCase', () => {
     expect(mockPasswordHash.comparePassword).toBeCalledWith(useCasePayload.password, 'encrypted_password');
     expect(mockUserRepository.getIdByUsername).toBeCalledWith(useCasePayload.username);
     expect(mockAuthenticationTokenManager.createAccessToken).toBeCalledWith({ username: useCasePayload.username, id: 'user-123' });
+    expect(mockAuthenticationTokenManager.createRefreshToken).toBeCalledWith({ username: useCasePayload.username, id: 'user-123' });
     expect(mockAuthenticationRepository.addToken).toBeCalledWith(mockNewAuth.refreshToken);
   });
 });

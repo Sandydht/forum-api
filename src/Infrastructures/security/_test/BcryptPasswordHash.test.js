@@ -36,8 +36,7 @@ describe('BcryptPasswordHash', () => {
       const encryptedPassword = await bcryptEncryptionHelper.hash(plainPassword);
 
       // Action & Assert
-      await expect(bcryptEncryptionHelper.comparePassword(plainPassword, encryptedPassword))
-        .resolves.not.toThrow(AuthenticationError);
+      await expect(bcryptEncryptionHelper.comparePassword(plainPassword, encryptedPassword)).resolves.not.toThrow(AuthenticationError);
     });
   });
 });

@@ -24,8 +24,7 @@ class LoginUserUseCase {
     const id = await this._userRepository.getIdByUsername(username);
 
     const accessToken = await this._authenticationTokenManager.createAccessToken({ username, id });
-    const refreshToken = await this._authenticationTokenManager
-      .createRefreshToken({ username, id });
+    const refreshToken = await this._authenticationTokenManager.createRefreshToken({ username, id });
 
     const newAuth = new NewAuth({
       accessToken,
