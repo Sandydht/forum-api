@@ -23,11 +23,9 @@ describe('AddUserUseCase', () => {
     const mockUserRepository = new UserRepository();
     const mockPasswordHash = new PasswordHash();
 
-    mockUserRepository.verifyAvailableUsername = jest.fn()
-      .mockImplementation(() => Promise.resolve());
+    mockUserRepository.verifyAvailableUsername = jest.fn().mockImplementation(() => Promise.resolve());
     mockPasswordHash.hash = jest.fn().mockImplementation(() => Promise.resolve('encrypted_password'));
-    mockUserRepository.addUser = jest.fn()
-      .mockImplementation(() => Promise.resolve(mockRegisteredUser));
+    mockUserRepository.addUser = jest.fn().mockImplementation(() => Promise.resolve(mockRegisteredUser));
 
     const getUserUseCase = new AddUserUseCase({
       userRepository: mockUserRepository,

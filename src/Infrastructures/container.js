@@ -35,23 +35,23 @@ container.register([
     },
   },
   {
-    key: PasswordHash.name,
-    Class: BcryptPasswordHash,
-    parameter: {
-      dependencies: [
-        {
-          concrete: bcrypt,
-        },
-      ],
-    },
-  },
-  {
     key: AuthenticationRepository.name,
     Class: AuthenticationRepositoryPostgres,
     parameter: {
       dependencies: [
         {
           concrete: pool,
+        },
+      ],
+    },
+  },
+  {
+    key: PasswordHash.name,
+    Class: BcryptPasswordHash,
+    parameter: {
+      dependencies: [
+        {
+          concrete: bcrypt,
         },
       ],
     },
