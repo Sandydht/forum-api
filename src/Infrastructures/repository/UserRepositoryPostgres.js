@@ -1,6 +1,6 @@
-const UserRepository = require('../../Domains/users/UserRepository');
 const InvariantError = require('../../Commons/exceptions/InvariantError');
 const RegisteredUser = require('../../Domains/users/entities/RegisteredUser');
+const UserRepository = require('../../Domains/users/UserRepository');
 
 class UserRepositoryPostgres extends UserRepository {
   constructor(pool, idGenerator) {
@@ -32,6 +32,7 @@ class UserRepositoryPostgres extends UserRepository {
     };
 
     const result = await this._pool.query(query);
+
     return new RegisteredUser({ ...result.rows[0] });
   }
 
@@ -63,6 +64,7 @@ class UserRepositoryPostgres extends UserRepository {
     }
 
     const { id } = result.rows[0];
+
     return id;
   }
 }

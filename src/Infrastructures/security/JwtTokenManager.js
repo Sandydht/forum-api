@@ -7,12 +7,12 @@ class JwtTokenManager extends AuthenticationTokenManager {
     this._jwt = jwt;
   }
 
-  async createRefreshToken(payload) {
-    return this._jwt.generate(payload, process.env.REFRESH_TOKEN_KEY);
-  }
-
   async createAccessToken(payload) {
     return this._jwt.generate(payload, process.env.ACCESS_TOKEN_KEY);
+  }
+
+  async createRefreshToken(payload) {
+    return this._jwt.generate(payload, process.env.REFRESH_TOKEN_KEY);
   }
 
   async verifyRefreshToken(token) {

@@ -1,5 +1,7 @@
 class LogoutUserUseCase {
-  constructor({ authenticationRepository }) {
+  constructor({
+    authenticationRepository,
+  }) {
     this._authenticationRepository = authenticationRepository;
   }
 
@@ -12,7 +14,6 @@ class LogoutUserUseCase {
 
   _validatePayload(payload) {
     const { refreshToken } = payload;
-
     if (!refreshToken) {
       throw new Error('LOGOUT_USER_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN');
     }

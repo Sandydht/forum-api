@@ -1,5 +1,5 @@
 const UserLogin = require('../../Domains/users/entities/UserLogin');
-const NewAuth = require('../../Domains/authentications/entities/NewAuth');
+const NewAuthentication = require('../../Domains/authentications/entities/NewAuth');
 
 class LoginUserUseCase {
   constructor({
@@ -23,18 +23,19 @@ class LoginUserUseCase {
 
     const id = await this._userRepository.getIdByUsername(username);
 
-    const [accessToken, refreshToken] = await Promise.all([
-      this._authenticationTokenManager.createAccessToken({ username, id }),
-      this._authenticationTokenManager.createRefreshToken({ username, id }),
-    ]);
+    const accessToken = await this._authenticationTokenManager
+      .createAccessToken({ username, id });
+    const refreshToken = await this._authenticationTokenManager
+      .createRefreshToken({ username, id });
 
-    const newAuth = new NewAuth({
+    const newAuthentication = new NewAuthentication({
       accessToken,
       refreshToken,
     });
 
-    await this._authenticationRepository.addToken(newAuth.refreshToken);
-    return newAuth;
+    await this._authenticationRepository.addToken(newAuthentication.refreshToken);
+
+    return newAuthentication;
   }
 }
 

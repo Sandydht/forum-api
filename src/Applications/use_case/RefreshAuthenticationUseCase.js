@@ -1,5 +1,8 @@
 class RefreshAuthenticationUseCase {
-  constructor({ authenticationRepository, authenticationTokenManager }) {
+  constructor({
+    authenticationRepository,
+    authenticationTokenManager,
+  }) {
     this._authenticationRepository = authenticationRepository;
     this._authenticationTokenManager = authenticationTokenManager;
   }
@@ -24,7 +27,7 @@ class RefreshAuthenticationUseCase {
     }
 
     if (typeof refreshToken !== 'string') {
-      throw new Error('REFRESH_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPESIFICATION');
+      throw new Error('REFRESH_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }

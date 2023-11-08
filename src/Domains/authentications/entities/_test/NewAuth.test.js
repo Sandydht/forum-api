@@ -12,7 +12,7 @@ describe('NewAuth entities', () => {
     expect(() => new NewAuth(payload)).toThrowError('NEW_AUTH.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
-  it('should throw error when payload not meet data type spesification', () => {
+  it('should throw error when payload not meet data type specification', () => {
     // Arrange
     const payload = {
       accessToken: 'accessToken',
@@ -20,10 +20,10 @@ describe('NewAuth entities', () => {
     };
 
     // Action & Assert
-    expect(() => new NewAuth(payload)).toThrowError('NEW_AUTH.NOT_MEET_DATA_TYPE_SPESIFICATION');
+    expect(() => new NewAuth(payload)).toThrowError('NEW_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
-  it('should create NewAuth object correctly', () => {
+  it('should create NewAuth entities correctly', () => {
     // Arrange
     const payload = {
       accessToken: 'accessToken',

@@ -1,5 +1,5 @@
-const AuthenticationRepository = require('../../Domains/authentications/AuthenticationRepository');
 const InvariantError = require('../../Commons/exceptions/InvariantError');
+const AuthenticationRepository = require('../../Domains/authentications/AuthenticationRepository');
 
 class AuthenticationRepositoryPostgres extends AuthenticationRepository {
   constructor(pool) {
@@ -9,7 +9,7 @@ class AuthenticationRepositoryPostgres extends AuthenticationRepository {
 
   async addToken(token) {
     const query = {
-      text: 'INSERT INTO authentications VALUES($1)',
+      text: 'INSERT INTO authentications VALUES ($1)',
       values: [token],
     };
 
