@@ -14,7 +14,7 @@ class LogoutUserUseCase {
     const { refreshToken } = payload;
 
     if (!refreshToken) {
-      throw new Error('LOGOUT_USER_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY');
+      throw new Error('LOGOUT_USER_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN');
     }
 
     if (typeof refreshToken !== 'string') {

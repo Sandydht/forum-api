@@ -3,13 +3,13 @@ const AuthenticationRepository = require('../../../Domains/authentications/Authe
 const LogoutUserUseCase = require('../LogoutUserUseCase');
 
 describe('LogoutUserUseCase', () => {
-  it('should throw error if use case payload not contain needed property', async () => {
+  it('should throw error if use case payload not contain refresh token', async () => {
     // Arrange
     const useCasePayload = {};
     const logoutUserUseCase = new LogoutUserUseCase({});
 
     // Action & Assert
-    await expect(logoutUserUseCase.execute(useCasePayload)).rejects.toThrowError('LOGOUT_USER_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY');
+    await expect(logoutUserUseCase.execute(useCasePayload)).rejects.toThrowError('LOGOUT_USER_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN');
   });
 
   it('should throw error if refresh token not string', async () => {
