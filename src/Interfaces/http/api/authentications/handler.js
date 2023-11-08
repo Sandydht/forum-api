@@ -1,5 +1,7 @@
 const autoBind = require('auto-bind');
 const LoginUserUseCase = require('../../../../Applications/use_case/LoginUserUseCase');
+const RefreshAuthenticationUseCase = require('../../../../Applications/use_case/RefreshAuthenticationUseCase');
+const LogoutUserUseCase = require('../../../../Applications/use_case/LogoutUserUseCase');
 
 class AuthenticationsHandler {
   constructor(container) {
@@ -20,6 +22,26 @@ class AuthenticationsHandler {
     });
     response.code(201);
     return response;
+  }
+
+  async putAuthenticationHandler(request) {
+    const refreshAuthenticationUseCase = this._container.getInstance(RefreshAuthenticationUseCase.name);
+    const accessToken = await refreshAuthenticationUseCase.execute(request.payload);
+
+    return {
+      status: 'success',
+      data: {
+        accessToken,
+      },
+    };
+  }
+
+  async deleteAuthenticationHandler(request) {
+    const logoutUserUseCase = this._container.getInstance(LogoutUserUseCase.name);
+    await logoutUserUseCase.execute(request.payload);
+    return {
+      status: 'success',
+    };
   }
 }
 
