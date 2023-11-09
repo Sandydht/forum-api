@@ -75,7 +75,7 @@ describe('UserRepositoryPostgres', () => {
     });
   });
 
-  describe('getPasswordByUsername', () => {
+  describe('getPasswordByUsername function', () => {
     it('should throw InvariantError when user not found', () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
@@ -98,7 +98,7 @@ describe('UserRepositoryPostgres', () => {
     });
   });
 
-  describe('getIdByUsername', () => {
+  describe('getIdByUsername function', () => {
     it('should throw InvariantError when user not found', async () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
@@ -117,6 +117,25 @@ describe('UserRepositoryPostgres', () => {
 
       // Assert
       expect(userId).toEqual('user-321');
+    });
+  });
+
+  describe('verifyAvailableId function', () => {
+    it('should throw InvariantError when id not available', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(userRepositoryPostgres.verifyAvailableId('user-123')).rejects.toThrowError(InvariantError);
+    });
+
+    it('should not throw InvariantError when id available', async () => {
+      // Arrange
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(userRepositoryPostgres.verifyAvailableId('user-123')).resolves.not.toThrowError(InvariantError);
     });
   });
 });
