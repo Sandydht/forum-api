@@ -68,7 +68,7 @@ describe('/threads endpoint', () => {
       expect(responseJson.data.addedThread.owner).toBeDefined();
     });
 
-    it('should response 401 when user is not logged in', async () => {
+    it('should response 401 when user not logged in', async () => {
       // Arrange
       const requestPayload = {
         title: 'sebuah thread',
