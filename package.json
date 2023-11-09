@@ -6,23 +6,16 @@
   "scripts": {
     "start": "node src/app.js",
     "start:dev": "nodemon src/app.js",
-    "test": "jest --setupFiles dotenv/config",
-    "test:watch": "jest --watchAll --coverage --setupFiles dotenv/config",
+    "test": "jest --setupFiles dotenv/config -i",
+    "test:watch:change": "jest --watch --setupFiles dotenv/config -i",
+    "test:watch": "jest --watchAll --coverage --setupFiles dotenv/config -i",
     "migrate": "node-pg-migrate",
     "migrate:test": "node-pg-migrate -f config/database/test.json",
-    "lint": "eslint src"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Sandydht/forum-api.git"
+    "lint": "npx eslint ."
   },
   "keywords": [],
-  "author": "Sandydht",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Sandydht/forum-api/issues"
-  },
-  "homepage": "https://github.com/Sandydht/forum-api#readme",
   "dependencies": {
     "@hapi/hapi": "20.1.5",
     "@hapi/jwt": "2.0.1",
@@ -30,8 +23,7 @@
     "dotenv": "10.0.0",
     "instances-container": "2.0.3",
     "nanoid": "3.1.23",
-    "pg": "8.6.0",
-    "auto-bind": "4.0.0"
+    "pg": "8.6.0"
   },
   "devDependencies": {
     "@types/jest": "26.0.24",

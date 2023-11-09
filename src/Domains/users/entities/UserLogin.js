@@ -2,13 +2,12 @@ class UserLogin {
   constructor(payload) {
     this._verifyPayload(payload);
 
-    this.username = payload.username;
-    this.password = payload.password;
+    const { username, password } = payload;
+    this.username = username;
+    this.password = password;
   }
 
-  _verifyPayload(payload) {
-    const { username, password } = payload;
-
+  _verifyPayload({ username, password }) {
     if (!username || !password) {
       throw new Error('USER_LOGIN.NOT_CONTAIN_NEEDED_PROPERTY');
     }
