@@ -81,6 +81,9 @@ container.register([
         {
           concrete: pool,
         },
+        {
+          concrete: nanoid,
+        },
       ],
     },
   },
