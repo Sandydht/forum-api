@@ -3,12 +3,12 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const ThreadCommentsTableTestHelper = {
   async addThreadComment({
-    id = 'comment-123', content = 'sebuah comment', userId = 'user-123',
+    id = 'comment-123', content = 'sebuah comment', threadId = 'thread-123', userId = 'user-123',
   }) {
     const date = new Date().toISOString();
     const query = {
-      text: 'INSERT INTO thread_comments VALUES($1, $2, $3, $4)',
-      values: [id, content, date, userId],
+      text: 'INSERT INTO thread_comments VALUES($1, $2, $3, $4, $5)',
+      values: [id, content, date, threadId, userId],
     };
 
     await pool.query(query);

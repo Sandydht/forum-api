@@ -16,6 +16,13 @@ exports.up = (pgm) => {
       type: 'TEXT',
       notNull: true,
     },
+    thread_id: {
+      type: 'VARCHAR(50)',
+      notNull: true,
+      references: 'threads',
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
+    },
     user_id: {
       type: 'VARCHAR(50)',
       notNull: true,
