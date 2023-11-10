@@ -66,7 +66,7 @@ describe('/threads comments endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: `/threads/${responseJsonThread.id}/comments`,
+        url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
         payload: requestPayload,
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
@@ -77,9 +77,9 @@ describe('/threads comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
-      expect(responseJson.data.addedThread.id).toBeDefined();
-      expect(responseJson.data.addedThread.content).toBeDefined();
-      expect(responseJson.data.addedThread.owner).toBeDefined();
+      expect(responseJson.data.addedComment.id).toBeDefined();
+      expect(responseJson.data.addedComment.content).toBeDefined();
+      expect(responseJson.data.addedComment.owner).toBeDefined();
     });
 
     it('should response 404 if thread not found', async () => {
@@ -122,9 +122,9 @@ describe('/threads comments endpoint', () => {
 
       // Assert
       const responseJson = JSON.parse(response.payload);
-      expect(response.statusCode).toEqual(400);
+      expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('harus mengirimkan content');
+      expect(responseJson.message).toEqual('thread tidak ditemukan');
     });
 
     it('should response 401 when user not logged in', async () => {
@@ -171,7 +171,7 @@ describe('/threads comments endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: `/threads/${responseJsonThread.id}/comments`,
+        url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
         payload: requestPayload,
       });
 
@@ -224,7 +224,7 @@ describe('/threads comments endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: `/threads/${responseJsonThread.id}/comments`,
+        url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
         payload: requestPayload,
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
@@ -282,7 +282,7 @@ describe('/threads comments endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: `/threads/${responseJsonThread.id}/comments`,
+        url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
         payload: requestPayload,
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,

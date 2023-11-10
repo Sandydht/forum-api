@@ -20,6 +20,9 @@ describe('DomainErrorTranslator', () => {
 
     expect(DomainErrorTranslator.translate(new Error('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY'))).toStrictEqual(new InvariantError('harus mengirimkan title dan body'));
     expect(DomainErrorTranslator.translate(new Error('ADD_THREAD.NOT_MEET_DATA_TYPE_SPESIFICATION'))).toStrictEqual(new InvariantError('title dan body harus string'));
+
+    expect(DomainErrorTranslator.translate(new Error('ADD_THREAD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY'))).toStrictEqual(new InvariantError('harus mengirimkan content'));
+    expect(DomainErrorTranslator.translate(new Error('ADD_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPESIFICATION'))).toStrictEqual(new InvariantError('content harus string'));
   });
 
   it('should return original error when error message is not needed to translate', () => {
