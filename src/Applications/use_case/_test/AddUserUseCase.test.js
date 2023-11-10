@@ -9,47 +9,43 @@ describe('AddUserUseCase', () => {
   it('should orchestrating the add user action correctly', async () => {
     // Arrange
     const useCasePayload = {
-      username: 'dicoding',
+      username: 'sandy',
       password: 'secret',
-      fullname: 'Dicoding Indonesia',
+      fullname: 'Sandy Dwi',
     };
 
+    const mockRegisterUser = new RegisterUser(useCasePayload);
     const mockRegisteredUser = new RegisteredUser({
       id: 'user-123',
       username: useCasePayload.username,
       fullname: useCasePayload.fullname,
     });
-
-    /** creating dependency of use case */
     const mockUserRepository = new UserRepository();
     const mockPasswordHash = new PasswordHash();
 
-    /** mocking needed function */
     mockUserRepository.verifyAvailableUsername = jest.fn().mockImplementation(() => Promise.resolve());
     mockPasswordHash.hash = jest.fn().mockImplementation(() => Promise.resolve('encrypted_password'));
     mockUserRepository.addUser = jest.fn().mockImplementation(() => Promise.resolve(mockRegisteredUser));
 
-    /** creating use case instance */
-    const getUserUseCase = new AddUserUseCase({
+    const addUserUseCase = new AddUserUseCase({
       userRepository: mockUserRepository,
       passwordHash: mockPasswordHash,
     });
 
     // Action
-    const registeredUser = await getUserUseCase.execute(useCasePayload);
+    const registerUser = await addUserUseCase.execute(mockRegisterUser);
 
     // Assert
-    expect(registeredUser).toStrictEqual(new RegisteredUser({
-      id: 'user-123',
-      username: useCasePayload.username,
-      fullname: useCasePayload.fullname,
-    }));
-
     expect(mockUserRepository.verifyAvailableUsername).toBeCalledWith(useCasePayload.username);
     expect(mockPasswordHash.hash).toBeCalledWith(useCasePayload.password);
     expect(mockUserRepository.addUser).toBeCalledWith(new RegisterUser({
       username: useCasePayload.username,
       password: 'encrypted_password',
+      fullname: useCasePayload.fullname,
+    }));
+    expect(registerUser).toStrictEqual(new RegisteredUser({
+      id: 'user-123',
+      username: useCasePayload.username,
       fullname: useCasePayload.fullname,
     }));
   });
