@@ -36,7 +36,7 @@ describe('LogoutUserUseCase', () => {
       authenticationRepository: mockAuthenticationRepository,
     });
 
-    // Act
+    // Action
     await logoutUserUseCase.execute(useCasePayload);
 
     // Assert

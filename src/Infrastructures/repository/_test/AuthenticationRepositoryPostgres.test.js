@@ -50,7 +50,7 @@ describe('AuthenticationRepository postgres', () => {
     });
   });
 
-  describe('deleteToken', () => {
+  describe('deleteToken function', () => {
     it('should delete token from database', async () => {
       // Arrange
       const authenticationRepository = new AuthenticationRepositoryPostgres(pool);
