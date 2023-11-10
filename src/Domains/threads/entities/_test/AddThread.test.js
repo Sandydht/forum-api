@@ -23,7 +23,7 @@ describe('AddThread entities', () => {
     expect(() => new AddThread(payload)).toThrowError('ADD_THREAD.NOT_MEET_DATA_TYPE_SPESIFICATION');
   });
 
-  it('should create AddThread object correctly', () => {
+  it('should create addThread object correctly', () => {
     // Arrange
     const payload = {
       title: 'sebuah thread',

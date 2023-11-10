@@ -8,6 +8,6 @@ describe('ThreadCommentRepository interface', () => {
 
     // Action & Assert
     expect(threadCommentRepository).toBeInstanceOf(ThreadCommentRepository);
-    await expect(threadCommentRepository.addThreadComment({})).rejects.toThrowError('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    await expect(threadCommentRepository.addThreadComment('', '', {})).rejects.toThrowError('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 });
