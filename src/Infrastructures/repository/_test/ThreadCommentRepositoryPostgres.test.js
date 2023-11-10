@@ -14,9 +14,9 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
   afterEach(async () => {
     await Promise.all([
+      UsersTableTestHelper.cleanTable(),
       ThreadsTableTestHelper.cleanTable(),
       ThreadCommentsTableTestHelper.cleanTable(),
-      UsersTableTestHelper.cleanTable(),
     ]);
   });
 

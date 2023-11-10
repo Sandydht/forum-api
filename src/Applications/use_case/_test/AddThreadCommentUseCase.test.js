@@ -36,13 +36,12 @@ describe('AddThreadCommentUseCase', () => {
     const addedThreadComment = await addThreadCommentUseCase.execute(userId, threadId, mockAddThreadComment);
 
     // Assert
-    expect(addThreadCommentUseCase).toBeInstanceOf(AddThreadCommentUseCase);
+    expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
+    expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith(userId, threadId, useCasePayload);
     expect(addedThreadComment).toStrictEqual(new AddedThreadComment({
       id: 'comment-123',
       content: useCasePayload.content,
       owner: userId,
     }));
-    expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
-    expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith(userId, threadId, mockAddThreadComment);
   });
 });

@@ -34,9 +34,9 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/users',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
-          fullname: 'Dicoding Indonesia',
+          fullname: 'Sandy Dwi',
         },
       });
 
@@ -44,7 +44,7 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/authentications',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
         },
       });
@@ -94,9 +94,9 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/users',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
-          fullname: 'Dicoding Indonesia',
+          fullname: 'Sandy Dwi',
         },
       });
 
@@ -104,7 +104,7 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/authentications',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
         },
       });
@@ -139,9 +139,9 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/users',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
-          fullname: 'Dicoding Indonesia',
+          fullname: 'Sandy Dwi',
         },
       });
 
@@ -149,7 +149,7 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/authentications',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
         },
       });
@@ -192,9 +192,9 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/users',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
-          fullname: 'Dicoding Indonesia',
+          fullname: 'Sandy Dwi',
         },
       });
 
@@ -202,7 +202,7 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/authentications',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
         },
       });
@@ -250,9 +250,9 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/users',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
-          fullname: 'Dicoding Indonesia',
+          fullname: 'Sandy Dwi',
         },
       });
 
@@ -260,7 +260,7 @@ describe('/threads comments endpoint', () => {
         method: 'POST',
         url: '/authentications',
         payload: {
-          username: 'dicoding',
+          username: 'sandy',
           password: 'secret',
         },
       });
