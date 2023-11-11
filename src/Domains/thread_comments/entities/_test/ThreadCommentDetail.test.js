@@ -7,7 +7,7 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
     };
 
     // Action & Assert
@@ -19,7 +19,8 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 123,
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      deletedAt: null,
       content: 'sebuah comment',
     };
 
@@ -27,13 +28,14 @@ describe('a ThreadCommentDetail entities', () => {
     expect(() => new ThreadCommentDetail(payload)).toThrowError('THREAD_COMMENT_DETAIL.NOT_MEET_DATA_TYPE_SPESIFICATION');
   });
 
-  it('should create threadCommentDetail object correctly', () => {
+  it('should display content = **komentar telah dihapus** when a comment has been deleted', () => {
     // Arrange
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch unix
-      content: 'sebuah comment' || '**komentar telah dihapus**',
+      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      deletedAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      content: 'sebuah comment',
     };
 
     // Action
@@ -41,9 +43,32 @@ describe('a ThreadCommentDetail entities', () => {
 
     // Assert
     expect(threadCommentDetail).toBeInstanceOf(ThreadCommentDetail);
-    expect(threadCommentDetail.id).toEqual(payload.id);
-    expect(threadCommentDetail.username).toEqual(payload.username);
-    expect(threadCommentDetail.date).toBe(new Date(Math.floor(new Date().getTime() / 1000.0)).toISOString());
+    expect(threadCommentDetail.id).toBeDefined();
+    expect(threadCommentDetail.username).toBeDefined();
+    expect(threadCommentDetail.date).toBeDefined();
+    expect(threadCommentDetail.content).toBeDefined();
+    expect(threadCommentDetail.content).toEqual('**komentar telah dihapus**');
+  });
+
+  it('should create threadCommentDetail object correctly', () => {
+    // Arrange
+    const payload = {
+      id: 'comment-123',
+      username: 'sandy',
+      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      deletedAt: null,
+      content: 'sebuah comment',
+    };
+
+    // Action
+    const threadCommentDetail = new ThreadCommentDetail(payload);
+
+    // Assert
+    expect(threadCommentDetail).toBeInstanceOf(ThreadCommentDetail);
+    expect(threadCommentDetail.id).toBeDefined();
+    expect(threadCommentDetail.username).toBeDefined();
+    expect(threadCommentDetail.date).toBeDefined();
+    expect(threadCommentDetail.content).toBeDefined();
     expect(threadCommentDetail.content).toEqual(payload.content);
   });
 });

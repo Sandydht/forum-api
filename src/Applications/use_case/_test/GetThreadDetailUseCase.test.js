@@ -21,7 +21,8 @@ describe('GetThreadDetailUseCase', () => {
     const mockThreadCommentDetail = new ThreadCommentDetail({
       id: 'comment-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      deletedAt: null,
       content: 'sebuah comment',
     });
     const mockThreadRepository = new ThreadRepository();
@@ -54,7 +55,8 @@ describe('GetThreadDetailUseCase', () => {
           new ThreadCommentDetail({
             id: 'comment-123',
             username: 'sandy',
-            date: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+            createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+            deletedAt: null,
             content: 'sebuah comment',
           }),
         ],
