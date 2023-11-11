@@ -13,10 +13,8 @@ describe('ThreadRepositoryPostgres', () => {
   });
 
   afterEach(async () => {
-    await Promise.all([
-      ThreadsTableTestHelper.cleanTable(),
-      UsersTableTestHelper.cleanTable(),
-    ]);
+    await ThreadsTableTestHelper.cleanTable();
+    await UsersTableTestHelper.cleanTable();
   });
 
   describe('addThread function', () => {

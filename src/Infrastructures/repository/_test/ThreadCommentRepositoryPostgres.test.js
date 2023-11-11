@@ -15,15 +15,13 @@ describe('ThreadCommentRepositoryPostgres', () => {
   });
 
   afterEach(async () => {
-    await Promise.all([
-      UsersTableTestHelper.cleanTable(),
-      ThreadsTableTestHelper.cleanTable(),
-      ThreadCommentsTableTestHelper.cleanTable(),
-    ]);
+    await ThreadCommentsTableTestHelper.cleanTable();
+    await ThreadsTableTestHelper.cleanTable();
+    await UsersTableTestHelper.cleanTable();
   });
 
   describe('addThreadComment function', () => {
-    it('should persist add thread comment and return data correctly', async () => {
+    it('should persist add thread comment and return correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });

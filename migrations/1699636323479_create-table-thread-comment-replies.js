@@ -12,6 +12,13 @@ exports.up = (pgm) => {
       type: 'text',
       notNull: true,
     },
+    thread_id: {
+      type: 'varchar(50)',
+      notNull: true,
+      references: 'threads',
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
+    },
     comment_id: {
       type: 'varchar(50)',
       notNull: true,
