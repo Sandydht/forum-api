@@ -31,7 +31,7 @@ jobs:
           --health-retries 5
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x]
     env:
       CI: true
       PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
