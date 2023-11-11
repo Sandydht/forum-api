@@ -1,5 +1,7 @@
 const ThreadCommentRepository = require('../../Domains/thread_comments/ThreadCommentRepository');
 const AddedThreadComment = require('../../Domains/thread_comments/entities/AddedThreadComment');
+const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 
 class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
   constructor(pool, idGenerator) {
@@ -23,6 +25,44 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
       content: result.rows[0].content,
       owner: result.rows[0].user_id,
     });
+  }
+
+  async verifyThreadCommentByUser(userId, commentId) {
+    const query = {
+      text: 'SELECT * FROM thread_comments WHERE user_id = $1 AND id = $2',
+      values: [userId, commentId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new AuthorizationError('Anda tidak dapat menghapus komentar ini');
+    }
+  }
+
+  async verifyAvailableThreadComment(id) {
+    const query = {
+      text: 'SELECT * FROM thread_comments WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('Comment tidak ditemukan');
+    }
+  }
+
+  async deleteThreadComment(id) {
+    const updatedAt = Math.floor(new Date().getTime() / 1000.0);
+    const deletedAt = Math.floor(new Date().getTime() / 1000.0);
+
+    const query = {
+      text: 'UPDATE thread_comments SET deleted_at = $1, updated_at = $2 WHERE id = $3 RETURNING id',
+      values: [deletedAt, updatedAt, id],
+    };
+
+    await this._pool.query(query);
   }
 }
 

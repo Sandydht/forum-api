@@ -7,6 +7,14 @@ const routes = (handler) => ([
       auth: 'forum_app',
     },
   },
+  {
+    method: 'DELETE',
+    path: '/threads/{threadId}/comments/{commentId}',
+    handler: handler.deleteThreadCommentHanlder,
+    options: {
+      auth: 'forum_app',
+    },
+  },
 ]);
 
 module.exports = routes;
