@@ -22,6 +22,7 @@ describe('a ThreadCommentDetail entities', () => {
       createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
       deletedAt: null,
       content: 'sebuah comment',
+      replies: [],
     };
 
     // Action & Assert
@@ -36,6 +37,7 @@ describe('a ThreadCommentDetail entities', () => {
       createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
       deletedAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
       content: 'sebuah comment',
+      replies: [],
     };
 
     // Action
@@ -47,6 +49,7 @@ describe('a ThreadCommentDetail entities', () => {
     expect(threadCommentDetail.username).toBeDefined();
     expect(threadCommentDetail.date).toBeDefined();
     expect(threadCommentDetail.content).toBeDefined();
+    expect(threadCommentDetail.replies).toBeDefined();
     expect(threadCommentDetail.content).toEqual('**komentar telah dihapus**');
   });
 
@@ -58,6 +61,7 @@ describe('a ThreadCommentDetail entities', () => {
       createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
       deletedAt: null,
       content: 'sebuah comment',
+      replies: [],
     };
 
     // Action
@@ -69,6 +73,7 @@ describe('a ThreadCommentDetail entities', () => {
     expect(threadCommentDetail.username).toBeDefined();
     expect(threadCommentDetail.date).toBeDefined();
     expect(threadCommentDetail.content).toBeDefined();
+    expect(threadCommentDetail.replies).toBeDefined();
     expect(threadCommentDetail.content).toEqual(payload.content);
   });
 });

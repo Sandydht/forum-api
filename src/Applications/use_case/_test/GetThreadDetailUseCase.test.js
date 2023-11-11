@@ -4,6 +4,8 @@ const ThreadCommentDetail = require('../../../Domains/thread_comments/entities/T
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const ThreadCommentRepository = require('../../../Domains/thread_comments/ThreadCommentRepository');
 const GetThreadDetailUseCase = require('../GetThreadDetailUseCase');
+const ThreadCommentReplyRepository = require('../../../Domains/thread_comment_replies/ThreadCommentReplyRepository');
+const ThreadCommentReplyDetail = require('../../../Domains/thread_comment_replies/entities/ThreadCommentReplyDetail');
 
 describe('GetThreadDetailUseCase', () => {
   it('should orchestrating the get thread action correctly', async () => {
@@ -24,17 +26,28 @@ describe('GetThreadDetailUseCase', () => {
       createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
       deletedAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
       content: 'sebuah comment',
+      replies: [],
+    });
+    const mockThreadCommentReplyDetail = new ThreadCommentReplyDetail({
+      id: 'reply-123',
+      username: 'sandy',
+      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      deletedAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      content: 'sebuah balasan',
     });
     const mockThreadRepository = new ThreadRepository();
     const mockThreadCommentRepository = new ThreadCommentRepository();
+    const mockThreadCommentReplyRepository = new ThreadCommentReplyRepository();
 
     mockThreadRepository.verifyAvailableThread = jest.fn().mockImplementation(() => Promise.resolve());
     mockThreadRepository.getThreadById = jest.fn().mockImplementation(() => Promise.resolve(mockThreadDetail));
     mockThreadCommentRepository.getCommentByThreadId = jest.fn().mockImplementation(() => Promise.resolve([mockThreadCommentDetail]));
+    mockThreadCommentReplyRepository.getRepliesByThread = jest.fn().mockImplementation(() => Promise.resolve([mockThreadCommentReplyDetail]));
 
     const getThreadDetailUseCase = new GetThreadDetailUseCase({
       threadRepository: mockThreadRepository,
       threadCommentRepository: mockThreadCommentRepository,
+      threadCommentReplyRepository: mockThreadCommentReplyRepository,
     });
 
     // Action
@@ -44,11 +57,26 @@ describe('GetThreadDetailUseCase', () => {
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
     expect(mockThreadRepository.getThreadById).toBeCalledWith(threadId);
     expect(mockThreadCommentRepository.getCommentByThreadId).toBeCalledWith(threadId);
+    expect(mockThreadCommentRepository.getCommentByThreadId).toBeCalledWith(threadId);
     expect(getThreadDetail.id).toBeDefined();
     expect(getThreadDetail.title).toBeDefined();
     expect(getThreadDetail.body).toBeDefined();
     expect(getThreadDetail.date).toBeDefined();
     expect(getThreadDetail.username).toBeDefined();
     expect(getThreadDetail.comments).toBeDefined();
+
+    const [comment] = getThreadDetail.comments;
+    expect(comment.id).toBeDefined();
+    expect(comment.username).toBeDefined();
+    expect(comment.date).toBeDefined();
+    expect(comment.replies).toBeDefined();
+    expect(comment.content).toBeDefined();
+    expect(mockThreadCommentReplyRepository.getRepliesByThread).toBeCalledWith(threadId, comment.id);
+
+    const [reply] = comment.replies;
+    expect(reply.id).toBeDefined();
+    expect(reply.username).toBeDefined();
+    expect(reply.date).toBeDefined();
+    expect(reply.content).toBeDefined();
   });
 });

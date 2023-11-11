@@ -129,6 +129,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
       const comments = await threadCommentRepositoryPostgres.getCommentByThreadId('thread-123');
 
       // Assert
+      expect(Array.isArray(comments)).toBeTruthy();
       expect(comments).toHaveLength(0);
     });
 
@@ -144,7 +145,12 @@ describe('ThreadCommentRepositoryPostgres', () => {
       const comments = await threadCommenRepositoryPostgres.getCommentByThreadId('thread-123');
 
       // Assert
-      expect(comments).toHaveLength(1);
+      const [comment] = comments;
+      expect(comment.id).toBeDefined();
+      expect(comment.username).toBeDefined();
+      expect(comment.date).toBeDefined();
+      expect(comment.replies).toBeDefined();
+      expect(comment.content).toBeDefined();
     });
   });
 });

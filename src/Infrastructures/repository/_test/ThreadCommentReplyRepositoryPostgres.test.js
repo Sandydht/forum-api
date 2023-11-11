@@ -60,4 +60,8 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
       }));
     });
   });
+
+  describe('getRepliesByThread function', () => {
+
+  });
 });

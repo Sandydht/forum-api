@@ -9,5 +9,6 @@ describe('ThreadCommentReplyRepository interface', () => {
     // Action & Assert
     expect(threadCommentReplyRepository).toBeInstanceOf(ThreadCommentReplyRepository);
     await expect(threadCommentReplyRepository.addThreadCommentReply('', '', '', {})).rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    await expect(threadCommentReplyRepository.getRepliesByThread('', '')).rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 });

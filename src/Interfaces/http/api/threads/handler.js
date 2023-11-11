@@ -25,8 +25,8 @@ class ThreadsHandler {
   }
 
   async getThreadDetailHandler(request) {
-    const getThreadDetailUseCase = this._container.getInstance(GetThreadDetailUseCase.name);
     const { threadId } = request.params;
+    const getThreadDetailUseCase = this._container.getInstance(GetThreadDetailUseCase.name);
 
     const thread = await getThreadDetailUseCase.execute(threadId);
 

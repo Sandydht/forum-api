@@ -25,6 +25,11 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
       userId: result.rows[0].user_id,
     });
   }
+
+  async getRepliesByThread(threadId, commentId) {
+    console.log('threadId: ', threadId);
+    console.log('commentId: ', commentId);
+  }
 }
 
 module.exports = ThreadCommentReplyRepositoryPostgres;

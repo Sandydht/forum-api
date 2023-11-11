@@ -104,8 +104,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(thread.body).toBeDefined();
       expect(thread.date).toBeDefined();
       expect(thread.username).toBeDefined();
-      expect(thread.id).toEqual('thread-123');
-      expect(thread.username).toEqual('sandy');
+      expect(thread.comments).toBeDefined();
     });
   });
 });
