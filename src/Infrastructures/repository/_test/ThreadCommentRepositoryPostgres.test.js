@@ -121,7 +121,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
   });
 
   describe('getCommentByThreadId function', () => {
-    it('should return empty array when thread comment not found', async () => {
+    it('should return empty array when thread has no comments', async () => {
       // Arrange
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
 
@@ -145,12 +145,17 @@ describe('ThreadCommentRepositoryPostgres', () => {
       const comments = await threadCommenRepositoryPostgres.getCommentByThreadId('thread-123');
 
       // Assert
-      const [comment] = comments;
-      expect(comment.id).toBeDefined();
-      expect(comment.username).toBeDefined();
-      expect(comment.date).toBeDefined();
-      expect(comment.replies).toBeDefined();
-      expect(comment.content).toBeDefined();
+      expect(Array.isArray(comments)).toBeTruthy();
+
+      comments.forEach((comment) => {
+        expect(comment.id).toBeDefined();
+        expect(comment.username).toBeDefined();
+        expect(comment.date).toBeDefined();
+        expect(comment.replies).toBeDefined();
+        expect(Array.isArray(comment.replies)).toBeTruthy();
+        expect(comment.replies).toHaveLength(0);
+        expect(comment.content).toBeDefined();
+      });
     });
   });
 });

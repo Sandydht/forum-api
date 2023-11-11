@@ -223,7 +223,7 @@ describe('/threads endpoint', () => {
         method: 'POST',
         url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
         payload: {
-          content: 'sebuah comment 1',
+          content: 'sebuah comment',
         },
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
@@ -247,6 +247,7 @@ describe('/threads endpoint', () => {
       expect(responseJson.data.thread.date).toBeDefined();
       expect(responseJson.data.thread.username).toBeDefined();
       expect(responseJson.data.thread.comments).toBeDefined();
+      expect(responseJson.data.thread.comments).toHaveLength(1);
     });
 
     it('should response 404 when thread not found', async () => {

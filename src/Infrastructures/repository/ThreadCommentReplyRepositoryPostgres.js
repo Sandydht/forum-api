@@ -1,6 +1,7 @@
 const ThreadCommentReplyRepository = require('../../Domains/thread_comment_replies/ThreadCommentReplyRepository');
 const AddThreadCommentReply = require('../../Domains/thread_comment_replies/entities/AddThreadCommentReply');
 const AddedThreadCommentReply = require('../../Domains/thread_comment_replies/entities/AddedThreadCommentReply');
+const ThreadCommentReplyDetail = require('../../Domains/thread_comment_replies/entities/ThreadCommentReplyDetail');
 
 class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository {
   constructor(pool, idGenerator) {
@@ -27,8 +28,23 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
   }
 
   async getRepliesByThread(threadId, commentId) {
-    console.log('threadId: ', threadId);
-    console.log('commentId: ', commentId);
+    const query = {
+      text: 'SELECT * FROM thread_comment_replies INNER JOIN users ON thread_comment_replies.user_id = users.id WHERE thread_comment_replies.thread_id = $1 AND thread_comment_replies.comment_id = $2',
+      values: [threadId, commentId],
+    };
+
+    const result = await this._pool.query(query);
+    if (!result.rowCount) {
+      return [];
+    }
+
+    return result.rows.map((data) => new ThreadCommentReplyDetail({
+      id: data.id,
+      username: data.username,
+      createdAt: data.created_at,
+      deletedAt: data.deleted_at,
+      content: data.content,
+    }));
   }
 }
 

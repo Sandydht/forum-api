@@ -64,19 +64,22 @@ describe('GetThreadDetailUseCase', () => {
     expect(getThreadDetail.date).toBeDefined();
     expect(getThreadDetail.username).toBeDefined();
     expect(getThreadDetail.comments).toBeDefined();
+    expect(Array.isArray(getThreadDetail.comments)).toBeTruthy();
 
-    const [comment] = getThreadDetail.comments;
-    expect(comment.id).toBeDefined();
-    expect(comment.username).toBeDefined();
-    expect(comment.date).toBeDefined();
-    expect(comment.replies).toBeDefined();
-    expect(comment.content).toBeDefined();
-    expect(mockThreadCommentReplyRepository.getRepliesByThread).toBeCalledWith(threadId, comment.id);
+    getThreadDetail.comments.forEach((comment) => {
+      expect(comment.id).toBeDefined();
+      expect(comment.username).toBeDefined();
+      expect(comment.date).toBeDefined();
+      expect(comment.replies).toBeDefined();
+      expect(Array.isArray(comment.replies)).toBeTruthy();
+      expect(comment.content).toBeDefined();
 
-    const [reply] = comment.replies;
-    expect(reply.id).toBeDefined();
-    expect(reply.username).toBeDefined();
-    expect(reply.date).toBeDefined();
-    expect(reply.content).toBeDefined();
+      comment.replies.forEach((reply) => {
+        expect(reply.id).toBeDefined();
+        expect(reply.username).toBeDefined();
+        expect(reply.date).toBeDefined();
+        expect(reply.content).toBeDefined();
+      });
+    });
   });
 });

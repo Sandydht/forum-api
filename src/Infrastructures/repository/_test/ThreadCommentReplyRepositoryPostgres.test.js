@@ -62,6 +62,40 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
   });
 
   describe('getRepliesByThread function', () => {
+    it('should return empty array when thread comment has no replies', async () => {
+      // Arrange
+      const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
 
+      // Action
+      const replies = await threadCommentReplyRepositoryPostgres.getRepliesByThread('thread-123', 'comment-123');
+
+      // Assert
+      expect(Array.isArray(replies)).toBeTruthy();
+      expect(replies).toHaveLength(0);
+    });
+
+    it('should return thread comment replies list correctly', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
+        id: 'reply-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+      });
+      const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+      // Action
+      const replies = await threadCommentReplyRepositoryPostgres.getRepliesByThread('thread-123', 'comment-123');
+
+      // Assert
+      expect(Array.isArray(replies)).toBeTruthy();
+
+      replies.forEach((reply) => {
+        expect(reply.id).toBeDefined();
+        expect(reply.username).toBeDefined();
+        expect(reply.date).toBeDefined();
+        expect(reply.content).toBeDefined();
+      });
+    });
   });
 });

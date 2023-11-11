@@ -261,7 +261,7 @@ container.register([
         },
         {
           name: 'threadCommentReplyRepository',
-          internal: ThreadCommentReplyRepositoryPostgres.name,
+          internal: ThreadCommentReplyRepository.name,
         },
       ],
     },
