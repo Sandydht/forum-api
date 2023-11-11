@@ -31,7 +31,8 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
 
   async getRepliesByThread(threadId, commentId) {
     const query = {
-      text: 'SELECT * FROM thread_comment_replies INNER JOIN users ON thread_comment_replies.user_id = users.id WHERE thread_comment_replies.thread_id = $1 AND thread_comment_replies.comment_id = $2',
+      // eslint-disable-next-line max-len
+      text: 'SELECT thread_comment_replies.id, thread_comment_replies.created_at, thread_comment_replies.deleted_at, thread_comment_replies.content, users.username FROM thread_comment_replies INNER JOIN users ON thread_comment_replies.user_id = users.id WHERE thread_comment_replies.thread_id = $1 AND thread_comment_replies.comment_id = $2',
       values: [threadId, commentId],
     };
 
