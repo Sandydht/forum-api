@@ -10,8 +10,8 @@ class GetThreadDetailUseCase {
     const thread = await this._threadRepository.getThreadById(threadId);
     const threadComments = await this._threadCommentRepository.getCommentByThreadId(threadId);
 
-    thread.comments.push(threadComments);
-    return { thread };
+    thread.comments = threadComments;
+    return thread;
   }
 }
 
