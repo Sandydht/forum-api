@@ -8,6 +8,8 @@ const ThreadCommentRepliesTableTestHelper = require('../../../../tests/ThreadCom
 const AddThreadCommentReply = require('../../../Domains/thread_comment_replies/entities/AddThreadCommentReply');
 const AddedThreadCommentReply = require('../../../Domains/thread_comment_replies/entities/AddedThreadCommentReply');
 const ThreadCommentReplyRepositoryPostgres = require('../ThreadCommentReplyRepositoryPostgres');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
 describe('ThreadCommentReplyRepositoryPostgres', () => {
   afterAll(async () => {
@@ -96,6 +98,74 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
         expect(reply.date).toBeDefined();
         expect(reply.content).toBeDefined();
       });
+    });
+  });
+
+  describe('verifyAvalilableThreadCommentReply function', () => {
+    it('should throw NotFoundError when thread comment reply not found', async () => {
+      // Arrange
+      const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentReplyRepositoryPostgres.verifyAvalilableThreadCommentReply('reply-123')).rejects.toThrowError(NotFoundError);
+    });
+
+    it('should not throw NotFoundError when thread comment reply available', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
+        id: 'reply-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+      });
+      const threadCommentRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentRepositoryPostgres.verifyAvalilableThreadCommentReply('reply-123')).resolves.not.toThrowError(NotFoundError);
+    });
+  });
+
+  describe('verifyAvalilableThreadCommentReplyByUser function', () => {
+    it('should throw AuthorizationError when thread comment reply not found', async () => {
+      // Arrange
+      const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentReplyRepositoryPostgres.verifyAvalilableThreadCommentReplyByUser('user-123', 'reply-123')).rejects.toThrowError(AuthorizationError);
+    });
+
+    it('should not throw AuthorizationError when thread comment reply available', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
+        id: 'reply-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+      });
+      const threadCommentRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentRepositoryPostgres.verifyAvalilableThreadCommentReplyByUser('user-123', 'reply-123')).resolves.not.toThrowError(AuthorizationError);
+    });
+  });
+
+  describe('deleteThreadCommentReply function', () => {
+    it('should soft delete thread comment reply in the database', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
+        id: 'reply-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+      });
+      const threadCommentRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+      // Action
+      await threadCommentRepositoryPostgres.deleteThreadCommentReply('reply-123');
+
+      // Assert
+      const replies = await ThreadCommentRepliesTableTestHelper.findThreadCommentReplyById('reply-123');
+      expect(replies[0].deleted_at).not.toEqual(null);
     });
   });
 });

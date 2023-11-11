@@ -2,6 +2,8 @@ const ThreadCommentReplyRepository = require('../../Domains/thread_comment_repli
 const AddThreadCommentReply = require('../../Domains/thread_comment_replies/entities/AddThreadCommentReply');
 const AddedThreadCommentReply = require('../../Domains/thread_comment_replies/entities/AddedThreadCommentReply');
 const ThreadCommentReplyDetail = require('../../Domains/thread_comment_replies/entities/ThreadCommentReplyDetail');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 
 class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository {
   constructor(pool, idGenerator) {
@@ -45,6 +47,43 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
       deletedAt: data.deleted_at,
       content: data.content,
     }));
+  }
+
+  async verifyAvalilableThreadCommentReply(id) {
+    const query = {
+      text: 'SELECT * FROM thread_comment_replies WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+    if (!result.rowCount) {
+      throw new NotFoundError('Reply tidak ditemukan');
+    }
+  }
+
+  async verifyAvalilableThreadCommentReplyByUser(userId, id) {
+    const query = {
+      text: 'SELECT * FROM thread_comment_replies WHERE user_id = $1 AND id = $2',
+      values: [userId, id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new AuthorizationError('Anda tidak dapat menghapus balasan komentar ini');
+    }
+  }
+
+  async deleteThreadCommentReply(id) {
+    const updatedAt = Math.floor(new Date().getTime() / 1000.0);
+    const deletedAt = Math.floor(new Date().getTime() / 1000.0);
+
+    const query = {
+      text: 'UPDATE thread_comment_replies SET deleted_at = $1, updated_at = $2 WHERE id = $3 RETURNING id',
+      values: [deletedAt, updatedAt, id],
+    };
+
+    await this._pool.query(query);
   }
 }
 
