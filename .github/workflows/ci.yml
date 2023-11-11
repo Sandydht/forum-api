@@ -18,10 +18,10 @@ jobs:
   test:
     needs: commitlint
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
+    container: node:20.9.0-alpine3.18
     services:
       postgres:
-        image: postgres
+        image: postgres:alpine3.18
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
