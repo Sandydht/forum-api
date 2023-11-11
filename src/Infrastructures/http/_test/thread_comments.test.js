@@ -552,17 +552,6 @@ describe('/threads comments endpoint', () => {
       });
       const responseJsonThread = JSON.parse(responseThread.payload);
 
-      await server.inject({
-        method: 'POST',
-        url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
-        payload: {
-          content: 'sebuah comment',
-        },
-        headers: {
-          authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
-        },
-      });
-
       // Action
       const response = await server.inject({
         method: 'DELETE',
