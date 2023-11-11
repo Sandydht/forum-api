@@ -121,4 +121,32 @@ describe('ThreadCommentRepositoryPostgres', () => {
       expect(comments[0].deleted_at).not.toEqual(null);
     });
   });
+
+  describe('getCommentByThreadId function', () => {
+    it('should return empty array when thread comment not found', async () => {
+      // Arrange
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action
+      const comments = await threadCommentRepositoryPostgres.getCommentByThreadId('thread-123');
+
+      // Assert
+      expect(comments).toHaveLength(0);
+    });
+
+    it('should return thread comment list correctly', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+
+      const threadCommenRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action
+      const comments = await threadCommenRepositoryPostgres.getCommentByThreadId('thread-123');
+
+      // Assert
+      expect(comments).toHaveLength(1);
+    });
+  });
 });
