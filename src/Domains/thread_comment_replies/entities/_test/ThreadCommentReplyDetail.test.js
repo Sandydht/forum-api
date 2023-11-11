@@ -43,10 +43,9 @@ describe('a ThreadCommentReplyDetail entities', () => {
 
     // Assert
     expect(threadCommentReplyDetail).toBeInstanceOf(ThreadCommentReplyDetail);
-    expect(threadCommentReplyDetail.id).toBeDefined();
-    expect(threadCommentReplyDetail.username).toBeDefined();
-    expect(threadCommentReplyDetail.date).toBeDefined();
-    expect(threadCommentReplyDetail.content).toBeDefined();
+    expect(threadCommentReplyDetail.id).toEqual(payload.id);
+    expect(threadCommentReplyDetail.username).toEqual(payload.username);
+    expect(threadCommentReplyDetail.date).toEqual(new Date(payload.createdAt).toISOString());
     expect(threadCommentReplyDetail.content).toEqual('**balasan telah dihapus**');
   });
 
@@ -65,10 +64,9 @@ describe('a ThreadCommentReplyDetail entities', () => {
 
     // Assert
     expect(threadCommentReplyDetail).toBeInstanceOf(ThreadCommentReplyDetail);
-    expect(threadCommentReplyDetail.id).toBeDefined();
-    expect(threadCommentReplyDetail.username).toBeDefined();
-    expect(threadCommentReplyDetail.date).toBeDefined();
-    expect(threadCommentReplyDetail.content).toBeDefined();
+    expect(threadCommentReplyDetail.id).toEqual(payload.id);
+    expect(threadCommentReplyDetail.username).toEqual(payload.username);
+    expect(threadCommentReplyDetail.date).toEqual(new Date(payload.createdAt).toISOString());
     expect(threadCommentReplyDetail.content).toEqual(payload.content);
   });
 });

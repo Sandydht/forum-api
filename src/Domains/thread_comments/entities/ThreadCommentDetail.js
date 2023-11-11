@@ -8,7 +8,7 @@ class ThreadCommentDetail {
 
     this.id = id;
     this.username = username;
-    this.date = createdAt !== null ? new Date(createdAt).toISOString() : null;
+    this.date = new Date(createdAt).toISOString();
     this.replies = replies;
     this.content = deletedAt !== null ? '**komentar telah dihapus**' : content;
   }

@@ -57,7 +57,7 @@ describe('GetThreadDetailUseCase', () => {
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
     expect(mockThreadRepository.getThreadById).toBeCalledWith(threadId);
     expect(mockThreadCommentRepository.getCommentByThreadId).toBeCalledWith(threadId);
-    expect(mockThreadCommentRepository.getCommentByThreadId).toBeCalledWith(threadId);
+
     expect(getThreadDetail.id).toBeDefined();
     expect(getThreadDetail.title).toBeDefined();
     expect(getThreadDetail.body).toBeDefined();
@@ -73,6 +73,7 @@ describe('GetThreadDetailUseCase', () => {
       expect(comment.replies).toBeDefined();
       expect(Array.isArray(comment.replies)).toBeTruthy();
       expect(comment.content).toBeDefined();
+      expect(mockThreadCommentReplyRepository.getRepliesByThread).toBeCalledWith(threadId, comment.id);
 
       comment.replies.forEach((reply) => {
         expect(reply.id).toBeDefined();

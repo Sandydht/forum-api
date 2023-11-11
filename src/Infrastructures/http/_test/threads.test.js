@@ -219,11 +219,23 @@ describe('/threads endpoint', () => {
       });
       const responseJsonThread = JSON.parse(responseThread.payload);
 
-      await server.inject({
+      const responseThreadComment = await server.inject({
         method: 'POST',
         url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
         payload: {
           content: 'sebuah comment',
+        },
+        headers: {
+          authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
+        },
+      });
+      const responseJsonThreadComment = JSON.parse(responseThreadComment.payload);
+
+      await server.inject({
+        method: 'POST',
+        url: `/threads/${responseJsonThread.data.addedThread.id}/comments/${responseJsonThreadComment.data.addedComment.id}/replies`,
+        payload: {
+          content: 'sebuah balasan',
         },
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
@@ -247,7 +259,23 @@ describe('/threads endpoint', () => {
       expect(responseJson.data.thread.date).toBeDefined();
       expect(responseJson.data.thread.username).toBeDefined();
       expect(responseJson.data.thread.comments).toBeDefined();
-      expect(responseJson.data.thread.comments).toHaveLength(1);
+      expect(Array.isArray(responseJson.data.thread.comments)).toBeTruthy();
+
+      responseJson.data.thread.comments.forEach((comment) => {
+        expect(comment.id).toBeDefined();
+        expect(comment.username).toBeDefined();
+        expect(comment.date).toBeDefined();
+        expect(comment.replies).toBeDefined();
+        expect(Array.isArray(comment.replies)).toBeTruthy();
+        expect(comment.content).toBeDefined();
+
+        comment.replies.forEach((reply) => {
+          expect(reply.id).toBeDefined();
+          expect(reply.username).toBeDefined();
+          expect(reply.date).toBeDefined();
+          expect(reply.content).toBeDefined();
+        });
+      });
     });
 
     it('should response 404 when thread not found', async () => {

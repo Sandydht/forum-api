@@ -45,11 +45,10 @@ describe('a ThreadCommentDetail entities', () => {
 
     // Assert
     expect(threadCommentDetail).toBeInstanceOf(ThreadCommentDetail);
-    expect(threadCommentDetail.id).toBeDefined();
-    expect(threadCommentDetail.username).toBeDefined();
-    expect(threadCommentDetail.date).toBeDefined();
-    expect(threadCommentDetail.content).toBeDefined();
-    expect(threadCommentDetail.replies).toBeDefined();
+    expect(threadCommentDetail.id).toEqual(payload.id);
+    expect(threadCommentDetail.username).toEqual(payload.username);
+    expect(threadCommentDetail.date).toEqual(new Date(payload.createdAt).toISOString());
+    expect(threadCommentDetail.replies).toEqual(payload.replies);
     expect(threadCommentDetail.content).toEqual('**komentar telah dihapus**');
   });
 
@@ -69,11 +68,10 @@ describe('a ThreadCommentDetail entities', () => {
 
     // Assert
     expect(threadCommentDetail).toBeInstanceOf(ThreadCommentDetail);
-    expect(threadCommentDetail.id).toBeDefined();
-    expect(threadCommentDetail.username).toBeDefined();
-    expect(threadCommentDetail.date).toBeDefined();
-    expect(threadCommentDetail.content).toBeDefined();
-    expect(threadCommentDetail.replies).toBeDefined();
+    expect(threadCommentDetail.id).toEqual(payload.id);
+    expect(threadCommentDetail.username).toEqual(payload.username);
+    expect(threadCommentDetail.date).toEqual(new Date(payload.createdAt).toISOString());
+    expect(threadCommentDetail.replies).toEqual(payload.replies);
     expect(threadCommentDetail.content).toEqual(payload.content);
   });
 });

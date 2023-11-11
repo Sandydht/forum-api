@@ -13,7 +13,7 @@ class GetThreadDetailUseCase {
     await this._threadRepository.verifyAvailableThread(threadId);
     const thread = await this._threadRepository.getThreadById(threadId);
     const threadComments = await this._threadCommentRepository.getCommentByThreadId(threadId);
-    const mapThreadComments = await Promise.all((threadComments || []).map(async (comment) => ({
+    const mapThreadComments = await Promise.all((threadComments).map(async (comment) => ({
       ...comment,
       replies: await this._threadCommentReplyRepository.getRepliesByThread(threadId, comment.id),
     })));
