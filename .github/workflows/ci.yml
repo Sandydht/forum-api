@@ -37,6 +37,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Create Database
+        run: psql -d postgresql://postgres@localhost/forumapi
+        env:
+          PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
