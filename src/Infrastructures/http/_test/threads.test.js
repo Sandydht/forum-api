@@ -12,11 +12,9 @@ describe('/threads endpoint', () => {
   });
 
   afterEach(async () => {
-    await Promise.all([
-      AuthenticationsTableTestHelper.cleanTable(),
-      UsersTableTestHelper.cleanTable(),
-      ThreadsTableTestHelper.cleanTable(),
-    ]);
+    await ThreadsTableTestHelper.cleanTable();
+    await AuthenticationsTableTestHelper.cleanTable();
+    await UsersTableTestHelper.cleanTable();
   });
 
   describe('when POST /threads', () => {

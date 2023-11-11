@@ -26,6 +26,9 @@ DomainErrorTranslator._directories = {
 
   'ADD_THREAD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan content'),
   'ADD_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPESIFICATION': new InvariantError('content harus string'),
+
+  'ADD_THREAD_COMMENT_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan content'),
+  'ADD_THREAD_COMMENT_REPLY.NOT_MEET_DATA_TYPE_SPESIFICATION': new InvariantError('content harus string'),
 };
 
 module.exports = DomainErrorTranslator;
