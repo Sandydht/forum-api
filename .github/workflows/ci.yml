@@ -6,24 +6,37 @@ on:
       - master
  
 jobs:
-  test:
+  commitlint:
     runs-on: ubuntu-latest
- 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Commit
+        uses: wagoid/commitlint-github-action@v4
+
+  test:
+    needs: commitlint
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
- 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install migrate and test
-      run: |
-        npm install
-        npm run migrate up
-        npm run test
+    - name: Install dependencies
+      run: npm install
+    - name: Eslint
+      run: npm run lint
+    - name: npm migrate and test
+      run: npm run migrate up && npm run test
       env:
         CI: true
         PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
