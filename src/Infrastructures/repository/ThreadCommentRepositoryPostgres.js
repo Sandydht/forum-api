@@ -1,6 +1,7 @@
 const ThreadCommentRepository = require('../../Domains/thread_comments/ThreadCommentRepository');
 const AddedThreadComment = require('../../Domains/thread_comments/entities/AddedThreadComment');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 
 class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
   constructor(pool, idGenerator) {
@@ -37,6 +38,30 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
     if (!result.rowCount) {
       throw new NotFoundError('Thread comment tidak ditemukan');
     }
+  }
+
+  async verifyAvailableThreadCommentByUser(userId, id) {
+    const query = {
+      text: 'SELECT id FROM thread_comments WHERE user_id = $1 AND id = $2',
+      values: [userId, id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new AuthorizationError('Thread comment tidak ditemukan');
+    }
+  }
+
+  async deleteThreadComment(id) {
+    const date = Math.floor(new Date().getTime() / 1000.0); // epoch
+
+    const query = {
+      text: 'UPDATE thread_comments SET deleted_at = $1, updated_at = $2 WHERE id = $3',
+      values: [date, date, id],
+    };
+
+    await this._pool.query(query);
   }
 }
 

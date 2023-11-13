@@ -10,5 +10,7 @@ describe('ThreadCommentRepository', () => {
     expect(threadCommentRepository).toBeInstanceOf(ThreadCommentRepository);
     await expect(threadCommentRepository.addThreadComment('', '', {})).rejects.toThrowError('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     await expect(threadCommentRepository.verifyAvailableThreadComment('')).rejects.toThrowError('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    await expect(threadCommentRepository.verifyAvailableThreadCommentByUser('', '')).rejects.toThrowError('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    await expect(threadCommentRepository.deleteThreadComment('')).rejects.toThrowError('THREAD_COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 });

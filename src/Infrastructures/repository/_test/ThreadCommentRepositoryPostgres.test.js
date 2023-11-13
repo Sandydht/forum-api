@@ -7,6 +7,7 @@ const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsT
 const AddThreadComment = require('../../../Domains/thread_comments/entities/AddThreadComment');
 const AddedThreadComment = require('../../../Domains/thread_comments/entities/AddedThreadComment');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
 describe('ThreadCommentRepositoryPostgres', () => {
   afterAll(async () => {
@@ -79,6 +80,47 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
       // Action & Assert
       await expect(threadCommentRepositoryPostgres.verifyAvailableThreadComment('comment-123')).resolves.not.toThrowError(NotFoundError);
+    });
+  });
+
+  describe('verifyAvailableThreadCommentByUser function', () => {
+    it('should throw AuthorizationError when thread comment not available', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentRepositoryPostgres.verifyAvailableThreadCommentByUser('user-123', 'comment-123')).rejects.toThrowError(AuthorizationError);
+    });
+
+    it('should not throw AuthorizationError when thread comment available', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', userId: 'user-123', threadId: 'thread-123' });
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentRepositoryPostgres.verifyAvailableThreadCommentByUser('user-123', 'comment-123')).resolves.not.toThrowError(AuthorizationError);
+    });
+  });
+
+  describe('deleteThreadComment function', () => {
+    it('should update thread comment', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action
+      await threadCommentRepositoryPostgres.deleteThreadComment('comment-123');
+
+      // Assert
+      const comments = await ThreadCommentsTableTestHelper.findThreadCommentById('comment-123');
+      expect(comments).toHaveLength(1);
+      expect(comments[0].deleted_at).not.toBeNull();
     });
   });
 });
