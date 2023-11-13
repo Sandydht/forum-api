@@ -408,7 +408,7 @@ describe('/comments endpoint', () => {
       expect(responseJson.message).toEqual('Missing authentication');
     });
 
-    it('should response 403 when the comment is not the user`s', async () => {
+    it('should response 403 when the comment is not the user', async () => {
       // Arrange
       const server = await createServer(container);
 
