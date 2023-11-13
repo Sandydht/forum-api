@@ -17,7 +17,7 @@ describe('AddThreadCommentReply', () => {
     };
 
     // Action & Assert
-    expect(() => new AddThreadCommentReply(payload)).toThrowError('ADD_THREAD_COMMENT_REPLY.NOT_MEET_DATA_TYPE_SPESIFICATION');
+    expect(() => new AddThreadCommentReply(payload)).toThrowError('ADD_THREAD_COMMENT_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create addThreadCommentReply object correctly', () => {
