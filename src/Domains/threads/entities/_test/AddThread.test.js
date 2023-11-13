@@ -16,7 +16,7 @@ describe('a AddThread entities', () => {
     // Arrange
     const payload = {
       title: 'sebuah thread',
-      body: 12345,
+      body: 123,
     };
 
     // Action & Assert
