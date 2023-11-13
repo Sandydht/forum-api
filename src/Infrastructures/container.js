@@ -27,6 +27,7 @@ const ThreadCommentRepository = require('../Domains/thread_comments/ThreadCommen
 const ThreadCommentRepositoryPostgres = require('./repository/ThreadCommentRepositoryPostgres');
 const AddThreadCommentReplyUseCase = require('../Applications/use_case/AddThreadCommentReplyUseCase');
 const ThreadCommentReplyRepository = require('../Domains/thread_comment_replies/ThreadCommentReplyRepository');
+const ThreadCommentReplyRepositoryPostgres = require('./repository/ThreadCommentReplyRepositoryPostgres');
 
 const container = createContainer();
 
@@ -95,6 +96,20 @@ container.register([
   {
     key: ThreadCommentRepository.name,
     Class: ThreadCommentRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool,
+        },
+        {
+          concrete: nanoid,
+        },
+      ],
+    },
+  },
+  {
+    key: ThreadCommentReplyRepository.name,
+    Class: ThreadCommentReplyRepositoryPostgres,
     parameter: {
       dependencies: [
         {
