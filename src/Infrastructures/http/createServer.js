@@ -18,21 +18,21 @@ const createServer = async (container) => {
   ]);
 
   // Authentication JWT strategy
-  server.auth.strategy('forum_app', 'jwt', {
-    keys: process.env.ACCESS_TOKEN_KEY,
-    verify: {
-      aud: false,
-      iss: false,
-      sub: false,
-      maxAgeSec: process.env.ACCCESS_TOKEN_AGE,
-    },
-    validate: (artifacts) => ({
-      isValid: true,
-      credentials: {
-        id: artifacts.decoded.payload.id,
-      },
-    }),
-  });
+  // server.auth.strategy('forum_app', 'jwt', {
+  //   keys: process.env.ACCESS_TOKEN_KEY,
+  //   verify: {
+  //     aud: false,
+  //     iss: false,
+  //     sub: false,
+  //     maxAgeSec: process.env.ACCCESS_TOKEN_AGE,
+  //   },
+  //   validate: (artifacts) => ({
+  //     isValid: true,
+  //     credentials: {
+  //       id: artifacts.decoded.payload.id,
+  //     },
+  //   }),
+  // });
 
   await server.register([
     {
