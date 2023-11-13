@@ -69,7 +69,7 @@ describe('ThreadRepositoryPostgres', () => {
       await expect(threadRepositoryPostgres.verifyAvailableThread('thread-123')).rejects.toThrowError(NotFoundError);
     });
 
-    it('should throw NotFoundError when thread available', async () => {
+    it('should not throw NotFoundError when thread available', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });

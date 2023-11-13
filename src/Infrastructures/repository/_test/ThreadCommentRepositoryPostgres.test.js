@@ -6,6 +6,7 @@ const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper');
 const AddThreadComment = require('../../../Domains/thread_comments/entities/AddThreadComment');
 const AddedThreadComment = require('../../../Domains/thread_comments/entities/AddedThreadComment');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 describe('ThreadCommentRepositoryPostgres', () => {
   afterAll(async () => {
@@ -57,6 +58,27 @@ describe('ThreadCommentRepositoryPostgres', () => {
         content: 'sebuah comment',
         owner: 'user-123',
       }));
+    });
+  });
+
+  describe('verifyAvailableThreadComment function', () => {
+    it('should throw NotFoundError when thread comment not available', async () => {
+      // Arrange
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentRepositoryPostgres.verifyAvailableThreadComment('comment-123')).rejects.toThrowError(NotFoundError);
+    });
+
+    it('should not throw NotFoundError when thread comment available', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentRepositoryPostgres.verifyAvailableThreadComment('comment-123')).resolves.not.toThrowError(NotFoundError);
     });
   });
 });

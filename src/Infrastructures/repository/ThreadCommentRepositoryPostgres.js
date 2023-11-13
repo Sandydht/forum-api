@@ -1,5 +1,6 @@
 const ThreadCommentRepository = require('../../Domains/thread_comments/ThreadCommentRepository');
 const AddedThreadComment = require('../../Domains/thread_comments/entities/AddedThreadComment');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 
 class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
   constructor(pool, idGenerator) {
@@ -23,6 +24,19 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
       content: result.rows[0].content,
       owner: result.rows[0].user_id,
     });
+  }
+
+  async verifyAvailableThreadComment(id) {
+    const query = {
+      text: 'SELECT id FROM thread_comments WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('Thread comment tidak ditemukan');
+    }
   }
 }
 
