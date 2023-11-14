@@ -12,5 +12,6 @@ describe('ThreadCommentReplyRepository', () => {
     await expect(threadCommentReplyRepository.verifyAvailableThreadCommentReplyByUser('', '')).rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     await expect(threadCommentReplyRepository.verifyAvailableThreadCommentReply('')).rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     await expect(threadCommentReplyRepository.deleteThreadCommentReply('')).rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    await expect(threadCommentReplyRepository.getThreadCommentReplyByCommentId('')).rejects.toThrowError('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 });

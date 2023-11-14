@@ -123,4 +123,45 @@ describe('ThreadCommentRepositoryPostgres', () => {
       expect(comments[0].deleted_at).not.toBeNull();
     });
   });
+
+  describe('getThreadCommentsByThreadId function', () => {
+    it('should return empty array when comments not found', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action
+      const comments = await threadCommentRepositoryPostgres.getThreadCommentsByThreadId('thread-123');
+
+      // Assert
+      expect(comments).toBeInstanceOf(Array);
+    });
+
+    it('should return comments correctly', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-234', threadId: 'thread-123', userId: 'user-123' });
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Delete comment
+      await ThreadCommentsTableTestHelper.softDeleteThreadCommentById('comment-234');
+
+      // Action
+      const comments = await threadCommentRepositoryPostgres.getThreadCommentsByThreadId('thread-123');
+      const [comment1, comment2] = comments;
+
+      expect(comment1.id).toEqual('comment-234');
+      expect(comment1.username).toEqual('sandy');
+      expect(typeof comment1.date).toBe('string');
+      expect(comment1.content).toEqual('**komentar telah dihapus**');
+
+      expect(comment2.id).toEqual('comment-123');
+      expect(comment2.username).toEqual('sandy');
+      expect(typeof comment2.date).toBe('string');
+      expect(comment2.content).toEqual('sebuah comment');
+    });
+  });
 });
