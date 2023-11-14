@@ -55,7 +55,7 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
   }
 
   async deleteThreadComment(id) {
-    const date = new Date().getTime() / 1000.0; // epoch
+    const date = new Date().toISOString();
 
     const query = {
       text: 'UPDATE thread_comments SET deleted_at = $1, updated_at = $2 WHERE id = $3',

@@ -21,18 +21,18 @@ exports.up = (pgm) => {
       type: 'text',
       notNull: true,
     },
-    created_at: { // epoch
-      type: 'bigint',
+    created_at: {
+      type: 'text',
       notNull: true,
-      default: new Date().getTime() / 1000.0,
+      default: new Date().toISOString(),
     },
-    updated_at: { // epoch
-      type: 'bigint',
+    updated_at: {
+      type: 'text',
       notNull: true,
-      default: new Date().getTime() / 1000.0,
+      default: new Date().toISOString(),
     },
-    deleted_at: { // epoch
-      type: 'bigint',
+    deleted_at: {
+      type: 'text',
       notNull: false,
       default: null,
     },

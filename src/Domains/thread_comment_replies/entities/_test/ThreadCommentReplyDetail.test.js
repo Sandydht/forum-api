@@ -7,7 +7,7 @@ describe('ThreadCommentReplyDetail', () => {
     const payload = {
       id: 'reply-123',
       username: 'sandy',
-      date: new Date().getTime() / 1000.0, // epoch
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah balasan',
     };
 
@@ -20,7 +20,7 @@ describe('ThreadCommentReplyDetail', () => {
     const payload = {
       id: 123,
       username: 'sandy',
-      date: new Date().getTime() / 1000.0, // epoch
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah balasan',
       isDelete: false,
     };
@@ -34,7 +34,7 @@ describe('ThreadCommentReplyDetail', () => {
     const payload = {
       id: 'reply-123',
       username: 'sandy',
-      date: new Date().getTime() / 1000.0, // epoch
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah balasan',
       isDelete: true,
     };
@@ -46,7 +46,7 @@ describe('ThreadCommentReplyDetail', () => {
     expect(threadCommentReplyDetail).toBeInstanceOf(ThreadCommentReplyDetail);
     expect(threadCommentReplyDetail.id).toEqual(payload.id);
     expect(threadCommentReplyDetail.username).toEqual(payload.username);
-    expect(threadCommentReplyDetail.date).toEqual(new Date(payload.date).toISOString());
+    expect(threadCommentReplyDetail.date).toEqual(new Date('2023-10-14').toISOString());
     expect(threadCommentReplyDetail.content).toEqual('**balasan telah dihapus**');
   });
 
@@ -55,7 +55,7 @@ describe('ThreadCommentReplyDetail', () => {
     const payload = {
       id: 'reply-123',
       username: 'sandy',
-      date: new Date().getTime() / 1000.0, // epoch
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah balasan',
       isDelete: false,
     };
@@ -67,7 +67,7 @@ describe('ThreadCommentReplyDetail', () => {
     expect(threadCommentReplyDetail).toBeInstanceOf(ThreadCommentReplyDetail);
     expect(threadCommentReplyDetail.id).toEqual(payload.id);
     expect(threadCommentReplyDetail.username).toEqual(payload.username);
-    expect(threadCommentReplyDetail.date).toEqual(new Date(payload.date).toISOString());
+    expect(threadCommentReplyDetail.date).toEqual(new Date('2023-10-14').toISOString());
     expect(threadCommentReplyDetail.content).toEqual(payload.content);
   });
 });
