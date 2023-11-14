@@ -47,7 +47,7 @@ describe('a ThreadDetail entities', () => {
     expect(thread.id).toEqual(payload.id);
     expect(thread.title).toEqual(payload.title);
     expect(thread.body).toEqual(payload.body);
-    expect(thread.date).toEqual(new Date('2023-10-14').toISOString());
+    expect(thread.date).toEqual(payload.date);
     expect(thread.username).toEqual(payload.username);
   });
 });
