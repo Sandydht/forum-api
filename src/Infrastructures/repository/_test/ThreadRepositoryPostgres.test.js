@@ -94,7 +94,11 @@ describe('ThreadRepositoryPostgres', () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
       await ThreadsTableTestHelper.addThread({
-        id: 'thread-123', title: 'sebuah thread', body: 'sebuah body thread', userId: 'user-123',
+        id: 'thread-123',
+        title: 'sebuah thread',
+        body: 'sebuah body thread',
+        userId: 'user-123',
+        createdAt: new Date('2023-11-14T13:00:00.000Z').toISOString(),
       });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
@@ -105,7 +109,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(thread.id).toEqual('thread-123');
       expect(thread.title).toEqual('sebuah thread');
       expect(thread.body).toEqual('sebuah body thread');
-      expect(typeof thread.date).toEqual('string');
+      expect(thread.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(thread.username).toEqual('sandy');
     });
   });

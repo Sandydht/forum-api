@@ -28,19 +28,19 @@ class ThreadsHandler {
     const getThreadDetailUseCase = this._container.getInstance(GetThreadDetailUseCase.name);
     const getThreadCommentByThreadUseCase = this._container.getInstance(GetThreadCommentByThreadUseCase.name);
 
-    const [thread, comments] = await Promise.all([
+    const [threadDetail, comments] = await Promise.all([
       getThreadDetailUseCase.execute(threadId),
       getThreadCommentByThreadUseCase.execute(threadId),
     ]);
 
+    const thread = {
+      ...threadDetail,
+      comments,
+    };
+
     return {
       status: 'success',
-      data: {
-        thread: {
-          ...thread,
-          comments,
-        },
-      },
+      data: { thread },
     };
   }
 }

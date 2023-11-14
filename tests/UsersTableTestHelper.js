@@ -3,11 +3,11 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const UsersTableTestHelper = {
   async addUser({
-    id = 'user-123', username = 'sandy', password = 'secret', fullname = 'Sandy Dwi', createdAt = new Date().toISOString(),
+    id = 'user-123', username = 'sandy', password = 'secret', fullname = 'Sandy Dwi', isDelete = false, createdAt = new Date(),
   }) {
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5)',
-      values: [id, username, password, fullname, createdAt],
+      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $6)',
+      values: [id, username, password, fullname, isDelete, createdAt],
     };
 
     await pool.query(query);
@@ -24,11 +24,9 @@ const UsersTableTestHelper = {
   },
 
   async softDeleteUserById(id) {
-    const date = new Date().toISOString();
-
     const query = {
-      text: 'UPDATE users SET deleted_at = $1, updated_at = $2 WHERE id = $3',
-      values: [date, date, id],
+      text: 'UPDATE users SET is_delete = $1 WHERE id = $3',
+      values: [true, id],
     };
 
     await pool.query(query);
