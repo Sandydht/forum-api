@@ -234,6 +234,8 @@ describe('/threads endpoint', () => {
       expect(responseJson.data.thread.body).toEqual('sebuah body thread');
       expect(typeof responseJson.data.thread.date).toEqual('string');
       expect(responseJson.data.thread.username).toEqual('sandy');
+      expect(responseJson.data.thread.comments).toBeInstanceOf(Array);
+      expect(responseJson.data.thread.comments).toHaveLength(0);
     });
 
     it('should response 200 when thread available but comments is not empty', async () => {

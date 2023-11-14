@@ -32,6 +32,7 @@ const DeleteThreadCommentUseCase = require('../Applications/use_case/DeleteThrea
 const DeleteThreadCommentReplyUseCase = require('../Applications/use_case/DeleteThreadCommentReplyUseCase');
 const GetThreadDetailUseCase = require('../Applications/use_case/GetThreadDetailUseCase');
 const GetThreadCommentByThreadUseCase = require('../Applications/use_case/GetThreadCommentByThreadUseCase');
+const GetThreadCommentRepliesByCommentUseCase = require('../Applications/use_case/GetThreadCommentRepliesCommentUseCase');
 
 const container = createContainer();
 
@@ -315,6 +316,23 @@ container.register([
         {
           name: 'threadCommentRepository',
           internal: ThreadCommentRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetThreadCommentRepliesByCommentUseCase.name,
+    Class: GetThreadCommentRepliesByCommentUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadCommentRepository',
+          internal: ThreadCommentRepository.name,
+        },
+        {
+          name: 'threadCommentReplyRepository',
+          internal: ThreadCommentReplyRepository.name,
         },
       ],
     },
