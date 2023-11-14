@@ -7,7 +7,7 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah comment',
     };
 
@@ -20,7 +20,7 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 123,
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah comment',
       isDelete: false,
     };
@@ -34,7 +34,7 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah comment',
       isDelete: true,
     };
@@ -55,7 +55,7 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah comment',
       isDelete: false,
     };

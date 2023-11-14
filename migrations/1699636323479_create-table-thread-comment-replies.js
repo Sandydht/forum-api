@@ -34,17 +34,17 @@ exports.up = (pgm) => {
       onUpdate: 'cascade',
     },
     created_at: { // epoch
-      type: 'integer',
+      type: 'bigint',
       notNull: true,
-      default: Math.floor(new Date().getTime() / 1000.0),
+      default: new Date().getTime() / 1000.0,
     },
     updated_at: { // epoch
-      type: 'integer',
+      type: 'bigint',
       notNull: true,
-      default: Math.floor(new Date().getTime() / 1000.0),
+      default: new Date().getTime() / 1000.0,
     },
     deleted_at: { // epoch
-      type: 'integer',
+      type: 'bigint',
       notNull: false,
       default: null,
     },

@@ -13,7 +13,7 @@ describe('GetThreadDetailUseCase', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       username: 'sandy',
     })));
 
@@ -31,7 +31,7 @@ describe('GetThreadDetailUseCase', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       username: 'sandy',
     }));
   });

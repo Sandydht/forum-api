@@ -55,7 +55,7 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
   }
 
   async deleteThreadComment(id) {
-    const date = Math.floor(new Date().getTime() / 1000.0); // epoch
+    const date = new Date().getTime() / 1000.0; // epoch
 
     const query = {
       text: 'UPDATE thread_comments SET deleted_at = $1, updated_at = $2 WHERE id = $3',
@@ -67,7 +67,8 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
 
   async getThreadCommentsByThreadId(threadId) {
     const query = {
-      text: 'SELECT thread_comments.id, thread_comments.created_at, thread_comments.deleted_at, thread_comments.content, users.username FROM thread_comments INNER JOIN users ON thread_comments.user_id = users.id WHERE thread_comments.thread_id = $1 ORDER BY thread_comments.created_at ASC',
+      // eslint-disable-next-line max-len
+      text: 'SELECT thread_comments.id, thread_comments.created_at, thread_comments.deleted_at, thread_comments.content, users.username FROM thread_comments INNER JOIN users ON thread_comments.user_id = users.id WHERE thread_comments.thread_id = $1 ORDER BY thread_comments.created_at DESC, thread_comments.id DESC',
       values: [threadId],
     };
 

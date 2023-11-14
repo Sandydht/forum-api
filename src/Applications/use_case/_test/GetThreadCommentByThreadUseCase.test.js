@@ -16,14 +16,14 @@ describe('GetThreadCommentByThreadUseCase', () => {
       new ThreadCommentDetail({
         id: 'comment-123',
         username: 'sandy',
-        date: Math.floor(new Date().getTime() / 1000.0), // epoch
+        date: new Date().getTime() / 1000.0, // epoch
         content: 'sebuah comment',
         isDelete: true,
       }),
       new ThreadCommentDetail({
         id: 'comment-234',
         username: 'sandy',
-        date: Math.floor(new Date().getTime() / 1000.0), // epoch
+        date: new Date().getTime() / 1000.0, // epoch
         content: 'sebuah comment',
         isDelete: false,
       }),
@@ -46,14 +46,14 @@ describe('GetThreadCommentByThreadUseCase', () => {
     expect(comment1).toStrictEqual(new ThreadCommentDetail({
       id: 'comment-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah comment',
       isDelete: true,
     }));
     expect(comment2).toStrictEqual(new ThreadCommentDetail({
       id: 'comment-234',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah comment',
       isDelete: false,
     }));

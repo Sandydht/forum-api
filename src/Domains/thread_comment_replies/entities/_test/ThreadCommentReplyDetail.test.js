@@ -7,7 +7,7 @@ describe('ThreadCommentReplyDetail', () => {
     const payload = {
       id: 'reply-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah balasan',
     };
 
@@ -20,7 +20,7 @@ describe('ThreadCommentReplyDetail', () => {
     const payload = {
       id: 123,
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah balasan',
       isDelete: false,
     };
@@ -34,7 +34,7 @@ describe('ThreadCommentReplyDetail', () => {
     const payload = {
       id: 'reply-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah balasan',
       isDelete: true,
     };
@@ -55,7 +55,7 @@ describe('ThreadCommentReplyDetail', () => {
     const payload = {
       id: 'reply-123',
       username: 'sandy',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       content: 'sebuah balasan',
       isDelete: false,
     };

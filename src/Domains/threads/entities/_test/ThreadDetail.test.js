@@ -8,7 +8,7 @@ describe('a ThreadDetail entities', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
     };
 
     // Assert
@@ -21,7 +21,7 @@ describe('a ThreadDetail entities', () => {
       id: 123,
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       username: 'sandy',
     };
 
@@ -35,7 +35,7 @@ describe('a ThreadDetail entities', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: Math.floor(new Date().getTime() / 1000.0), // epoch
+      date: new Date().getTime() / 1000.0, // epoch
       username: 'sandy',
     };
 
