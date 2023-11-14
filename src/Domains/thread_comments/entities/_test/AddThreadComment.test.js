@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const AddThreadComment = require('../AddThreadComment');
 
-describe('AddThreadComment entities', () => {
+describe('a AddThreadComment entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {};
@@ -13,11 +13,11 @@ describe('AddThreadComment entities', () => {
   it('should throw error when payload did not meet data type spesification', () => {
     // Arrange
     const payload = {
-      content: 1234,
+      content: 123,
     };
 
     // Action & Assert
-    expect(() => new AddThreadComment(payload)).toThrowError('ADD_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPESIFICATION');
+    expect(() => new AddThreadComment(payload)).toThrowError('ADD_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create addThreadComment object correctly', () => {

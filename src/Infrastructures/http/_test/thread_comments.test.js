@@ -1,13 +1,12 @@
 /* eslint-disable no-undef */
 const pool = require('../../database/postgres/pool');
-const AuthenticationsTableTestHelper = require('../../../../tests/AuthenticationsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper');
 const createServer = require('../createServer');
 const container = require('../../container');
 
-describe('/threads comments endpoint', () => {
+describe('/comments endpoint', () => {
   afterAll(async () => {
     await pool.end();
   });
@@ -15,17 +14,12 @@ describe('/threads comments endpoint', () => {
   afterEach(async () => {
     await ThreadCommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
-    await AuthenticationsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
   });
 
-  describe('when POST /threads comment', () => {
-    it('should response 201 and new thread comment', async () => {
+  describe('when POST /threads/{threadId}/comments', () => {
+    it('should response 201 and persisted thread comment', async () => {
       // Arrange
-      const requestPayload = {
-        content: 'sebuah comment',
-      };
-
       const server = await createServer(container);
 
       await server.inject({
@@ -65,7 +59,9 @@ describe('/threads comments endpoint', () => {
       const response = await server.inject({
         method: 'POST',
         url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
-        payload: requestPayload,
+        payload: {
+          content: 'sebuah comment',
+        },
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
         },
@@ -82,10 +78,6 @@ describe('/threads comments endpoint', () => {
 
     it('should response 401 when user not logged in', async () => {
       // Arrange
-      const requestPayload = {
-        content: 'sebuah comment',
-      };
-
       const server = await createServer(container);
 
       await server.inject({
@@ -125,7 +117,9 @@ describe('/threads comments endpoint', () => {
       const response = await server.inject({
         method: 'POST',
         url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
-        payload: requestPayload,
+        payload: {
+          content: 'sebuah comment',
+        },
       });
 
       // Assert
@@ -135,12 +129,8 @@ describe('/threads comments endpoint', () => {
       expect(responseJson.message).toEqual('Missing authentication');
     });
 
-    it('should response 404 if thread not found', async () => {
+    it('should response 404 when thread not found', async () => {
       // Arrange
-      const requestPayload = {
-        content: 'sebuah comment',
-      };
-
       const server = await createServer(container);
 
       await server.inject({
@@ -166,8 +156,8 @@ describe('/threads comments endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'POST',
-        url: '/threads/thread-234/comments',
-        payload: requestPayload,
+        url: '/threads/thread-123/comments',
+        payload: {},
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
         },
@@ -177,13 +167,11 @@ describe('/threads comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('thread tidak ditemukan');
+      expect(responseJson.message).toEqual('Thread tidak ditemukan');
     });
 
-    it('should response 400 if add thread comment payload not contain needed property', async () => {
+    it('should response 400 when request payload not contain needed property', async () => {
       // Arrange
-      const requestPayload = {};
-
       const server = await createServer(container);
 
       await server.inject({
@@ -223,7 +211,7 @@ describe('/threads comments endpoint', () => {
       const response = await server.inject({
         method: 'POST',
         url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
-        payload: requestPayload,
+        payload: {},
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
         },
@@ -233,15 +221,11 @@ describe('/threads comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('harus mengirimkan content');
+      expect(responseJson.message).toEqual('tidak dapat membuat thread comment baru karena properti yang dibutuhkan tidak ada');
     });
 
-    it('should response 400 if add thread comment payload wrong data type', async () => {
+    it('should response 400 when request payload not meet data type spesification', async () => {
       // Arrange
-      const requestPayload = {
-        content: 1234,
-      };
-
       const server = await createServer(container);
 
       await server.inject({
@@ -281,7 +265,9 @@ describe('/threads comments endpoint', () => {
       const response = await server.inject({
         method: 'POST',
         url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
-        payload: requestPayload,
+        payload: {
+          content: 123,
+        },
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
         },
@@ -291,12 +277,12 @@ describe('/threads comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('content harus string');
+      expect(responseJson.message).toEqual('tidak dapat membuat thread comment baru karena tipe data tidak sesuai');
     });
   });
 
-  describe('when DELETE /threads comment', () => {
-    it('should response 200 if thread comment deleted', async () => {
+  describe('when DELETE /threads/{threadId}/comments/{commentId}', () => {
+    it('should response 200 when thread comment deleted successfully', async () => {
       // Arrange
       const server = await createServer(container);
 
@@ -364,10 +350,55 @@ describe('/threads comments endpoint', () => {
       // Arrange
       const server = await createServer(container);
 
+      await server.inject({
+        method: 'POST',
+        url: '/users',
+        payload: {
+          username: 'sandy',
+          password: 'secret',
+          fullname: 'Sandy Dwi',
+        },
+      });
+
+      const responseAuthentication = await server.inject({
+        method: 'POST',
+        url: '/authentications',
+        payload: {
+          username: 'sandy',
+          password: 'secret',
+        },
+      });
+      const responseJsonAuthentication = JSON.parse(responseAuthentication.payload);
+
+      const responseThread = await server.inject({
+        method: 'POST',
+        url: '/threads',
+        payload: {
+          title: 'sebuah thread',
+          body: 'sebuah body thread',
+        },
+        headers: {
+          authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
+        },
+      });
+      const responseJsonThread = JSON.parse(responseThread.payload);
+
+      const responseThreadComment = await server.inject({
+        method: 'POST',
+        url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
+        payload: {
+          content: 'sebuah comment',
+        },
+        headers: {
+          authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
+        },
+      });
+      const responseJsonThreadComment = JSON.parse(responseThreadComment.payload);
+
       // Action
       const response = await server.inject({
         method: 'DELETE',
-        url: '/threads/thread-123/comments/comment-123',
+        url: `/threads/${responseJsonThread.data.addedThread.id}/comments/${responseJsonThreadComment.data.addedComment.id}`,
       });
 
       // Assert
@@ -377,7 +408,8 @@ describe('/threads comments endpoint', () => {
       expect(responseJson.message).toEqual('Missing authentication');
     });
 
-    it('should response 403 when user doesn`t have delete thread comment access', async () => {
+    it('should response 403 when the comment is not the user', async () => {
+      // Arrange
       const server = await createServer(container);
 
       await Promise.all([
@@ -435,7 +467,7 @@ describe('/threads comments endpoint', () => {
       });
       const responseJsonThread = JSON.parse(responseThread.payload);
 
-      const [responseComment1] = await Promise.all([
+      const [responseThreadComment1] = await Promise.all([
         server.inject({
           method: 'POST',
           url: `/threads/${responseJsonThread.data.addedThread.id}/comments`,
@@ -457,12 +489,12 @@ describe('/threads comments endpoint', () => {
           },
         }),
       ]);
-      const responseJsonComment1 = JSON.parse(responseComment1.payload);
+      const responseJsonThreadComment1 = JSON.parse(responseThreadComment1.payload);
 
       // Action
       const response = await server.inject({
         method: 'DELETE',
-        url: `/threads/${responseJsonThread.data.addedThread.id}/comments/${responseJsonComment1.data.addedComment.id}`,
+        url: `/threads/${responseJsonThread.data.addedThread.id}/comments/${responseJsonThreadComment1.data.addedComment.id}`,
         headers: {
           authorization: `Bearer ${responseJsonAuthentication2.data.accessToken}`,
         },
@@ -472,10 +504,10 @@ describe('/threads comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(403);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Anda tidak dapat menghapus komentar ini');
+      expect(responseJson.message).toEqual('Thread comment tidak ditemukan');
     });
 
-    it('should response 404 if thread not found', async () => {
+    it('should response 404 when thread not found', async () => {
       // Arrange
       const server = await createServer(container);
 
@@ -502,7 +534,7 @@ describe('/threads comments endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'DELETE',
-        url: '/threads/thread-234/comments/comment-234',
+        url: '/threads/{threadId}/comments/{commentId}',
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
         },
@@ -512,10 +544,10 @@ describe('/threads comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('thread tidak ditemukan');
+      expect(responseJson.message).toEqual('Thread tidak ditemukan');
     });
 
-    it('should response 404 if thread comment not found', async () => {
+    it('should response 404 when thread comment not found', async () => {
       // Arrange
       const server = await createServer(container);
 
@@ -555,7 +587,7 @@ describe('/threads comments endpoint', () => {
       // Action
       const response = await server.inject({
         method: 'DELETE',
-        url: `/threads/${responseJsonThread.data.addedThread.id}/comments/comment-123`,
+        url: `/threads/${responseJsonThread.data.addedThread.id}/comments/{commentId}`,
         headers: {
           authorization: `Bearer ${responseJsonAuthentication.data.accessToken}`,
         },
@@ -565,7 +597,7 @@ describe('/threads comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('Comment tidak ditemukan');
+      expect(responseJson.message).toEqual('Thread comment tidak ditemukan');
     });
   });
 });

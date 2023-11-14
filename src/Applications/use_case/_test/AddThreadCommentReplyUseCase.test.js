@@ -1,14 +1,13 @@
 /* eslint-disable no-undef */
 const AddThreadCommentReplyUseCase = require('../AddThreadCommentReplyUseCase');
-const AddThreadCommentReply = require('../../../Domains/thread_comment_replies/entities/AddThreadCommentReply');
-const AddedThreadCommentReply = require('../../../Domains/thread_comment_replies/entities/AddedThreadCommentReply');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const ThreadCommentRepository = require('../../../Domains/thread_comments/ThreadCommentRepository');
 const ThreadCommentReplyRepository = require('../../../Domains/thread_comment_replies/ThreadCommentReplyRepository');
+const AddedThreadCommentReply = require('../../../Domains/thread_comment_replies/entities/AddedThreadCommentReply');
+const AddThreadCommentReply = require('../../../Domains/thread_comment_replies/entities/AddThreadCommentReply');
 
 describe('AddThreadCommentReplyUseCase', () => {
   it('should orchestrating the add thread comment reply action correctly', async () => {
-    // Arrange
     const userId = 'user-123';
     const threadId = 'thread-123';
     const commentId = 'comment-123';
@@ -16,22 +15,17 @@ describe('AddThreadCommentReplyUseCase', () => {
       content: 'sebuah balasan',
     };
 
-    // Mock
-    const mockAddThreadCommentReply = new AddThreadCommentReply({
-      content: useCasePayload.content,
-    });
-    const mockAddedThreadCommentReply = new AddedThreadCommentReply({
-      id: 'reply-123',
-      content: 'sebuah balasan',
-      userId,
-    });
     const mockThreadRepository = new ThreadRepository();
     const mockThreadCommentRepository = new ThreadCommentRepository();
     const mockThreadCommentReplyRepository = new ThreadCommentReplyRepository();
 
     mockThreadRepository.verifyAvailableThread = jest.fn().mockImplementation(() => Promise.resolve());
     mockThreadCommentRepository.verifyAvailableThreadComment = jest.fn().mockImplementation(() => Promise.resolve());
-    mockThreadCommentReplyRepository.addThreadCommentReply = jest.fn().mockImplementation(() => Promise.resolve(mockAddedThreadCommentReply));
+    mockThreadCommentReplyRepository.addThreadCommentReply = jest.fn().mockImplementation(() => Promise.resolve(new AddedThreadCommentReply({
+      id: 'reply-123',
+      content: 'sebuah balasan',
+      owner: 'user-123',
+    })));
 
     const addThreadCommentReplyUseCase = new AddThreadCommentReplyUseCase({
       threadRepository: mockThreadRepository,
@@ -40,15 +34,19 @@ describe('AddThreadCommentReplyUseCase', () => {
     });
 
     // Action
-    const addedThreadCommentReply = await addThreadCommentReplyUseCase.execute(userId, threadId, commentId, mockAddThreadCommentReply);
+    const addedReply = await addThreadCommentReplyUseCase.execute(userId, threadId, commentId, useCasePayload);
 
     // Assert
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
     expect(mockThreadCommentRepository.verifyAvailableThreadComment).toBeCalledWith(commentId);
-    expect(addedThreadCommentReply).toStrictEqual(new AddedThreadCommentReply({
+    expect(mockThreadCommentReplyRepository.addThreadCommentReply).toBeCalledWith(userId, threadId, commentId, new AddThreadCommentReply({
+      content: 'sebuah balasan',
+    }));
+    expect(addThreadCommentReplyUseCase).toBeInstanceOf(AddThreadCommentReplyUseCase);
+    expect(addedReply).toStrictEqual(new AddedThreadCommentReply({
       id: 'reply-123',
-      content: useCasePayload.content,
-      userId,
+      content: 'sebuah balasan',
+      owner: 'user-123',
     }));
   });
 });

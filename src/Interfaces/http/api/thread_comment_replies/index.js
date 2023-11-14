@@ -1,5 +1,5 @@
-const ThreadCommentRepliesHandler = require('./handler');
 const routes = require('./routes');
+const ThreadCommentRepliesHandler = require('./handler');
 
 module.exports = {
   name: 'thread_comment_replies',

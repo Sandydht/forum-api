@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const AddedThread = require('../AddedThread');
 
-describe('AddedThread entities', () => {
+describe('a AddedThread entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
@@ -9,7 +9,7 @@ describe('AddedThread entities', () => {
       title: 'sebuah thread',
     };
 
-    // Action & Assert
+    // Assert
     expect(() => new AddedThread(payload)).toThrowError('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -21,8 +21,8 @@ describe('AddedThread entities', () => {
       owner: 123,
     };
 
-    // Action & Assert
-    expect(() => new AddedThread(payload)).toThrowError('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPESIFICATION');
+    // Assert
+    expect(() => new AddedThread(payload)).toThrowError('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create addedThread object correctly', () => {

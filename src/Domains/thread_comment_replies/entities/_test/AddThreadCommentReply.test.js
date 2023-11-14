@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const AddThreadCommentReply = require('../AddThreadCommentReply');
 
-describe('AddReply entities', () => {
+describe('AddThreadCommentReply', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {};
@@ -17,7 +17,7 @@ describe('AddReply entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddThreadCommentReply(payload)).toThrowError('ADD_THREAD_COMMENT_REPLY.NOT_MEET_DATA_TYPE_SPESIFICATION');
+    expect(() => new AddThreadCommentReply(payload)).toThrowError('ADD_THREAD_COMMENT_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create addThreadCommentReply object correctly', () => {
@@ -27,10 +27,10 @@ describe('AddReply entities', () => {
     };
 
     // Action
-    const addThreadCommentReply = new AddThreadCommentReply(payload);
+    const addedReply = new AddThreadCommentReply(payload);
 
     // Assert
-    expect(addThreadCommentReply).toBeInstanceOf(AddThreadCommentReply);
-    expect(addThreadCommentReply.content).toEqual(payload.content);
+    expect(addedReply).toBeInstanceOf(AddThreadCommentReply);
+    expect(addedReply.content).toEqual(payload.content);
   });
 });

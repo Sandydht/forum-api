@@ -1,5 +1,5 @@
-const ThreadsHandler = require('./handler');
 const routes = require('./routes');
+const ThreadsHandler = require('./handler');
 
 module.exports = {
   name: 'threads',

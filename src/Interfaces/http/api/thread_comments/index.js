@@ -1,5 +1,5 @@
-const ThreadCommentsHandler = require('./handler');
 const routes = require('./routes');
+const ThreadCommentsHandler = require('./handler');
 
 module.exports = {
   name: 'thread_comments',

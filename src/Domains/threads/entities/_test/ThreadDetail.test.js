@@ -8,11 +8,10 @@ describe('a ThreadDetail entities', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
-      username: 'sandy',
+      date: new Date('2023-10-14').toISOString(),
     };
 
-    // Action & Assert
+    // Assert
     expect(() => new ThreadDetail(payload)).toThrowError('THREAD_DETAIL.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
@@ -22,13 +21,12 @@ describe('a ThreadDetail entities', () => {
       id: 123,
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      createdAt: '2021-08-08T07:19:09.775Z',
+      date: new Date('2023-10-14').toISOString(),
       username: 'sandy',
-      comments: [],
     };
 
-    // Action & Assert
-    expect(() => new ThreadDetail(payload)).toThrowError('THREAD_DETAIL.NOT_MEET_DATA_TYPE_SPESIFICATION');
+    // Assert
+    expect(() => new ThreadDetail(payload)).toThrowError('THREAD_DETAIL.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create threadDetail object correctly', () => {
@@ -37,20 +35,19 @@ describe('a ThreadDetail entities', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      date: new Date('2023-10-14').toISOString(),
       username: 'sandy',
-      comments: [],
     };
 
     // Action
-    const threadDetail = new ThreadDetail(payload);
+    const thread = new ThreadDetail(payload);
 
     // Assert
-    expect(threadDetail).toBeInstanceOf(ThreadDetail);
-    expect(threadDetail.id).toBeDefined();
-    expect(threadDetail.title).toBeDefined();
-    expect(threadDetail.body).toBeDefined();
-    expect(threadDetail.date).toBeDefined();
-    expect(threadDetail.comments).toBeDefined();
+    expect(thread).toBeInstanceOf(ThreadDetail);
+    expect(thread.id).toEqual(payload.id);
+    expect(thread.title).toEqual(payload.title);
+    expect(thread.body).toEqual(payload.body);
+    expect(thread.date).toEqual(new Date('2023-10-14').toISOString());
+    expect(thread.username).toEqual(payload.username);
   });
 });

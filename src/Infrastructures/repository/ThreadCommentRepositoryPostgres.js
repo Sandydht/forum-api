@@ -1,7 +1,7 @@
 const ThreadCommentRepository = require('../../Domains/thread_comments/ThreadCommentRepository');
 const AddedThreadComment = require('../../Domains/thread_comments/entities/AddedThreadComment');
-const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const ThreadCommentDetail = require('../../Domains/thread_comments/entities/ThreadCommentDetail');
 
 class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
@@ -28,47 +28,47 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
     });
   }
 
-  async verifyThreadCommentByUser(userId, commentId) {
-    const query = {
-      text: 'SELECT * FROM thread_comments WHERE user_id = $1 AND id = $2',
-      values: [userId, commentId],
-    };
-
-    const result = await this._pool.query(query);
-
-    if (!result.rowCount) {
-      throw new AuthorizationError('Anda tidak dapat menghapus komentar ini');
-    }
-  }
-
   async verifyAvailableThreadComment(id) {
     const query = {
-      text: 'SELECT * FROM thread_comments WHERE id = $1',
+      text: 'SELECT id FROM thread_comments WHERE id = $1',
       values: [id],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Comment tidak ditemukan');
+      throw new NotFoundError('Thread comment tidak ditemukan');
+    }
+  }
+
+  async verifyAvailableThreadCommentByUser(userId, id) {
+    const query = {
+      text: 'SELECT id FROM thread_comments WHERE user_id = $1 AND id = $2',
+      values: [userId, id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new AuthorizationError('Thread comment tidak ditemukan');
     }
   }
 
   async deleteThreadComment(id) {
-    const updatedAt = Math.floor(new Date().getTime() / 1000.0);
-    const deletedAt = Math.floor(new Date().getTime() / 1000.0);
+    const date = new Date().toISOString();
 
     const query = {
-      text: 'UPDATE thread_comments SET deleted_at = $1, updated_at = $2 WHERE id = $3 RETURNING id',
-      values: [deletedAt, updatedAt, id],
+      text: 'UPDATE thread_comments SET deleted_at = $1, updated_at = $2 WHERE id = $3',
+      values: [date, date, id],
     };
 
     await this._pool.query(query);
   }
 
-  async getCommentByThreadId(threadId) {
+  async getThreadCommentsByThreadId(threadId) {
     const query = {
-      text: 'SELECT thread_comments.id, users.username, thread_comments.created_at, thread_comments.content, thread_comments.deleted_at FROM thread_comments INNER JOIN users ON thread_comments.user_id = users.id WHERE thread_comments.thread_id = $1 ORDER BY thread_comments.created_at ASC',
+      // eslint-disable-next-line max-len
+      text: 'SELECT thread_comments.id, thread_comments.created_at, thread_comments.deleted_at, thread_comments.content, users.username FROM thread_comments INNER JOIN users ON thread_comments.user_id = users.id WHERE thread_comments.thread_id = $1 ORDER BY thread_comments.created_at DESC, thread_comments.id DESC',
       values: [threadId],
     };
 
@@ -77,13 +77,12 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
       return [];
     }
 
-    return result.rows.map((data) => new ThreadCommentDetail({
-      id: data.id,
-      username: data.username,
-      createdAt: data.created_at,
-      deletedAt: data.deleted_at,
-      content: data.content,
-      replies: [],
+    return result.rows.map((comment) => new ThreadCommentDetail({
+      id: comment.id,
+      username: comment.username,
+      date: comment.created_at,
+      content: comment.content,
+      isDelete: Boolean(comment.deleted_at),
     }));
   }
 }

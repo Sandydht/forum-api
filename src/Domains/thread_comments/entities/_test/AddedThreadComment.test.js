@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const AddedThreadComment = require('../AddedThreadComment');
 
-describe('AddedThreadComment entities', () => {
+describe('a AddedThreadComment entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
@@ -10,7 +10,7 @@ describe('AddedThreadComment entities', () => {
     };
 
     // Action & Assert
-    expect(() => new AddedThreadComment(payload)).toThrowError('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddedThreadComment(payload)).toThrowError('ADDED_THREAD_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload did not meet data type spesification', () => {
@@ -18,11 +18,11 @@ describe('AddedThreadComment entities', () => {
     const payload = {
       id: 'comment-123',
       content: 'sebuah comment',
-      owner: 1234,
+      owner: 123,
     };
 
     // Action & Assert
-    expect(() => new AddedThreadComment(payload)).toThrowError('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPESIFICATION');
+    expect(() => new AddedThreadComment(payload)).toThrowError('ADDED_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create addedThreadComment object correctly', () => {
@@ -34,12 +34,12 @@ describe('AddedThreadComment entities', () => {
     };
 
     // Action
-    const addedThreadComment = new AddedThreadComment(payload);
+    const addedComment = new AddedThreadComment(payload);
 
     // Assert
-    expect(addedThreadComment).toBeInstanceOf(AddedThreadComment);
-    expect(addedThreadComment.id).toEqual(payload.id);
-    expect(addedThreadComment.content).toEqual(payload.content);
-    expect(addedThreadComment.owner).toEqual(payload.owner);
+    expect(addedComment).toBeInstanceOf(AddedThreadComment);
+    expect(addedComment.id).toEqual(payload.id);
+    expect(addedComment.content).toEqual(payload.content);
+    expect(addedComment.owner).toEqual(payload.owner);
   });
 });

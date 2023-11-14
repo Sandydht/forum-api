@@ -1,13 +1,13 @@
 /* eslint-disable no-undef */
-const pool = require('../../database/postgres/pool');
 const ThreadCommentRepositoryPostgres = require('../ThreadCommentRepositoryPostgres');
+const pool = require('../../database/postgres/pool');
+const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const AddThreadComment = require('../../../Domains/thread_comments/entities/AddThreadComment');
 const AddedThreadComment = require('../../../Domains/thread_comments/entities/AddedThreadComment');
-const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
+const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
 describe('ThreadCommentRepositoryPostgres', () => {
   afterAll(async () => {
@@ -21,7 +21,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
   });
 
   describe('addThreadComment function', () => {
-    it('should persist add thread comment and return correctly', async () => {
+    it('should persist add thread comment and return added thread comment correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
@@ -35,11 +35,11 @@ describe('ThreadCommentRepositoryPostgres', () => {
       await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', addThreadComment);
 
       // Assert
-      const threadComments = await ThreadCommentsTableTestHelper.findThreadCommentById('comment-123');
-      expect(threadComments).toHaveLength(1);
+      const comments = await ThreadCommentsTableTestHelper.findThreadCommentById('comment-123');
+      expect(comments).toHaveLength(1);
     });
 
-    it('should return thread comment correctly', async () => {
+    it('should return added thread comment correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
@@ -50,40 +50,20 @@ describe('ThreadCommentRepositoryPostgres', () => {
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      const addedThreadComment = await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', addThreadComment);
+      const addedComment = await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', addThreadComment);
 
       // Assert
-      expect(addedThreadComment).toStrictEqual(new AddedThreadComment({
+      expect(threadCommentRepositoryPostgres).toBeInstanceOf(ThreadCommentRepositoryPostgres);
+      expect(addedComment).toStrictEqual(new AddedThreadComment({
         id: 'comment-123',
-        content: addThreadComment.content,
+        content: 'sebuah comment',
         owner: 'user-123',
       }));
     });
   });
 
-  describe('verifyThreadCommentByUser function', () => {
-    it('should throw AuthorizationError when thread comment not found', async () => {
-      // Arrange
-      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
-
-      // Action & Assert
-      await expect(threadCommentRepositoryPostgres.verifyThreadCommentByUser('user-123', 'comment-123')).rejects.toThrowError(AuthorizationError);
-    });
-
-    it('should not throw AuthorizationError when thread comment available', async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ threadId: 'thread-123', userId: 'user-123' });
-      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
-
-      // Action & Assert
-      await expect(threadCommentRepositoryPostgres.verifyThreadCommentByUser('user-123', 'comment-123')).resolves.not.toThrowError(AuthorizationError);
-    });
-  });
-
   describe('verifyAvailableThreadComment function', () => {
-    it('should throw NotFoundError when thread comment not found', async () => {
+    it('should throw NotFoundError when thread comment not available', async () => {
       // Arrange
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
 
@@ -94,7 +74,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
     it('should not throw NotFoundError when thread comment available', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
       await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
 
@@ -103,11 +83,34 @@ describe('ThreadCommentRepositoryPostgres', () => {
     });
   });
 
-  describe('deleteThreadComment function', () => {
-    it('should soft delete comment in the database', async () => {
+  describe('verifyAvailableThreadCommentByUser function', () => {
+    it('should throw AuthorizationError when thread comment not available', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentRepositoryPostgres.verifyAvailableThreadCommentByUser('user-123', 'comment-123')).rejects.toThrowError(AuthorizationError);
+    });
+
+    it('should not throw AuthorizationError when thread comment available', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', userId: 'user-123', threadId: 'thread-123' });
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(threadCommentRepositoryPostgres.verifyAvailableThreadCommentByUser('user-123', 'comment-123')).resolves.not.toThrowError(AuthorizationError);
+    });
+  });
+
+  describe('deleteThreadComment function', () => {
+    it('should update thread comment', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
       await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
 
@@ -116,46 +119,52 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
       // Assert
       const comments = await ThreadCommentsTableTestHelper.findThreadCommentById('comment-123');
-      expect(comments[0].deleted_at).not.toEqual(null);
+      expect(comments).toHaveLength(1);
+      expect(comments[0].deleted_at).not.toBeNull();
     });
   });
 
-  describe('getCommentByThreadId function', () => {
-    it('should return empty array when thread has no comments', async () => {
+  describe('getThreadCommentsByThreadId function', () => {
+    it('should return empty array when comments not found', async () => {
       // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
 
       // Action
-      const comments = await threadCommentRepositoryPostgres.getCommentByThreadId('thread-123');
+      const comments = await threadCommentRepositoryPostgres.getThreadCommentsByThreadId('thread-123');
 
       // Assert
-      expect(Array.isArray(comments)).toBeTruthy();
+      expect(comments).toBeInstanceOf(Array);
       expect(comments).toHaveLength(0);
     });
 
-    it('should return thread comment list correctly', async () => {
+    it('should return comments correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
       await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-234', threadId: 'thread-123', userId: 'user-123' });
+      const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
 
-      const threadCommenRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
+      // Delete comment
+      await ThreadCommentsTableTestHelper.softDeleteThreadCommentById('comment-234');
 
       // Action
-      const comments = await threadCommenRepositoryPostgres.getCommentByThreadId('thread-123');
+      const comments = await threadCommentRepositoryPostgres.getThreadCommentsByThreadId('thread-123');
+      expect(comments).toBeInstanceOf(Array);
+      expect(comments).toHaveLength(2);
 
-      // Assert
-      expect(Array.isArray(comments)).toBeTruthy();
+      const [comment1, comment2] = comments;
+      expect(comment1.id).toEqual('comment-234');
+      expect(comment1.username).toEqual('sandy');
+      expect(typeof comment1.date).toBe('string');
+      expect(comment1.content).toEqual('**komentar telah dihapus**');
 
-      comments.forEach((comment) => {
-        expect(comment.id).toBeDefined();
-        expect(comment.username).toBeDefined();
-        expect(comment.date).toBeDefined();
-        expect(comment.replies).toBeDefined();
-        expect(Array.isArray(comment.replies)).toBeTruthy();
-        expect(comment.replies).toHaveLength(0);
-        expect(comment.content).toBeDefined();
-      });
+      expect(comment2.id).toEqual('comment-123');
+      expect(comment2.username).toEqual('sandy');
+      expect(typeof comment2.date).toBe('string');
+      expect(comment2.content).toEqual('sebuah comment');
     });
   });
 });

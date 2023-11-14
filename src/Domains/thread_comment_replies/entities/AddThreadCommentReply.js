@@ -1,6 +1,7 @@
 class AddThreadCommentReply {
   constructor(payload) {
     this._verifyPayload(payload);
+
     const { content } = payload;
     this.content = content;
   }
@@ -11,7 +12,7 @@ class AddThreadCommentReply {
     }
 
     if (typeof content !== 'string') {
-      throw new Error('ADD_THREAD_COMMENT_REPLY.NOT_MEET_DATA_TYPE_SPESIFICATION');
+      throw new Error('ADD_THREAD_COMMENT_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }

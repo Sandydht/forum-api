@@ -1,6 +1,6 @@
 const AddThreadComment = require('../../Domains/thread_comments/entities/AddThreadComment');
 
-class AddedThreadCommentUseCase {
+class AddThreadCommentUseCase {
   constructor({ threadRepository, threadCommentRepository }) {
     this._threadRepository = threadRepository;
     this._threadCommentRepository = threadCommentRepository;
@@ -13,4 +13,4 @@ class AddedThreadCommentUseCase {
   }
 }
 
-module.exports = AddedThreadCommentUseCase;
+module.exports = AddThreadCommentUseCase;

@@ -7,7 +7,8 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      date: new Date('2023-10-14').toISOString(),
+      content: 'sebuah comment',
     };
 
     // Action & Assert
@@ -19,25 +20,23 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 123,
       username: 'sandy',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
-      deletedAt: null,
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah comment',
-      replies: [],
+      isDelete: false,
     };
 
     // Action & Assert
     expect(() => new ThreadCommentDetail(payload)).toThrowError('THREAD_COMMENT_DETAIL.NOT_MEET_DATA_TYPE_SPESIFICATION');
   });
 
-  it('should display content = **komentar telah dihapus** when a comment has been deleted', () => {
+  it('should show (content = **komentar telah dihapus**) when comment is deleted', () => {
     // Arrange
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
-      deletedAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah comment',
-      replies: [],
+      isDelete: true,
     };
 
     // Action
@@ -47,20 +46,18 @@ describe('a ThreadCommentDetail entities', () => {
     expect(threadCommentDetail).toBeInstanceOf(ThreadCommentDetail);
     expect(threadCommentDetail.id).toEqual(payload.id);
     expect(threadCommentDetail.username).toEqual(payload.username);
-    expect(threadCommentDetail.date).toEqual(new Date(payload.createdAt).toISOString());
-    expect(threadCommentDetail.replies).toEqual(payload.replies);
+    expect(threadCommentDetail.date).toEqual(new Date('2023-10-14').toISOString());
     expect(threadCommentDetail.content).toEqual('**komentar telah dihapus**');
   });
 
-  it('should create threadCommentDetail object correctly', () => {
+  it('should show content when comment is not deleted', () => {
     // Arrange
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
-      deletedAt: null,
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah comment',
-      replies: [],
+      isDelete: false,
     };
 
     // Action
@@ -70,8 +67,7 @@ describe('a ThreadCommentDetail entities', () => {
     expect(threadCommentDetail).toBeInstanceOf(ThreadCommentDetail);
     expect(threadCommentDetail.id).toEqual(payload.id);
     expect(threadCommentDetail.username).toEqual(payload.username);
-    expect(threadCommentDetail.date).toEqual(new Date(payload.createdAt).toISOString());
-    expect(threadCommentDetail.replies).toEqual(payload.replies);
+    expect(threadCommentDetail.date).toEqual(new Date('2023-10-14').toISOString());
     expect(threadCommentDetail.content).toEqual(payload.content);
   });
 });

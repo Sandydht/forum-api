@@ -15,7 +15,7 @@ describe('DeleteThreadCommentUseCase', () => {
 
     mockThreadRepository.verifyAvailableThread = jest.fn().mockImplementation(() => Promise.resolve());
     mockThreadCommentRepository.verifyAvailableThreadComment = jest.fn().mockImplementation(() => Promise.resolve());
-    mockThreadCommentRepository.verifyThreadCommentByUser = jest.fn().mockImplementation(() => Promise.resolve());
+    mockThreadCommentRepository.verifyAvailableThreadCommentByUser = jest.fn().mockImplementation(() => Promise.resolve());
     mockThreadCommentRepository.deleteThreadComment = jest.fn().mockImplementation(() => Promise.resolve());
 
     const deleteThreadCommentUseCase = new DeleteThreadCommentUseCase({
@@ -29,7 +29,8 @@ describe('DeleteThreadCommentUseCase', () => {
     // Assert
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
     expect(mockThreadCommentRepository.verifyAvailableThreadComment).toBeCalledWith(commentId);
-    expect(mockThreadCommentRepository.verifyThreadCommentByUser).toBeCalledWith(userId, commentId);
+    expect(mockThreadCommentRepository.verifyAvailableThreadCommentByUser).toBeCalledWith(userId, commentId);
     expect(mockThreadCommentRepository.deleteThreadComment).toBeCalledWith(commentId);
+    expect(deleteThreadCommentUseCase).toBeInstanceOf(DeleteThreadCommentUseCase);
   });
 });

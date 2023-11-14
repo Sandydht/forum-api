@@ -1,13 +1,14 @@
 /* eslint-disable no-undef */
 const ThreadCommentReplyDetail = require('../ThreadCommentReplyDetail');
 
-describe('a ThreadCommentReplyDetail entities', () => {
+describe('ThreadCommentReplyDetail', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
       id: 'reply-123',
       username: 'sandy',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      date: new Date('2023-10-14').toISOString(),
+      content: 'sebuah balasan',
     };
 
     // Action & Assert
@@ -19,23 +20,23 @@ describe('a ThreadCommentReplyDetail entities', () => {
     const payload = {
       id: 123,
       username: 'sandy',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
-      deletedAt: null,
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah balasan',
+      isDelete: false,
     };
 
     // Action & Assert
     expect(() => new ThreadCommentReplyDetail(payload)).toThrowError('THREAD_COMMENT_REPLY_DETAIL.NOT_MEET_DATA_TYPE_SPESIFICATION');
   });
 
-  it('should display content = **balasan telah dihapus** when a reply has been deleted', () => {
+  it('should show (content = **balasan telah dihapus**) when comment is deleted', () => {
     // Arrange
     const payload = {
       id: 'reply-123',
       username: 'sandy',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
-      deletedAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah balasan',
+      isDelete: true,
     };
 
     // Action
@@ -45,18 +46,18 @@ describe('a ThreadCommentReplyDetail entities', () => {
     expect(threadCommentReplyDetail).toBeInstanceOf(ThreadCommentReplyDetail);
     expect(threadCommentReplyDetail.id).toEqual(payload.id);
     expect(threadCommentReplyDetail.username).toEqual(payload.username);
-    expect(threadCommentReplyDetail.date).toEqual(new Date(payload.createdAt).toISOString());
+    expect(threadCommentReplyDetail.date).toEqual(new Date('2023-10-14').toISOString());
     expect(threadCommentReplyDetail.content).toEqual('**balasan telah dihapus**');
   });
 
-  it('should create threadCommentReplyDetail object correctly', () => {
+  it('should show content when comment is not deleted', () => {
     // Arrange
     const payload = {
       id: 'reply-123',
       username: 'sandy',
-      createdAt: Math.floor(new Date().getTime() / 1000.0), // epoch unix
-      deletedAt: null,
+      date: new Date('2023-10-14').toISOString(),
       content: 'sebuah balasan',
+      isDelete: false,
     };
 
     // Action
@@ -66,7 +67,7 @@ describe('a ThreadCommentReplyDetail entities', () => {
     expect(threadCommentReplyDetail).toBeInstanceOf(ThreadCommentReplyDetail);
     expect(threadCommentReplyDetail.id).toEqual(payload.id);
     expect(threadCommentReplyDetail.username).toEqual(payload.username);
-    expect(threadCommentReplyDetail.date).toEqual(new Date(payload.createdAt).toISOString());
+    expect(threadCommentReplyDetail.date).toEqual(new Date('2023-10-14').toISOString());
     expect(threadCommentReplyDetail.content).toEqual(payload.content);
   });
 });

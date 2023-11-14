@@ -3,23 +3,22 @@ class ThreadCommentReplyDetail {
     this._verifyPayload(payload);
 
     const {
-      id, username, createdAt, deletedAt, content,
+      id, username, date, content, isDelete,
     } = payload;
-
     this.id = id;
     this.username = username;
-    this.date = new Date(createdAt).toISOString();
-    this.content = deletedAt !== null ? '**balasan telah dihapus**' : content;
+    this.date = date;
+    this.content = isDelete ? '**balasan telah dihapus**' : content;
   }
 
   _verifyPayload({
-    id, username, createdAt, deletedAt, content,
+    id, username, date, content, isDelete,
   }) {
-    if (!id || !username || createdAt === undefined || deletedAt === undefined || !content) {
+    if (!id || !username || !date || !content || isDelete === undefined) {
       throw new Error('THREAD_COMMENT_REPLY_DETAIL.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof id !== 'string' || typeof username !== 'string' || (createdAt !== null && typeof createdAt !== 'number') || (deletedAt !== null && typeof deletedAt !== 'number') || typeof content !== 'string') {
+    if (typeof id !== 'string' || typeof username !== 'string' || typeof date !== 'string' || typeof content !== 'string' || typeof isDelete !== 'boolean') {
       throw new Error('THREAD_COMMENT_REPLY_DETAIL.NOT_MEET_DATA_TYPE_SPESIFICATION');
     }
   }

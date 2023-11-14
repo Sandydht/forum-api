@@ -4,19 +4,19 @@ class ThreadCommentReplyRepository {
     throw new Error('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
-  async getRepliesByThread(threadId, commentId) {
+  async verifyAvailableThreadCommentReplyByUser(userId, id) {
     throw new Error('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
-  async verifyAvalilableThreadCommentReplyByUser(userId, id) {
-    throw new Error('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
-  }
-
-  async verifyAvalilableThreadCommentReply(id) {
+  async verifyAvailableThreadCommentReply(id) {
     throw new Error('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
   async deleteThreadCommentReply(id) {
+    throw new Error('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
+
+  async getThreadCommentRepliesByCommentId(id) {
     throw new Error('THREAD_COMMENT_REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }

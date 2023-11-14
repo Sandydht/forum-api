@@ -10,7 +10,7 @@ const routes = (handler) => ([
   {
     method: 'DELETE',
     path: '/threads/{threadId}/comments/{commentId}',
-    handler: handler.deleteThreadCommentHanlder,
+    handler: handler.deleteThreadCommentHandler,
     options: {
       auth: 'forum_app',
     },

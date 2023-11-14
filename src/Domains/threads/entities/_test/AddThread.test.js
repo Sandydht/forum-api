@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const AddThread = require('../AddThread');
 
-describe('AddThread entities', () => {
+describe('a AddThread entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
@@ -16,11 +16,11 @@ describe('AddThread entities', () => {
     // Arrange
     const payload = {
       title: 'sebuah thread',
-      body: {},
+      body: 123,
     };
 
     // Action & Assert
-    expect(() => new AddThread(payload)).toThrowError('ADD_THREAD.NOT_MEET_DATA_TYPE_SPESIFICATION');
+    expect(() => new AddThread(payload)).toThrowError('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
   it('should create addThread object correctly', () => {

@@ -19,18 +19,19 @@ const AuthenticationRepository = require('../Domains/authentications/Authenticat
 const AuthenticationRepositoryPostgres = require('./repository/AuthenticationRepositoryPostgres');
 const LogoutUserUseCase = require('../Applications/use_case/LogoutUserUseCase');
 const RefreshAuthenticationUseCase = require('../Applications/use_case/RefreshAuthenticationUseCase');
-const ThreadRepository = require('../Domains/threads/ThreadRepository');
 const AddThreadUseCase = require('../Applications/use_case/AddThreadUseCase');
+const ThreadRepository = require('../Domains/threads/ThreadRepository');
 const ThreadRepositoryPostgres = require('./repository/ThreadRepositoryPostgres');
 const AddThreadCommentUseCase = require('../Applications/use_case/AddThreadCommentUseCase');
 const ThreadCommentRepository = require('../Domains/thread_comments/ThreadCommentRepository');
 const ThreadCommentRepositoryPostgres = require('./repository/ThreadCommentRepositoryPostgres');
-const DeleteThreadCommentUseCase = require('../Applications/use_case/DeleteThreadCommentUseCase');
-const GetThreadDetailUseCase = require('../Applications/use_case/GetThreadDetailUseCase');
 const AddThreadCommentReplyUseCase = require('../Applications/use_case/AddThreadCommentReplyUseCase');
 const ThreadCommentReplyRepository = require('../Domains/thread_comment_replies/ThreadCommentReplyRepository');
 const ThreadCommentReplyRepositoryPostgres = require('./repository/ThreadCommentReplyRepositoryPostgres');
+const DeleteThreadCommentUseCase = require('../Applications/use_case/DeleteThreadCommentUseCase');
 const DeleteThreadCommentReplyUseCase = require('../Applications/use_case/DeleteThreadCommentReplyUseCase');
+const GetThreadDetailUseCase = require('../Applications/use_case/GetThreadDetailUseCase');
+const GetThreadCommentByThreadUseCase = require('../Applications/use_case/GetThreadCommentByThreadUseCase');
 
 const container = createContainer();
 
@@ -230,44 +231,6 @@ container.register([
     },
   },
   {
-    key: DeleteThreadCommentUseCase.name,
-    Class: DeleteThreadCommentUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        {
-          name: 'threadRepository',
-          internal: ThreadRepository.name,
-        },
-        {
-          name: 'threadCommentRepository',
-          internal: ThreadCommentRepository.name,
-        },
-      ],
-    },
-  },
-  {
-    key: GetThreadDetailUseCase.name,
-    Class: GetThreadDetailUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        {
-          name: 'threadRepository',
-          internal: ThreadRepository.name,
-        },
-        {
-          name: 'threadCommentRepository',
-          internal: ThreadCommentRepository.name,
-        },
-        {
-          name: 'threadCommentReplyRepository',
-          internal: ThreadCommentReplyRepository.name,
-        },
-      ],
-    },
-  },
-  {
     key: AddThreadCommentReplyUseCase.name,
     Class: AddThreadCommentReplyUseCase,
     parameter: {
@@ -289,6 +252,23 @@ container.register([
     },
   },
   {
+    key: DeleteThreadCommentUseCase.name,
+    Class: DeleteThreadCommentUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name,
+        },
+        {
+          name: 'threadCommentRepository',
+          internal: ThreadCommentRepository.name,
+        },
+      ],
+    },
+  },
+  {
     key: DeleteThreadCommentReplyUseCase.name,
     Class: DeleteThreadCommentReplyUseCase,
     parameter: {
@@ -305,6 +285,36 @@ container.register([
         {
           name: 'threadCommentReplyRepository',
           internal: ThreadCommentReplyRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetThreadDetailUseCase.name,
+    Class: GetThreadDetailUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetThreadCommentByThreadUseCase.name,
+    Class: GetThreadCommentByThreadUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name,
+        },
+        {
+          name: 'threadCommentRepository',
+          internal: ThreadCommentRepository.name,
         },
       ],
     },

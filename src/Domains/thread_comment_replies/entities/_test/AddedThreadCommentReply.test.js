@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const AddedThreadCommentReply = require('../AddedThreadCommentReply');
 
-describe('AddedThreadCommentReply entities', () => {
+describe('AddedThreadCommentReply', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
@@ -16,9 +16,9 @@ describe('AddedThreadCommentReply entities', () => {
   it('should throw error when payload did not meet data type spesification', () => {
     // Arrange
     const payload = {
-      id: 'reply-123',
+      id: 123,
       content: 'sebuah balasan',
-      userId: 123,
+      owner: 'user-123',
     };
 
     // Action & Assert
@@ -30,16 +30,16 @@ describe('AddedThreadCommentReply entities', () => {
     const payload = {
       id: 'reply-123',
       content: 'sebuah balasan',
-      userId: 'user-123',
+      owner: 'user-123',
     };
 
     // Action
-    const addedThreadCommentReply = new AddedThreadCommentReply(payload);
+    const addedReply = new AddedThreadCommentReply(payload);
 
     // Assert
-    expect(addedThreadCommentReply).toBeInstanceOf(AddedThreadCommentReply);
-    expect(addedThreadCommentReply.id).toEqual(payload.id);
-    expect(addedThreadCommentReply.content).toEqual(payload.content);
-    expect(addedThreadCommentReply.owner).toEqual(payload.userId);
+    expect(addedReply).toBeInstanceOf(AddedThreadCommentReply);
+    expect(addedReply.id).toEqual(payload.id);
+    expect(addedReply.content).toEqual(payload.content);
+    expect(addedReply.owner).toEqual(payload.owner);
   });
 });

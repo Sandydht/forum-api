@@ -12,7 +12,7 @@ class AddThreadComment {
     }
 
     if (typeof content !== 'string') {
-      throw new Error('ADD_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPESIFICATION');
+      throw new Error('ADD_THREAD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }
