@@ -136,6 +136,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
       // Assert
       expect(comments).toBeInstanceOf(Array);
+      expect(comments).toHaveLength(0);
     });
 
     it('should return comments correctly', async () => {
@@ -151,8 +152,10 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
       // Action
       const comments = await threadCommentRepositoryPostgres.getThreadCommentsByThreadId('thread-123');
-      const [comment1, comment2] = comments;
+      expect(comments).toBeInstanceOf(Array);
+      expect(comments).toHaveLength(2);
 
+      const [comment1, comment2] = comments;
       expect(comment1.id).toEqual('comment-234');
       expect(comment1.username).toEqual('sandy');
       expect(typeof comment1.date).toBe('string');

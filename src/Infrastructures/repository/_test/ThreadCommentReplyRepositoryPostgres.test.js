@@ -140,4 +140,56 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
       expect(replies[0].deleted_at).not.toBeNull();
     });
   });
+
+  describe('getThreadCommentRepliesByCommentId function', () => {
+    it('should return empty array when replies not found', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+      // Action
+      const replies = await threadCommentReplyRepositoryPostgres.getThreadCommentRepliesByCommentId('comment-123');
+
+      // Assert
+      expect(replies).toBeInstanceOf(Array);
+      expect(replies).toHaveLength(0);
+    });
+
+    it('should return replies correctly', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+      await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
+        id: 'reply-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+      });
+      await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
+        id: 'reply-234', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+      });
+      const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
+
+      // Delete reply
+      await ThreadCommentRepliesTableTestHelper.softDeleteThreadCommentReplyById('reply-234');
+
+      // Action
+      const replies = await threadCommentReplyRepositoryPostgres.getThreadCommentRepliesByCommentId('comment-123');
+
+      // Assert
+      expect(replies).toBeInstanceOf(Array);
+      expect(replies).toHaveLength(2);
+
+      const [reply1, reply2] = replies;
+      expect(reply1.id).toEqual('reply-234');
+      expect(reply1.username).toEqual('sandy');
+      expect(typeof reply1.date).toBe('string');
+      expect(reply1.content).toEqual('**balasan telah dihapus**');
+
+      expect(reply2.id).toEqual('reply-123');
+      expect(reply2.username).toEqual('sandy');
+      expect(typeof reply2.date).toBe('string');
+      expect(reply2.content).toEqual('sebuah balasan');
+    });
+  });
 });

@@ -2,6 +2,7 @@ const ThreadCommentReplyRepository = require('../../Domains/thread_comment_repli
 const AddedThreadCommentReply = require('../../Domains/thread_comment_replies/entities/AddedThreadCommentReply');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
+const ThreadCommentReplyDetail = require('../../Domains/thread_comment_replies/entities/ThreadCommentReplyDetail');
 
 class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository {
   constructor(pool, idGenerator) {
@@ -60,6 +61,27 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
     };
 
     await this._pool.query(query);
+  }
+
+  async getThreadCommentRepliesByCommentId(commentId) {
+    const query = {
+      // eslint-disable-next-line max-len
+      text: 'SELECT thread_comment_replies.id, thread_comment_replies.created_at, thread_comment_replies.deleted_at, thread_comment_replies.content, users.username FROM thread_comment_replies INNER JOIN users ON thread_comment_replies.user_id = users.id WHERE thread_comment_replies.comment_id = $1 ORDER BY thread_comment_replies.created_at ASC',
+      values: [commentId],
+    };
+
+    const result = await this._pool.query(query);
+    if (!result.rowCount) {
+      return [];
+    }
+
+    return result.rows.map((reply) => new ThreadCommentReplyDetail({
+      id: reply.id,
+      username: reply.username,
+      date: reply.created_at,
+      content: reply.content,
+      isDelete: Boolean(reply.deleted_at),
+    }));
   }
 }
 

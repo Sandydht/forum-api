@@ -23,6 +23,17 @@ const ThreadCommentRepliesTableTestHelper = {
     return result.rows;
   },
 
+  async softDeleteThreadCommentReplyById(id) {
+    const date = Math.floor(new Date().getTime() / 1000.0); // epoch
+
+    const query = {
+      text: 'UPDATE thread_comment_replies SET deleted_at = $1, updated_at = $2 WHERE id = $3',
+      values: [date, date, id],
+    };
+
+    await pool.query(query);
+  },
+
   async cleanTable() {
     await pool.query('DELETE FROM thread_comment_replies');
   },
