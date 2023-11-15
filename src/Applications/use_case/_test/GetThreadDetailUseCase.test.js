@@ -13,7 +13,7 @@ describe('GetThreadDetailUseCase', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       username: 'sandy',
     })));
 
@@ -31,7 +31,7 @@ describe('GetThreadDetailUseCase', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       username: 'sandy',
     }));
   });

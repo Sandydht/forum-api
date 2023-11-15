@@ -7,7 +7,7 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       content: 'sebuah comment',
     };
 
@@ -20,7 +20,7 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 123,
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       content: 'sebuah comment',
       isDelete: false,
     };
@@ -29,45 +29,39 @@ describe('a ThreadCommentDetail entities', () => {
     expect(() => new ThreadCommentDetail(payload)).toThrowError('THREAD_COMMENT_DETAIL.NOT_MEET_DATA_TYPE_SPESIFICATION');
   });
 
-  it('should show (content = **komentar telah dihapus**) when comment is deleted', () => {
+  it('should show content when comment is not deleted', () => {
     // Arrange
-    const payload = {
+    const comment1 = {
       id: 'comment-123',
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
+      content: 'sebuah comment',
+      isDelete: false,
+    };
+
+    const comment2 = {
+      id: 'comment-123',
+      username: 'sandy',
+      date: new Date('2023-10-14'),
       content: 'sebuah comment',
       isDelete: true,
     };
 
     // Action
-    const threadCommentDetail = new ThreadCommentDetail(payload);
+    const threadCommentDetail1 = new ThreadCommentDetail(comment1);
+    const threadCommentDetail2 = new ThreadCommentDetail(comment2);
 
     // Assert
-    expect(threadCommentDetail).toBeInstanceOf(ThreadCommentDetail);
-    expect(threadCommentDetail.id).toEqual(payload.id);
-    expect(threadCommentDetail.username).toEqual(payload.username);
-    expect(threadCommentDetail.date).toEqual(new Date('2023-10-14').toISOString());
-    expect(threadCommentDetail.content).toEqual('**komentar telah dihapus**');
-  });
+    expect(threadCommentDetail1).toBeInstanceOf(ThreadCommentDetail);
+    expect(threadCommentDetail1.id).toEqual(comment1.id);
+    expect(threadCommentDetail1.username).toEqual(comment1.username);
+    expect(threadCommentDetail1.date).toEqual(comment1.date.toISOString());
+    expect(threadCommentDetail1.content).toEqual(comment1.content);
 
-  it('should show content when comment is not deleted', () => {
-    // Arrange
-    const payload = {
-      id: 'comment-123',
-      username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
-      content: 'sebuah comment',
-      isDelete: false,
-    };
-
-    // Action
-    const threadCommentDetail = new ThreadCommentDetail(payload);
-
-    // Assert
-    expect(threadCommentDetail).toBeInstanceOf(ThreadCommentDetail);
-    expect(threadCommentDetail.id).toEqual(payload.id);
-    expect(threadCommentDetail.username).toEqual(payload.username);
-    expect(threadCommentDetail.date).toEqual(new Date('2023-10-14').toISOString());
-    expect(threadCommentDetail.content).toEqual(payload.content);
+    expect(threadCommentDetail2).toBeInstanceOf(ThreadCommentDetail);
+    expect(threadCommentDetail2.id).toEqual(comment2.id);
+    expect(threadCommentDetail2.username).toEqual(comment2.username);
+    expect(threadCommentDetail2.date).toEqual(comment2.date.toISOString());
+    expect(threadCommentDetail2.content).toEqual('**komentar telah dihapus**');
   });
 });

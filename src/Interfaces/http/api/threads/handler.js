@@ -1,6 +1,7 @@
 const AddThreadUseCase = require('../../../../Applications/use_case/AddThreadUseCase');
 const GetThreadDetailUseCase = require('../../../../Applications/use_case/GetThreadDetailUseCase');
 const GetThreadCommentByThreadUseCase = require('../../../../Applications/use_case/GetThreadCommentByThreadUseCase');
+const GetThreadCommentRepliesByCommentUseCase = require('../../../../Applications/use_case/GetThreadCommentRepliesCommentUseCase');
 
 class ThreadsHandler {
   constructor(container) {
@@ -27,20 +28,29 @@ class ThreadsHandler {
 
     const getThreadDetailUseCase = this._container.getInstance(GetThreadDetailUseCase.name);
     const getThreadCommentByThreadUseCase = this._container.getInstance(GetThreadCommentByThreadUseCase.name);
+    const getThreadCommentRepliesByCommentUseCase = this._container.getInstance(GetThreadCommentRepliesByCommentUseCase.name);
 
-    const [thread, comments] = await Promise.all([
+    const [threadDetail, comments] = await Promise.all([
       getThreadDetailUseCase.execute(threadId),
       getThreadCommentByThreadUseCase.execute(threadId),
     ]);
 
+    const mapComments = await Promise.all(comments.map(async (comment) => {
+      const replies = await getThreadCommentRepliesByCommentUseCase.execute(comment.id);
+      return {
+        ...comment,
+        replies,
+      };
+    }));
+
+    const thread = {
+      ...threadDetail,
+      comments: mapComments,
+    };
+
     return {
       status: 'success',
-      data: {
-        thread: {
-          ...thread,
-          comments,
-        },
-      },
+      data: { thread },
     };
   }
 }

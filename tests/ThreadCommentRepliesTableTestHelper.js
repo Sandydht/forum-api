@@ -3,11 +3,11 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const ThreadCommentRepliesTableTestHelper = {
   async addThreadCommentReply({
-    id = 'reply-123', content = 'sebuah balasan', threadId = 'thread-123', commentId = 'comment-123', userId = 'user-123',
+    id = 'reply-123', content = 'sebuah balasan', threadId = 'thread-123', commentId = 'comment-123', userId = 'user-123', isDelete = false, createdAt = new Date().toISOString(),
   }) {
     const query = {
-      text: 'INSERT INTO thread_comment_replies VALUES($1, $2, $3, $4, $5)',
-      values: [id, content, threadId, commentId, userId],
+      text: 'INSERT INTO thread_comment_replies VALUES($1, $2, $3, $4, $5, $6, $7)',
+      values: [id, content, threadId, commentId, userId, isDelete, createdAt],
     };
 
     await pool.query(query);
@@ -24,11 +24,9 @@ const ThreadCommentRepliesTableTestHelper = {
   },
 
   async softDeleteThreadCommentReplyById(id) {
-    const date = new Date().toISOString();
-
     const query = {
-      text: 'UPDATE thread_comment_replies SET deleted_at = $1, updated_at = $2 WHERE id = $3',
-      values: [date, date, id],
+      text: 'UPDATE thread_comment_replies SET is_delete = $1 WHERE id = $2',
+      values: [true, id],
     };
 
     await pool.query(query);

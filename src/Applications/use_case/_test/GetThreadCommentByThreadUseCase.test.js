@@ -16,16 +16,16 @@ describe('GetThreadCommentByThreadUseCase', () => {
       new ThreadCommentDetail({
         id: 'comment-123',
         username: 'sandy',
-        date: new Date('2023-10-14').toISOString(),
-        content: 'sebuah comment',
-        isDelete: true,
-      }),
-      new ThreadCommentDetail({
-        id: 'comment-234',
-        username: 'sandy',
-        date: new Date('2023-10-14').toISOString(),
+        date: new Date('2023-11-14'),
         content: 'sebuah comment',
         isDelete: false,
+      }),
+      new ThreadCommentDetail({
+        id: 'comment-123',
+        username: 'sandy',
+        date: new Date('2023-11-14'),
+        content: 'sebuah comment',
+        isDelete: true,
       }),
     ]));
 
@@ -41,21 +41,23 @@ describe('GetThreadCommentByThreadUseCase', () => {
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
     expect(mockThreadCommentRepository.getThreadCommentsByThreadId).toBeCalledWith(threadId);
     expect(getThreadCommentByThreadUseCase).toBeInstanceOf(GetThreadCommentByThreadUseCase);
+    expect(comments).toBeInstanceOf(Array);
+    expect(comments).toHaveLength(2);
 
     const [comment1, comment2] = comments;
     expect(comment1).toStrictEqual(new ThreadCommentDetail({
       id: 'comment-123',
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
-      content: 'sebuah comment',
-      isDelete: true,
-    }));
-    expect(comment2).toStrictEqual(new ThreadCommentDetail({
-      id: 'comment-234',
-      username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-11-14'),
       content: 'sebuah comment',
       isDelete: false,
+    }));
+    expect(comment2).toStrictEqual(new ThreadCommentDetail({
+      id: 'comment-123',
+      username: 'sandy',
+      date: new Date('2023-11-14'),
+      content: 'sebuah comment',
+      isDelete: true,
     }));
   });
 });

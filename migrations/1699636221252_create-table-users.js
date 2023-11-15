@@ -21,20 +21,15 @@ exports.up = (pgm) => {
       type: 'text',
       notNull: true,
     },
+    is_delete: {
+      type: 'boolean',
+      notNull: true,
+      default: false,
+    },
     created_at: {
-      type: 'text',
+      type: 'timestamp',
       notNull: true,
-      default: new Date().toISOString(),
-    },
-    updated_at: {
-      type: 'text',
-      notNull: true,
-      default: new Date().toISOString(),
-    },
-    deleted_at: {
-      type: 'text',
-      notNull: false,
-      default: null,
+      default: new Date().toUTCString(),
     },
   });
 };

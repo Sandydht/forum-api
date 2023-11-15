@@ -3,11 +3,11 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const ThreadsTableTestHelper = {
   async addThread({
-    id = 'thread-123', title = 'sebuah thread', body = 'sebuah body thread', userId = 'user-123',
+    id = 'thread-123', title = 'sebuah thread', body = 'sebuah body thread', userId = 'user-123', isDelete = false, createdAt = new Date().toISOString(),
   }) {
     const query = {
-      text: 'INSERT INTO threads VALUES($1, $2, $3, $4)',
-      values: [id, title, body, userId],
+      text: 'INSERT INTO threads VALUES($1, $2, $3, $4, $5, $6)',
+      values: [id, title, body, userId, isDelete, createdAt],
     };
 
     await pool.query(query);
@@ -21,6 +21,15 @@ const ThreadsTableTestHelper = {
 
     const result = await pool.query(query);
     return result.rows;
+  },
+
+  async softDeleteThreadById(id) {
+    const query = {
+      text: 'UPDATE threads SET is_delete = $1 WHERE id = $2',
+      values: [true, id],
+    };
+
+    await pool.query(query);
   },
 
   async cleanTable() {

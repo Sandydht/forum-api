@@ -120,7 +120,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
       // Assert
       const comments = await ThreadCommentsTableTestHelper.findThreadCommentById('comment-123');
       expect(comments).toHaveLength(1);
-      expect(comments[0].deleted_at).not.toBeNull();
+      expect(comments[0].is_delete).toEqual(true);
     });
   });
 
@@ -143,8 +143,18 @@ describe('ThreadCommentRepositoryPostgres', () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-234', threadId: 'thread-123', userId: 'user-123' });
+      await ThreadCommentsTableTestHelper.addThreadComment({
+        id: 'comment-123',
+        threadId: 'thread-123',
+        userId: 'user-123',
+        createdAt: new Date('2023-11-14T13:00:00.000Z'),
+      });
+      await ThreadCommentsTableTestHelper.addThreadComment({
+        id: 'comment-234',
+        threadId: 'thread-123',
+        userId: 'user-123',
+        createdAt: new Date('2023-11-14T12:00:00.000Z'),
+      });
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
 
       // Delete comment
@@ -152,18 +162,20 @@ describe('ThreadCommentRepositoryPostgres', () => {
 
       // Action
       const comments = await threadCommentRepositoryPostgres.getThreadCommentsByThreadId('thread-123');
+
+      // Assert
       expect(comments).toBeInstanceOf(Array);
       expect(comments).toHaveLength(2);
 
       const [comment1, comment2] = comments;
       expect(comment1.id).toEqual('comment-234');
       expect(comment1.username).toEqual('sandy');
-      expect(typeof comment1.date).toBe('string');
+      expect(comment1.date).toEqual(new Date('2023-11-14T12:00:00.000Z').toISOString());
       expect(comment1.content).toEqual('**komentar telah dihapus**');
 
       expect(comment2.id).toEqual('comment-123');
       expect(comment2.username).toEqual('sandy');
-      expect(typeof comment2.date).toBe('string');
+      expect(comment2.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(comment2.content).toEqual('sebuah comment');
     });
   });
