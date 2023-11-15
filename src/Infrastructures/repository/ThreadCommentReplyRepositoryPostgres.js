@@ -53,11 +53,9 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
   }
 
   async deleteThreadCommentReply(id) {
-    const date = new Date().toISOString();
-
     const query = {
-      text: 'UPDATE thread_comment_replies SET deleted_at = $1, updated_at = $2 WHERE id = $3',
-      values: [date, date, id],
+      text: 'UPDATE thread_comment_replies SET is_delete = $1 WHERE id = $2',
+      values: [true, id],
     };
 
     await this._pool.query(query);
@@ -66,7 +64,7 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
   async getThreadCommentRepliesByCommentId(commentId) {
     const query = {
       // eslint-disable-next-line max-len
-      text: 'SELECT thread_comment_replies.id, thread_comment_replies.created_at, thread_comment_replies.deleted_at, thread_comment_replies.content, users.username FROM thread_comment_replies INNER JOIN users ON thread_comment_replies.user_id = users.id WHERE thread_comment_replies.comment_id = $1 ORDER BY thread_comment_replies.created_at DESC, thread_comment_replies.id DESC',
+      text: 'SELECT thread_comment_replies.id, thread_comment_replies.created_at, thread_comment_replies.is_delete, thread_comment_replies.content, users.username FROM thread_comment_replies INNER JOIN users ON thread_comment_replies.user_id = users.id WHERE thread_comment_replies.comment_id = $1 ORDER BY thread_comment_replies.created_at ASC',
       values: [commentId],
     };
 
@@ -80,7 +78,7 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
       username: reply.username,
       date: reply.created_at,
       content: reply.content,
-      isDelete: Boolean(reply.deleted_at),
+      isDelete: reply.is_delete,
     }));
   }
 }

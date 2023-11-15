@@ -120,7 +120,7 @@ describe('ThreadCommentRepositoryPostgres', () => {
       // Assert
       const comments = await ThreadCommentsTableTestHelper.findThreadCommentById('comment-123');
       expect(comments).toHaveLength(1);
-      expect(comments[0].deleted_at).not.toBeNull();
+      expect(comments[0].is_delete).toEqual(true);
     });
   });
 

@@ -137,7 +137,7 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
       // Assert
       const replies = await ThreadCommentRepliesTableTestHelper.findThreadCommentReplyById('reply-123');
       expect(replies).toHaveLength(1);
-      expect(replies[0].deleted_at).not.toBeNull();
+      expect(replies[0].is_delete).toEqual(true);
     });
   });
 
@@ -163,10 +163,18 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
       await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
-        id: 'reply-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+        id: 'reply-123',
+        threadId: 'thread-123',
+        commentId: 'comment-123',
+        userId: 'user-123',
+        createdAt: new Date('2023-11-14T13:00:00.000Z'),
       });
       await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
-        id: 'reply-234', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+        id: 'reply-234',
+        threadId: 'thread-123',
+        commentId: 'comment-123',
+        userId: 'user-123',
+        createdAt: new Date('2023-11-14T12:00:00.000Z'),
       });
       const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
 
@@ -183,12 +191,12 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
       const [reply1, reply2] = replies;
       expect(reply1.id).toEqual('reply-234');
       expect(reply1.username).toEqual('sandy');
-      expect(typeof reply1.date).toBe('string');
+      expect(reply1.date).toEqual(new Date('2023-11-14T12:00:00.000Z').toISOString());
       expect(reply1.content).toEqual('**balasan telah dihapus**');
 
       expect(reply2.id).toEqual('reply-123');
       expect(reply2.username).toEqual('sandy');
-      expect(typeof reply2.date).toBe('string');
+      expect(reply2.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(reply2.content).toEqual('sebuah balasan');
     });
   });
