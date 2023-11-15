@@ -25,7 +25,7 @@ const ThreadsTableTestHelper = {
 
   async softDeleteThreadById(id) {
     const query = {
-      text: 'UPDATE threads SET is_delete = $1 WHERE id = $3',
+      text: 'UPDATE threads SET is_delete = $1 WHERE id = $2',
       values: [true, id],
     };
 

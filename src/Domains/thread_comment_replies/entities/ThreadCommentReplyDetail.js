@@ -7,7 +7,7 @@ class ThreadCommentReplyDetail {
     } = payload;
     this.id = id;
     this.username = username;
-    this.date = date;
+    this.date = new Date(date).toISOString();
     this.content = isDelete ? '**balasan telah dihapus**' : content;
   }
 
@@ -18,9 +18,13 @@ class ThreadCommentReplyDetail {
       throw new Error('THREAD_COMMENT_REPLY_DETAIL.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof id !== 'string' || typeof username !== 'string' || typeof date !== 'string' || typeof content !== 'string' || typeof isDelete !== 'boolean') {
+    if (typeof id !== 'string' || typeof username !== 'string' || !this._verifyDate(date) || typeof content !== 'string' || typeof isDelete !== 'boolean') {
       throw new Error('THREAD_COMMENT_REPLY_DETAIL.NOT_MEET_DATA_TYPE_SPESIFICATION');
     }
+  }
+
+  _verifyDate(date) {
+    return date instanceof Date;
   }
 }
 

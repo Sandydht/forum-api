@@ -8,7 +8,7 @@ describe('a ThreadDetail entities', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
     };
 
     // Assert
@@ -21,7 +21,7 @@ describe('a ThreadDetail entities', () => {
       id: 123,
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       username: 'sandy',
     };
 
@@ -35,7 +35,7 @@ describe('a ThreadDetail entities', () => {
       id: 'thread-123',
       title: 'sebuah thread',
       body: 'sebuah body thread',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       username: 'sandy',
     };
 
@@ -47,7 +47,7 @@ describe('a ThreadDetail entities', () => {
     expect(thread.id).toEqual(payload.id);
     expect(thread.title).toEqual(payload.title);
     expect(thread.body).toEqual(payload.body);
-    expect(thread.date).toEqual(payload.date);
+    expect(thread.date).toEqual(payload.date.toISOString());
     expect(thread.username).toEqual(payload.username);
   });
 });

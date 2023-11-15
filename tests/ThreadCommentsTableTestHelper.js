@@ -25,7 +25,7 @@ const ThreadCommentsTableTestHelper = {
 
   async softDeleteThreadCommentById(id) {
     const query = {
-      text: 'UPDATE thread_comments SET is_delete = $1 WHERE id = $3',
+      text: 'UPDATE thread_comments SET is_delete = $1 WHERE id = $2',
       values: [true, id],
     };
 

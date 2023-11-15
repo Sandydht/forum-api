@@ -25,7 +25,7 @@ const UsersTableTestHelper = {
 
   async softDeleteUserById(id) {
     const query = {
-      text: 'UPDATE users SET is_delete = $1 WHERE id = $3',
+      text: 'UPDATE users SET is_delete = $1 WHERE id = $2',
       values: [true, id],
     };
 

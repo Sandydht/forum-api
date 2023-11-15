@@ -16,14 +16,14 @@ describe('GetThreadCommentRepliesByCommentUseCase', () => {
       new ThreadCommentReplyDetail({
         id: 'reply-123',
         username: 'sandy',
-        date: new Date('2023-10-14').toISOString(),
+        date: new Date('2023-10-14'),
         content: 'sebuah balasan',
         isDelete: true,
       }),
       new ThreadCommentReplyDetail({
         id: 'reply-234',
         username: 'sandy',
-        date: new Date('2023-10-14').toISOString(),
+        date: new Date('2023-10-14'),
         content: 'sebuah balasan',
         isDelete: false,
       }),
@@ -46,14 +46,14 @@ describe('GetThreadCommentRepliesByCommentUseCase', () => {
     expect(reply1).toStrictEqual(new ThreadCommentReplyDetail({
       id: 'reply-123',
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       content: 'sebuah balasan',
       isDelete: true,
     }));
     expect(reply2).toStrictEqual(new ThreadCommentReplyDetail({
       id: 'reply-234',
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       content: 'sebuah balasan',
       isDelete: false,
     }));

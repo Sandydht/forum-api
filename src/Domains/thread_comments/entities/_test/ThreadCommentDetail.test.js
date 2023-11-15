@@ -7,7 +7,7 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 'comment-123',
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       content: 'sebuah comment',
     };
 
@@ -20,7 +20,7 @@ describe('a ThreadCommentDetail entities', () => {
     const payload = {
       id: 123,
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       content: 'sebuah comment',
       isDelete: false,
     };
@@ -34,7 +34,7 @@ describe('a ThreadCommentDetail entities', () => {
     const comment1 = {
       id: 'comment-123',
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       content: 'sebuah comment',
       isDelete: false,
     };
@@ -42,7 +42,7 @@ describe('a ThreadCommentDetail entities', () => {
     const comment2 = {
       id: 'comment-123',
       username: 'sandy',
-      date: new Date('2023-10-14').toISOString(),
+      date: new Date('2023-10-14'),
       content: 'sebuah comment',
       isDelete: true,
     };
@@ -55,13 +55,13 @@ describe('a ThreadCommentDetail entities', () => {
     expect(threadCommentDetail1).toBeInstanceOf(ThreadCommentDetail);
     expect(threadCommentDetail1.id).toEqual(comment1.id);
     expect(threadCommentDetail1.username).toEqual(comment1.username);
-    expect(threadCommentDetail1.date).toEqual(comment1.date);
+    expect(threadCommentDetail1.date).toEqual(comment1.date.toISOString());
     expect(threadCommentDetail1.content).toEqual(comment1.content);
 
     expect(threadCommentDetail2).toBeInstanceOf(ThreadCommentDetail);
     expect(threadCommentDetail2.id).toEqual(comment2.id);
     expect(threadCommentDetail2.username).toEqual(comment2.username);
-    expect(threadCommentDetail2.date).toEqual(comment2.date);
+    expect(threadCommentDetail2.date).toEqual(comment2.date.toISOString());
     expect(threadCommentDetail2.content).toEqual('**komentar telah dihapus**');
   });
 });

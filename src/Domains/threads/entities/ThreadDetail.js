@@ -9,7 +9,7 @@ class ThreadDetail {
     this.id = id;
     this.title = title;
     this.body = body;
-    this.date = date;
+    this.date = new Date(date).toISOString();
     this.username = username;
   }
 
@@ -20,9 +20,13 @@ class ThreadDetail {
       throw new Error('THREAD_DETAIL.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof id !== 'string' || typeof title !== 'string' || typeof body !== 'string' || typeof date !== 'string' || typeof username !== 'string') {
+    if (typeof id !== 'string' || typeof title !== 'string' || typeof body !== 'string' || !this._verifyDate(date) || typeof username !== 'string') {
       throw new Error('THREAD_DETAIL.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
+  }
+
+  _verifyDate(date) {
+    return date instanceof Date;
   }
 }
 

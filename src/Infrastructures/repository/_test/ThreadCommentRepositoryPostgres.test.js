@@ -147,13 +147,13 @@ describe('ThreadCommentRepositoryPostgres', () => {
         id: 'comment-123',
         threadId: 'thread-123',
         userId: 'user-123',
-        createdAt: new Date('2023-11-14T13:00:00.000Z').toISOString(),
+        createdAt: new Date('2023-11-14T13:00:00.000Z'),
       });
       await ThreadCommentsTableTestHelper.addThreadComment({
         id: 'comment-234',
         threadId: 'thread-123',
         userId: 'user-123',
-        createdAt: new Date('2023-11-14T12:00:00.000Z').toISOString(),
+        createdAt: new Date('2023-11-14T12:00:00.000Z'),
       });
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
 

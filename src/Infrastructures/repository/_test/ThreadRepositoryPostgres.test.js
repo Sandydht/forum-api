@@ -98,7 +98,7 @@ describe('ThreadRepositoryPostgres', () => {
         title: 'sebuah thread',
         body: 'sebuah body thread',
         userId: 'user-123',
-        createdAt: new Date('2023-11-14T13:00:00.000Z').toISOString(),
+        createdAt: new Date('2023-11-14T13:00:00.000Z'),
       });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 

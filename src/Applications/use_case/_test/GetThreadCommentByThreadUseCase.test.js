@@ -16,14 +16,14 @@ describe('GetThreadCommentByThreadUseCase', () => {
       new ThreadCommentDetail({
         id: 'comment-123',
         username: 'sandy',
-        date: new Date('2023-11-14').toISOString(),
+        date: new Date('2023-11-14'),
         content: 'sebuah comment',
         isDelete: false,
       }),
       new ThreadCommentDetail({
         id: 'comment-123',
         username: 'sandy',
-        date: new Date('2023-11-14').toISOString(),
+        date: new Date('2023-11-14'),
         content: 'sebuah comment',
         isDelete: true,
       }),
@@ -48,14 +48,14 @@ describe('GetThreadCommentByThreadUseCase', () => {
     expect(comment1).toStrictEqual(new ThreadCommentDetail({
       id: 'comment-123',
       username: 'sandy',
-      date: new Date('2023-11-14').toISOString(),
+      date: new Date('2023-11-14'),
       content: 'sebuah comment',
       isDelete: false,
     }));
     expect(comment2).toStrictEqual(new ThreadCommentDetail({
       id: 'comment-123',
       username: 'sandy',
-      date: new Date('2023-11-14').toISOString(),
+      date: new Date('2023-11-14'),
       content: 'sebuah comment',
       isDelete: true,
     }));
