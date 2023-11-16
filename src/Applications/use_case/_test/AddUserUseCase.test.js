@@ -15,17 +15,16 @@ describe('AddUserUseCase', () => {
     };
 
     const mockRegisterUser = new RegisterUser(useCasePayload);
-    const mockRegisteredUser = new RegisteredUser({
-      id: 'user-123',
-      username: useCasePayload.username,
-      fullname: useCasePayload.fullname,
-    });
     const mockUserRepository = new UserRepository();
     const mockPasswordHash = new PasswordHash();
 
     mockUserRepository.verifyAvailableUsername = jest.fn().mockImplementation(() => Promise.resolve());
     mockPasswordHash.hash = jest.fn().mockImplementation(() => Promise.resolve('encrypted_password'));
-    mockUserRepository.addUser = jest.fn().mockImplementation(() => Promise.resolve(mockRegisteredUser));
+    mockUserRepository.addUser = jest.fn().mockImplementation(() => Promise.resolve(new RegisteredUser({
+      id: 'user-123',
+      username: 'sandy',
+      fullname: 'Sandy Dwi',
+    })));
 
     const addUserUseCase = new AddUserUseCase({
       userRepository: mockUserRepository,
@@ -33,20 +32,21 @@ describe('AddUserUseCase', () => {
     });
 
     // Action
-    const registerUser = await addUserUseCase.execute(mockRegisterUser);
+    const addedUser = await addUserUseCase.execute(useCasePayload);
 
     // Assert
-    expect(mockUserRepository.verifyAvailableUsername).toBeCalledWith(useCasePayload.username);
-    expect(mockPasswordHash.hash).toBeCalledWith(useCasePayload.password);
+    expect(mockUserRepository.verifyAvailableUsername).toBeCalledWith(mockRegisterUser.username);
+    expect(mockPasswordHash.hash).toBeCalledWith(mockRegisterUser.password);
     expect(mockUserRepository.addUser).toBeCalledWith(new RegisterUser({
-      username: useCasePayload.username,
+      username: mockRegisterUser.username,
       password: 'encrypted_password',
-      fullname: useCasePayload.fullname,
+      fullname: mockRegisterUser.fullname,
     }));
-    expect(registerUser).toStrictEqual(new RegisteredUser({
+    expect(addUserUseCase).toBeInstanceOf(AddUserUseCase);
+    expect(addedUser).toStrictEqual(new RegisteredUser({
       id: 'user-123',
-      username: useCasePayload.username,
-      fullname: useCasePayload.fullname,
+      username: 'sandy',
+      fullname: 'Sandy Dwi',
     }));
   });
 });
