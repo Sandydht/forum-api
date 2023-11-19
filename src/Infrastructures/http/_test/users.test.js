@@ -133,7 +133,7 @@ describe('/users endpoint', () => {
       expect(responseJson.message).toEqual('tidak dapat membuat user baru karena username mengandung karakter terlarang');
     });
 
-    it('should response 400 when username available', async () => {
+    it('should response 400 when username unavailable', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ username: 'sandy' });
       const requestPayload = {
@@ -155,7 +155,7 @@ describe('/users endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('username sudah terdaftar');
+      expect(responseJson.message).toEqual('username tidak tersedia');
     });
   });
 });

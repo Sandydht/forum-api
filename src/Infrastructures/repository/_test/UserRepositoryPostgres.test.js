@@ -16,7 +16,7 @@ describe('UserRepositoryPostgres', () => {
   });
 
   describe('verifyAvailableUsername function', () => {
-    it('should throw InvariantError when username available', async () => {
+    it('should throw InvariantError when username not available', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ username: 'sandy' });
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
@@ -25,7 +25,7 @@ describe('UserRepositoryPostgres', () => {
       await expect(userRepositoryPostgres.verifyAvailableUsername('sandy')).rejects.toThrowError(InvariantError);
     });
 
-    it('should not throw InvariantError when username not available', async () => {
+    it('should not throw InvariantError when username available', async () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
