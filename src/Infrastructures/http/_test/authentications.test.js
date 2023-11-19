@@ -7,12 +7,6 @@ const createServer = require('../createServer');
 const AuthenticationTokenManager = require('../../../Applications/security/AuthenticationTokenManager');
 
 describe('/authentications endpoint', () => {
-  let server = null;
-
-  beforeAll(async () => {
-    server = await createServer(container);
-  });
-
   afterAll(async () => {
     await pool.end();
   });
@@ -29,6 +23,8 @@ describe('/authentications endpoint', () => {
         username: 'sandy',
         password: 'secret',
       };
+
+      const server = await createServer(container);
 
       // add user
       await server.inject({
@@ -63,6 +59,8 @@ describe('/authentications endpoint', () => {
         password: 'secret',
       };
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'POST',
@@ -83,6 +81,8 @@ describe('/authentications endpoint', () => {
         username: 'sandy',
         password: 'wrong_password',
       };
+
+      const server = await createServer(container);
 
       // Add user
       await server.inject({
@@ -115,6 +115,8 @@ describe('/authentications endpoint', () => {
         username: 'sandy',
       };
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'POST',
@@ -135,6 +137,8 @@ describe('/authentications endpoint', () => {
         username: 123,
         password: 'secret',
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -158,6 +162,8 @@ describe('/authentications endpoint', () => {
         username: 'sandy',
         password: 'secret',
       };
+
+      const server = await createServer(container);
 
       // add user
       await server.inject({
@@ -196,6 +202,8 @@ describe('/authentications endpoint', () => {
       // Arrange
       const requestPayload = {};
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'PUT',
@@ -214,6 +222,8 @@ describe('/authentications endpoint', () => {
       const requestPayload = {
         refreshToken: 123,
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -234,6 +244,8 @@ describe('/authentications endpoint', () => {
         refreshToken: 'invalid_refresh_token',
       };
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'PUT',
@@ -251,6 +263,8 @@ describe('/authentications endpoint', () => {
     it('should return 400 if refresh token not registered in database', async () => {
       // Arrange
       const refreshToken = await container.getInstance(AuthenticationTokenManager.name).createRefreshToken({ username: 'dicoding' });
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -275,6 +289,8 @@ describe('/authentications endpoint', () => {
       const refreshToken = 'refresh_token';
       await AuthenticationsTableTestHelper.addToken(refreshToken);
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'DELETE',
@@ -293,6 +309,8 @@ describe('/authentications endpoint', () => {
     it('should response 400 if refresh token not registered in database', async () => {
       // Arrange
       const refreshToken = 'refresh_token';
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -314,6 +332,8 @@ describe('/authentications endpoint', () => {
       // Arrange
       const requestPayload = {};
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'DELETE',
@@ -332,6 +352,8 @@ describe('/authentications endpoint', () => {
       const requestPayload = {
         refreshToken: 123,
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({

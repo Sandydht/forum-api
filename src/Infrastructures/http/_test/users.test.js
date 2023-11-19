@@ -5,19 +5,12 @@ const container = require('../../container');
 const createServer = require('../createServer');
 
 describe('/users endpoint', () => {
-  let server = null;
-
   afterAll(async () => {
     await pool.end();
-    server.stop();
   });
 
   afterEach(async () => {
     await UsersTableTestHelper.cleanTable();
-  });
-
-  beforeAll(async () => {
-    server = await createServer(container);
   });
 
   describe('when POST /users', () => {
@@ -28,6 +21,8 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: 'Sandy Dwi',
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -49,6 +44,8 @@ describe('/users endpoint', () => {
         fullname: 'Sandy Dwi',
         password: 'secret',
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -72,6 +69,8 @@ describe('/users endpoint', () => {
         fullname: ['Sandy Dwi'],
       };
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'POST',
@@ -93,6 +92,8 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: 'Sandy Dwi',
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -116,6 +117,8 @@ describe('/users endpoint', () => {
         fullname: 'Sandy Dwi',
       };
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'POST',
@@ -138,6 +141,8 @@ describe('/users endpoint', () => {
         fullname: 'Sandy Dwi',
         password: 'secret',
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({

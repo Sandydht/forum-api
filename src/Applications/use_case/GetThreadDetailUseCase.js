@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 class GetThreadDetailUseCase {
   constructor({
     threadRepository,
@@ -16,13 +17,14 @@ class GetThreadDetailUseCase {
     const mapThreadComments = await Promise.all(
       threadComments.map(async (comment) => {
         const threadCommentReplies = await this._threadCommentReplyRepository.getThreadCommentRepliesByCommentId(comment.id);
-        // eslint-disable-next-line no-param-reassign
-        comment.replies = Array.isArray(threadCommentReplies) && threadCommentReplies.length > 0 ? threadCommentReplies : [];
+        comment.replies = threadCommentReplies;
+
         return comment;
       }),
     );
 
-    thread.comments = Array.isArray(mapThreadComments) && mapThreadComments.length > 0 ? mapThreadComments : [];
+    thread.comments = mapThreadComments;
+
     return thread;
   }
 }
