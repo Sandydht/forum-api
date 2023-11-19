@@ -172,11 +172,13 @@ describe('ThreadCommentRepositoryPostgres', () => {
       expect(comment1.username).toEqual('sandy');
       expect(comment1.date).toEqual(new Date('2023-11-14T12:00:00.000Z').toISOString());
       expect(comment1.content).toEqual('**komentar telah dihapus**');
+      expect(comment1.replies).toBeInstanceOf(Array);
 
       expect(comment2.id).toEqual('comment-123');
       expect(comment2.username).toEqual('sandy');
       expect(comment2.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(comment2.content).toEqual('sebuah comment');
+      expect(comment2.replies).toBeInstanceOf(Array);
     });
   });
 });

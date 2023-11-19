@@ -43,7 +43,6 @@ describe('ThreadRepositoryPostgres', () => {
         title: 'sebuah thread',
         body: 'sebuah body thread',
       });
-
       const fakeIdGenerator = () => '123';
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
@@ -90,7 +89,7 @@ describe('ThreadRepositoryPostgres', () => {
       return expect(threadRepositoryPostgres.getThreadById('thread-123')).rejects.toThrowError(NotFoundError);
     });
 
-    it('shoul return thread detail when thread is found', async () => {
+    it('should return thread detail when thread is found', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
       await ThreadsTableTestHelper.addThread({
@@ -111,6 +110,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(thread.body).toEqual('sebuah body thread');
       expect(thread.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(thread.username).toEqual('sandy');
+      expect(thread.comments).toBeInstanceOf(Array);
     });
   });
 });

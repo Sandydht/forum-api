@@ -23,7 +23,9 @@ describe('/authentications endpoint', () => {
         username: 'sandy',
         password: 'secret',
       };
+
       const server = await createServer(container);
+
       // add user
       await server.inject({
         method: 'POST',
@@ -56,6 +58,7 @@ describe('/authentications endpoint', () => {
         username: 'sandy',
         password: 'secret',
       };
+
       const server = await createServer(container);
 
       // Action
@@ -78,7 +81,9 @@ describe('/authentications endpoint', () => {
         username: 'sandy',
         password: 'wrong_password',
       };
+
       const server = await createServer(container);
+
       // Add user
       await server.inject({
         method: 'POST',
@@ -109,6 +114,7 @@ describe('/authentications endpoint', () => {
       const requestPayload = {
         username: 'sandy',
       };
+
       const server = await createServer(container);
 
       // Action
@@ -131,6 +137,7 @@ describe('/authentications endpoint', () => {
         username: 123,
         password: 'secret',
       };
+
       const server = await createServer(container);
 
       // Action
@@ -151,7 +158,13 @@ describe('/authentications endpoint', () => {
   describe('when PUT /authentications', () => {
     it('should return 200 and new access token', async () => {
       // Arrange
+      const requestPayload = {
+        username: 'sandy',
+        password: 'secret',
+      };
+
       const server = await createServer(container);
+
       // add user
       await server.inject({
         method: 'POST',
@@ -166,10 +179,7 @@ describe('/authentications endpoint', () => {
       const loginResponse = await server.inject({
         method: 'POST',
         url: '/authentications',
-        payload: {
-          username: 'sandy',
-          password: 'secret',
-        },
+        payload: requestPayload,
       });
       const { data: { refreshToken } } = JSON.parse(loginResponse.payload);
 
@@ -190,13 +200,15 @@ describe('/authentications endpoint', () => {
 
     it('should return 400 payload not contain refresh token', async () => {
       // Arrange
+      const requestPayload = {};
+
       const server = await createServer(container);
 
       // Action
       const response = await server.inject({
         method: 'PUT',
         url: '/authentications',
-        payload: {},
+        payload: requestPayload,
       });
 
       const responseJson = JSON.parse(response.payload);
@@ -207,15 +219,17 @@ describe('/authentications endpoint', () => {
 
     it('should return 400 if refresh token not string', async () => {
       // Arrange
+      const requestPayload = {
+        refreshToken: 123,
+      };
+
       const server = await createServer(container);
 
       // Action
       const response = await server.inject({
         method: 'PUT',
         url: '/authentications',
-        payload: {
-          refreshToken: 123,
-        },
+        payload: requestPayload,
       });
 
       const responseJson = JSON.parse(response.payload);
@@ -226,15 +240,17 @@ describe('/authentications endpoint', () => {
 
     it('should return 400 if refresh token not valid', async () => {
       // Arrange
+      const requestPayload = {
+        refreshToken: 'invalid_refresh_token',
+      };
+
       const server = await createServer(container);
 
       // Action
       const response = await server.inject({
         method: 'PUT',
         url: '/authentications',
-        payload: {
-          refreshToken: 'invalid_refresh_token',
-        },
+        payload: requestPayload,
       });
 
       // Assert
@@ -246,8 +262,9 @@ describe('/authentications endpoint', () => {
 
     it('should return 400 if refresh token not registered in database', async () => {
       // Arrange
-      const server = await createServer(container);
       const refreshToken = await container.getInstance(AuthenticationTokenManager.name).createRefreshToken({ username: 'dicoding' });
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -269,9 +286,10 @@ describe('/authentications endpoint', () => {
   describe('when DELETE /authentications', () => {
     it('should response 200 if refresh token valid', async () => {
       // Arrange
-      const server = await createServer(container);
       const refreshToken = 'refresh_token';
       await AuthenticationsTableTestHelper.addToken(refreshToken);
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -290,8 +308,9 @@ describe('/authentications endpoint', () => {
 
     it('should response 400 if refresh token not registered in database', async () => {
       // Arrange
-      const server = await createServer(container);
       const refreshToken = 'refresh_token';
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -311,13 +330,15 @@ describe('/authentications endpoint', () => {
 
     it('should response 400 if payload not contain refresh token', async () => {
       // Arrange
+      const requestPayload = {};
+
       const server = await createServer(container);
 
       // Action
       const response = await server.inject({
         method: 'DELETE',
         url: '/authentications',
-        payload: {},
+        payload: requestPayload,
       });
 
       const responseJson = JSON.parse(response.payload);
@@ -328,15 +349,17 @@ describe('/authentications endpoint', () => {
 
     it('should response 400 if refresh token not string', async () => {
       // Arrange
+      const requestPayload = {
+        refreshToken: 123,
+      };
+
       const server = await createServer(container);
 
       // Action
       const response = await server.inject({
         method: 'DELETE',
         url: '/authentications',
-        payload: {
-          refreshToken: 123,
-        },
+        payload: requestPayload,
       });
 
       const responseJson = JSON.parse(response.payload);

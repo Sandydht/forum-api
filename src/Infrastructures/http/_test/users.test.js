@@ -5,19 +5,12 @@ const container = require('../../container');
 const createServer = require('../createServer');
 
 describe('/users endpoint', () => {
-  let server = null;
-
   afterAll(async () => {
     await pool.end();
-    server.stop();
   });
 
   afterEach(async () => {
     await UsersTableTestHelper.cleanTable();
-  });
-
-  beforeAll(async () => {
-    server = await createServer(container);
   });
 
   describe('when POST /users', () => {
@@ -28,6 +21,8 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: 'Sandy Dwi',
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -49,6 +44,8 @@ describe('/users endpoint', () => {
         fullname: 'Sandy Dwi',
         password: 'secret',
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -72,6 +69,8 @@ describe('/users endpoint', () => {
         fullname: ['Sandy Dwi'],
       };
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'POST',
@@ -93,6 +92,8 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: 'Sandy Dwi',
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -116,6 +117,8 @@ describe('/users endpoint', () => {
         fullname: 'Sandy Dwi',
       };
 
+      const server = await createServer(container);
+
       // Action
       const response = await server.inject({
         method: 'POST',
@@ -130,7 +133,7 @@ describe('/users endpoint', () => {
       expect(responseJson.message).toEqual('tidak dapat membuat user baru karena username mengandung karakter terlarang');
     });
 
-    it('should response 400 when username available', async () => {
+    it('should response 400 when username unavailable', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ username: 'sandy' });
       const requestPayload = {
@@ -138,6 +141,8 @@ describe('/users endpoint', () => {
         fullname: 'Sandy Dwi',
         password: 'secret',
       };
+
+      const server = await createServer(container);
 
       // Action
       const response = await server.inject({
@@ -150,7 +155,7 @@ describe('/users endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('username sudah terdaftar');
+      expect(responseJson.message).toEqual('username tidak tersedia');
     });
   });
 });
