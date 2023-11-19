@@ -86,7 +86,7 @@ describe('UserRepositoryPostgres', () => {
       await expect(userRepositoryPostgres.getPasswordByUsername('sandy')).rejects.toThrowError(InvariantError);
     });
 
-    it('should return username password when user is found', async () => {
+    it('should return password when user is found', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({
         username: 'sandy',
