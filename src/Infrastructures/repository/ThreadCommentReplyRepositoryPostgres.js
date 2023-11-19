@@ -69,10 +69,6 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
     };
 
     const result = await this._pool.query(query);
-    if (!result.rowCount) {
-      return [];
-    }
-
     return result.rows.map((reply) => new ThreadCommentReplyDetail({
       id: reply.id,
       username: reply.username,

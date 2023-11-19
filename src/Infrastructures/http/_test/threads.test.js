@@ -182,7 +182,7 @@ describe('/threads endpoint', () => {
   });
 
   describe('when GET /threads/{threadId}', () => {
-    it('should reponse 200 when thread available and not contain comments', async () => {
+    it('should reponse 200 when thread available', async () => {
       // Arrange
       const server = await createServer(container);
 
