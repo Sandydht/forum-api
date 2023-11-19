@@ -29,7 +29,7 @@ exports.up = (pgm) => {
     created_at: {
       type: 'timestamp',
       notNull: true,
-      default: new Date().toUTCString(),
+      default: pgm.func('current_timestamp'),
     },
   });
 };
