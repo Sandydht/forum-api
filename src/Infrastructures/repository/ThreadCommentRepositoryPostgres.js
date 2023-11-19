@@ -81,6 +81,7 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
       date: comment.created_at,
       content: comment.content,
       isDelete: comment.is_delete,
+      replies: [],
     }));
   }
 }

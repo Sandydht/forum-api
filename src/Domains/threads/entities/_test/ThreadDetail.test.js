@@ -9,6 +9,7 @@ describe('a ThreadDetail entities', () => {
       title: 'sebuah thread',
       body: 'sebuah body thread',
       date: new Date('2023-10-14'),
+      username: 'sandy',
     };
 
     // Assert
@@ -23,6 +24,7 @@ describe('a ThreadDetail entities', () => {
       body: 'sebuah body thread',
       date: new Date('2023-10-14'),
       username: 'sandy',
+      comments: [],
     };
 
     // Assert
@@ -37,6 +39,7 @@ describe('a ThreadDetail entities', () => {
       body: 'sebuah body thread',
       date: new Date('2023-10-14'),
       username: 'sandy',
+      comments: [],
     };
 
     // Action
@@ -49,5 +52,6 @@ describe('a ThreadDetail entities', () => {
     expect(thread.body).toEqual(payload.body);
     expect(thread.date).toEqual(payload.date.toISOString());
     expect(thread.username).toEqual(payload.username);
+    expect(thread.comments).toBeInstanceOf(Array);
   });
 });

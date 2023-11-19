@@ -8,6 +8,7 @@ describe('a ThreadCommentDetail entities', () => {
       id: 'comment-123',
       username: 'sandy',
       date: new Date('2023-10-14'),
+      replies: [],
       content: 'sebuah comment',
     };
 
@@ -21,6 +22,7 @@ describe('a ThreadCommentDetail entities', () => {
       id: 123,
       username: 'sandy',
       date: new Date('2023-10-14'),
+      replies: [],
       content: 'sebuah comment',
       isDelete: false,
     };
@@ -35,6 +37,7 @@ describe('a ThreadCommentDetail entities', () => {
       id: 'comment-123',
       username: 'sandy',
       date: new Date('2023-10-14'),
+      replies: [],
       content: 'sebuah comment',
       isDelete: false,
     };
@@ -43,6 +46,7 @@ describe('a ThreadCommentDetail entities', () => {
       id: 'comment-123',
       username: 'sandy',
       date: new Date('2023-10-14'),
+      replies: [],
       content: 'sebuah comment',
       isDelete: true,
     };
@@ -56,12 +60,14 @@ describe('a ThreadCommentDetail entities', () => {
     expect(threadCommentDetail1.id).toEqual(comment1.id);
     expect(threadCommentDetail1.username).toEqual(comment1.username);
     expect(threadCommentDetail1.date).toEqual(comment1.date.toISOString());
+    expect(threadCommentDetail1.replies).toBeInstanceOf(Array);
     expect(threadCommentDetail1.content).toEqual(comment1.content);
 
     expect(threadCommentDetail2).toBeInstanceOf(ThreadCommentDetail);
     expect(threadCommentDetail2.id).toEqual(comment2.id);
     expect(threadCommentDetail2.username).toEqual(comment2.username);
     expect(threadCommentDetail2.date).toEqual(comment2.date.toISOString());
+    expect(threadCommentDetail2.replies).toBeInstanceOf(Array);
     expect(threadCommentDetail2.content).toEqual('**komentar telah dihapus**');
   });
 });

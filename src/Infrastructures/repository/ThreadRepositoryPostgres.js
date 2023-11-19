@@ -55,6 +55,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       body: result.rows[0].body,
       date: result.rows[0].created_at,
       username: result.rows[0].username,
+      comments: [],
     });
   }
 }
