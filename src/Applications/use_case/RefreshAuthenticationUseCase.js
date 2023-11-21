@@ -1,3 +1,5 @@
+const RefreshAuth = require('../../Domains/authentications/entities/RefreshAuth');
+
 class RefreshAuthenticationUseCase {
   constructor({
     authenticationRepository,
@@ -8,8 +10,7 @@ class RefreshAuthenticationUseCase {
   }
 
   async execute(useCasePayload) {
-    this._verifyPayload(useCasePayload);
-    const { refreshToken } = useCasePayload;
+    const { refreshToken } = new RefreshAuth(useCasePayload);
 
     await this._authenticationTokenManager.verifyRefreshToken(refreshToken);
     await this._authenticationRepository.checkAvailabilityToken(refreshToken);
