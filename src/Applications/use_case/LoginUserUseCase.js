@@ -1,5 +1,5 @@
 const UserLogin = require('../../Domains/users/entities/UserLogin');
-const NewAuthentication = require('../../Domains/authentications/entities/NewAuth');
+const NewAuth = require('../../Domains/authentications/entities/NewAuth');
 
 class LoginUserUseCase {
   constructor({
@@ -23,17 +23,17 @@ class LoginUserUseCase {
 
     const id = await this._userRepository.getIdByUsername(username);
 
-    const accessToken = await this._authenticationTokenManager.createAccessToken({ username, id });
-    const refreshToken = await this._authenticationTokenManager.createRefreshToken({ username, id });
+    const accessToken = await this._authenticationTokenManager.createAccessToken({ id, username });
+    const refreshToken = await this._authenticationTokenManager.createRefreshToken({ id, username });
 
-    const newAuthentication = new NewAuthentication({
+    const newAuth = new NewAuth({
       accessToken,
       refreshToken,
     });
 
-    await this._authenticationRepository.addToken(newAuthentication.refreshToken);
+    await this._authenticationRepository.addToken(newAuth.refreshToken);
 
-    return newAuthentication;
+    return newAuth;
   }
 }
 

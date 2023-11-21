@@ -110,7 +110,6 @@ describe('ThreadRepositoryPostgres', () => {
       expect(thread.body).toEqual('sebuah body thread');
       expect(thread.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(thread.username).toEqual('sandy');
-      expect(thread.comments).toBeInstanceOf(Array);
     });
   });
 });
