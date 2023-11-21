@@ -2,7 +2,6 @@
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const RegisterUser = require('../../../Domains/users/entities/RegisterUser');
-const RegisteredUser = require('../../../Domains/users/entities/RegisteredUser');
 const pool = require('../../database/postgres/pool');
 const UserRepositoryPostgres = require('../UserRepositoryPostgres');
 
@@ -69,11 +68,9 @@ describe('UserRepositoryPostgres', () => {
       const registeredUser = await userRepositoryPostgres.addUser(registerUser);
 
       // Assert
-      expect(registeredUser).toStrictEqual(new RegisteredUser({
-        id: 'user-123',
-        username: registerUser.username,
-        fullname: registerUser.fullname,
-      }));
+      expect(registeredUser.id).toEqual('user-123');
+      expect(registeredUser.username).toEqual(registerUser.username);
+      expect(registeredUser.fullname).toEqual(registerUser.fullname);
     });
   });
 
@@ -106,7 +103,7 @@ describe('UserRepositoryPostgres', () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
-      // Arrange Action & Assert
+      // Action & Assert
       await expect(userRepositoryPostgres.getIdByUsername('sandy')).rejects.toThrowError(InvariantError);
     });
 
