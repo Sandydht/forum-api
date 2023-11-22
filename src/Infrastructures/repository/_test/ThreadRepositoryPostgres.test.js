@@ -52,7 +52,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(threadRepositoryPostgres).toBeInstanceOf(ThreadRepositoryPostgres);
       expect(addedThread.id).toEqual('thread-123');
       expect(addedThread.title).toEqual(addThread.title);
-      expect(addThread.user_id).toEqual('user-123');
+      expect(addedThread.user_id).toEqual('user-123');
     });
   });
 

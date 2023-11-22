@@ -13,42 +13,29 @@ describe('AddThreadUseCase', () => {
       body: 'sebuah body thread',
     };
 
+    const addThread = new AddThread(useCasePayload);
     const mockThreadRepository = new ThreadRepository();
 
-    mockThreadRepository.addThread = jest.fn(() => Promise.resolve());
+    mockThreadRepository.addThread = jest.fn(() => Promise.resolve({
+      id: 'thread-123',
+      title: 'sebuah thread',
+      user_id: 'user-123',
+    }));
 
-    // // Arrange
-    // const userId = 'user-123';
-    // const useCasePayload = {
-    //   title: 'sebuah thread',
-    //   body: 'sebuah body thread',
-    // };
+    const addThreadUseCase = new AddThreadUseCase({
+      threadRepository: mockThreadRepository,
+    });
 
-    // const mockThreadRepository = new ThreadRepository();
+    // Action
+    const addedThread = await addThreadUseCase.execute(userId, useCasePayload);
 
-    // mockThreadRepository.addThread = jest.fn().mockImplementation(() => Promise.resolve(new AddedThread({
-    //   id: 'thread-123',
-    //   title: 'sebuah thread',
-    //   owner: 'user-123',
-    // })));
-
-    // const addThreadUseCase = new AddThreadUseCase({
-    //   threadRepository: mockThreadRepository,
-    // });
-
-    // // Action
-    // const addedThread = await addThreadUseCase.execute(userId, useCasePayload);
-
-    // // Assert
-    // expect(mockThreadRepository.addThread).toBeCalledWith(userId, new AddThread({
-    //   title: useCasePayload.title,
-    //   body: useCasePayload.body,
-    // }));
-    // expect(addThreadUseCase).toBeInstanceOf(AddThreadUseCase);
-    // expect(addedThread).toStrictEqual(new AddedThread({
-    //   id: 'thread-123',
-    //   title: 'sebuah thread',
-    //   owner: 'user-123',
-    // }));
+    // Assert
+    expect(mockThreadRepository.addThread).toBeCalledWith(userId, addThread);
+    expect(addThreadUseCase).toBeInstanceOf(AddThreadUseCase);
+    expect(addedThread).toStrictEqual(new AddedThread({
+      id: 'thread-123',
+      title: addThread.title,
+      owner: userId,
+    }));
   });
 });
