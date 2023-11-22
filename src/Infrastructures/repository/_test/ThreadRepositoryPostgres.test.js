@@ -100,12 +100,13 @@ describe('ThreadRepositoryPostgres', () => {
 
       // Action
       const thread = await threadRepositoryPostgres.getThreadById('thread-123');
+      console.log('thread: ', thread);
 
       // Assert
       expect(thread.id).toEqual('thread-123');
       expect(thread.title).toEqual('sebuah thread');
       expect(thread.body).toEqual('sebuah body thread');
-      expect(thread.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
+      expect(thread.created_at).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(thread.username).toEqual('sandy');
     });
   });

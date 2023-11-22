@@ -35,13 +35,14 @@ describe('UserRepositoryPostgres', () => {
   describe('addUser function', () => {
     it('should persist register user and return registered user correctly', async () => {
       // Arrange
-      const fakeIdGenerator = () => '123';
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator);
       const payload = {
         username: 'sandy',
         fullname: 'Sandy Dwi',
         password: 'secret',
       };
+
+      const fakeIdGenerator = () => '123';
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
       await userRepositoryPostgres.addUser(payload);
@@ -53,13 +54,14 @@ describe('UserRepositoryPostgres', () => {
 
     it('should return registered user correctly', async () => {
       // Arrange
-      const fakeIdGenerator = () => '123';
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator);
       const payload = {
         username: 'sandy',
         fullname: 'Sandy Dwi',
         password: 'secret',
       };
+
+      const fakeIdGenerator = () => '123';
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
       const registeredUser = await userRepositoryPostgres.addUser(payload);
