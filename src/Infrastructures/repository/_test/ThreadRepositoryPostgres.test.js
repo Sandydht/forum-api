@@ -3,7 +3,6 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
-const AddThread = require('../../../Domains/threads/entities/AddThread');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 describe('ThreadRepositoryPostgres', () => {
@@ -20,15 +19,16 @@ describe('ThreadRepositoryPostgres', () => {
     it('should persist add thread and return added thread correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
-      const addThread = new AddThread({
+      const payload = {
         title: 'sebuah thread',
         body: 'sebuah body thread',
-      });
+      };
+
       const fakeIdGenerator = () => '123';
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await threadRepositoryPostgres.addThread('user-123', addThread);
+      await threadRepositoryPostgres.addThread('user-123', payload);
 
       // Assert
       const threads = await ThreadsTableTestHelper.findThreadById('thread-123');
@@ -38,20 +38,21 @@ describe('ThreadRepositoryPostgres', () => {
     it('should return added thread correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
-      const addThread = new AddThread({
+      const payload = {
         title: 'sebuah thread',
         body: 'sebuah body thread',
-      });
+      };
+
       const fakeIdGenerator = () => '123';
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      const addedThread = await threadRepositoryPostgres.addThread('user-123', addThread);
+      const addedThread = await threadRepositoryPostgres.addThread('user-123', payload);
 
       // Assert
       expect(threadRepositoryPostgres).toBeInstanceOf(ThreadRepositoryPostgres);
       expect(addedThread.id).toEqual('thread-123');
-      expect(addedThread.title).toEqual(addThread.title);
+      expect(addedThread.title).toEqual(payload.title);
       expect(addedThread.user_id).toEqual('user-123');
     });
   });
