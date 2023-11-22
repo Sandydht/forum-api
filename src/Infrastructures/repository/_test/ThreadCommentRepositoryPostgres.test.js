@@ -4,8 +4,6 @@ const pool = require('../../database/postgres/pool');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper');
-const AddThreadComment = require('../../../Domains/thread_comments/entities/AddThreadComment');
-const AddedThreadComment = require('../../../Domains/thread_comments/entities/AddedThreadComment');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
@@ -25,14 +23,15 @@ describe('ThreadCommentRepositoryPostgres', () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      const addThreadComment = new AddThreadComment({
+      const payload = {
         content: 'sebuah comment',
-      });
+      };
+
       const fakeIdGenerator = () => '123';
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', addThreadComment);
+      await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', payload);
 
       // Assert
       const comments = await ThreadCommentsTableTestHelper.findThreadCommentById('comment-123');
@@ -43,22 +42,21 @@ describe('ThreadCommentRepositoryPostgres', () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      const addThreadComment = new AddThreadComment({
+      const payload = {
         content: 'sebuah comment',
-      });
+      };
+
       const fakeIdGenerator = () => '123';
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      const addedComment = await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', addThreadComment);
+      const addedComment = await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', payload);
 
       // Assert
       expect(threadCommentRepositoryPostgres).toBeInstanceOf(ThreadCommentRepositoryPostgres);
-      expect(addedComment).toStrictEqual(new AddedThreadComment({
-        id: 'comment-123',
-        content: 'sebuah comment',
-        owner: 'user-123',
-      }));
+      expect(addedComment.id).toEqual('comment-123');
+      expect(addedComment.content).toEqual(payload.content);
+      expect(addedComment.user_id).toEqual('user-123');
     });
   });
 

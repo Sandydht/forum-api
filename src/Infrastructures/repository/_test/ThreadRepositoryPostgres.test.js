@@ -101,7 +101,6 @@ describe('ThreadRepositoryPostgres', () => {
 
       // Action
       const thread = await threadRepositoryPostgres.getThreadById('thread-123');
-      console.log('thread: ', thread);
 
       // Assert
       expect(thread.id).toEqual('thread-123');

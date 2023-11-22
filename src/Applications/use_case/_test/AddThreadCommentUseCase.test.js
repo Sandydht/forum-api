@@ -14,15 +14,16 @@ describe('AddThreadCommentUseCase', () => {
       content: 'sebuah comment',
     };
 
+    const mockAddThreadComment = new AddThreadComment(useCasePayload);
     const mockThreadRepository = new ThreadRepository();
     const mockThreadCommentRepository = new ThreadCommentRepository();
 
-    mockThreadRepository.verifyAvailableThread = jest.fn().mockImplementation(() => Promise.resolve());
-    mockThreadCommentRepository.addThreadComment = jest.fn().mockImplementation(() => Promise.resolve(new AddedThreadComment({
+    mockThreadRepository.verifyAvailableThread = jest.fn(() => Promise.resolve());
+    mockThreadCommentRepository.addThreadComment = jest.fn(() => Promise.resolve({
       id: 'comment-123',
       content: 'sebuah comment',
-      owner: 'user-123',
-    })));
+      user_id: 'user-123',
+    }));
 
     const addThreadCommentUseCase = new AddThreadCommentUseCase({
       threadRepository: mockThreadRepository,
@@ -34,14 +35,12 @@ describe('AddThreadCommentUseCase', () => {
 
     // Assert
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
+    expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith(userId, threadId, mockAddThreadComment);
     expect(addThreadCommentUseCase).toBeInstanceOf(AddThreadCommentUseCase);
-    expect(mockThreadCommentRepository.addThreadComment).toBeCalledWith(userId, threadId, new AddThreadComment({
-      content: 'sebuah comment',
-    }));
     expect(addedComment).toStrictEqual(new AddedThreadComment({
       id: 'comment-123',
-      content: 'sebuah comment',
-      owner: 'user-123',
+      content: useCasePayload.content,
+      owner: userId,
     }));
   });
 });

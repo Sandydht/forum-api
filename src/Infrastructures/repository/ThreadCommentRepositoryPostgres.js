@@ -1,5 +1,4 @@
 const ThreadCommentRepository = require('../../Domains/thread_comments/ThreadCommentRepository');
-const AddedThreadComment = require('../../Domains/thread_comments/entities/AddedThreadComment');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 
@@ -20,11 +19,7 @@ class ThreadCommentRepositoryPostgres extends ThreadCommentRepository {
     };
 
     const result = await this._pool.query(query);
-    return new AddedThreadComment({
-      id: result.rows[0].id,
-      content: result.rows[0].content,
-      owner: result.rows[0].user_id,
-    });
+    return result.rows[0];
   }
 
   async verifyAvailableThreadComment(id) {
