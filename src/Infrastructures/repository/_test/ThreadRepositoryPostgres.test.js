@@ -97,6 +97,7 @@ describe('ThreadRepositoryPostgres', () => {
         userId: 'user-123',
         createdAt: new Date('2023-11-14T13:00:00.000Z'),
       });
+
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action
@@ -106,7 +107,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(thread.id).toEqual('thread-123');
       expect(thread.title).toEqual('sebuah thread');
       expect(thread.body).toEqual('sebuah body thread');
-      expect(thread.created_at).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
+      expect(new Date(thread.created_at).toISOString()).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(thread.username).toEqual('sandy');
     });
   });

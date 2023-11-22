@@ -1,7 +1,6 @@
 const ThreadCommentReplyRepository = require('../../Domains/thread_comment_replies/ThreadCommentReplyRepository');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
-const ThreadCommentReplyDetail = require('../../Domains/thread_comment_replies/entities/ThreadCommentReplyDetail');
 
 class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository {
   constructor(pool, idGenerator) {
@@ -64,13 +63,7 @@ class ThreadCommentReplyRepositoryPostgres extends ThreadCommentReplyRepository 
     };
 
     const result = await this._pool.query(query);
-    return result.rows.map((reply) => new ThreadCommentReplyDetail({
-      id: reply.id,
-      username: reply.username,
-      date: reply.created_at,
-      content: reply.content,
-      isDelete: reply.is_delete,
-    }));
+    return result.rows;
   }
 }
 

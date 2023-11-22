@@ -146,17 +146,18 @@ describe('ThreadCommentRepositoryPostgres', () => {
         threadId: 'thread-123',
         userId: 'user-123',
         createdAt: new Date('2023-11-14T13:00:00.000Z'),
+        content: 'sebuah comment',
+        isDelete: false,
       });
       await ThreadCommentsTableTestHelper.addThreadComment({
         id: 'comment-234',
         threadId: 'thread-123',
         userId: 'user-123',
         createdAt: new Date('2023-11-14T12:00:00.000Z'),
+        content: 'sebuah comment',
+        isDelete: true,
       });
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
-
-      // Delete comment
-      await ThreadCommentsTableTestHelper.softDeleteThreadCommentById('comment-234');
 
       // Action
       const comments = await threadCommentRepositoryPostgres.getThreadCommentsByThreadId('thread-123');
@@ -168,13 +169,15 @@ describe('ThreadCommentRepositoryPostgres', () => {
       const [comment1, comment2] = comments;
       expect(comment1.id).toEqual('comment-234');
       expect(comment1.username).toEqual('sandy');
-      expect(comment1.date).toEqual(new Date('2023-11-14T12:00:00.000Z').toISOString());
-      expect(comment1.content).toEqual('**komentar telah dihapus**');
+      expect(new Date(comment1.created_at).toISOString()).toEqual(new Date('2023-11-14T12:00:00.000Z').toISOString());
+      expect(comment1.content).toEqual('sebuah comment');
+      expect(comment1.is_delete).toEqual(true);
 
       expect(comment2.id).toEqual('comment-123');
       expect(comment2.username).toEqual('sandy');
-      expect(comment2.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
+      expect(new Date(comment2.created_at).toISOString()).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(comment2.content).toEqual('sebuah comment');
+      expect(comment2.is_delete).toEqual(false);
     });
   });
 });
