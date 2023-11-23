@@ -7,10 +7,12 @@ class GetThreadDetailUseCase {
     threadRepository,
     threadCommentRepository,
     threadCommentReplyRepository,
+    threadCommentLikeRepository,
   }) {
     this._threadRepository = threadRepository;
     this._threadCommentRepository = threadCommentRepository;
     this._threadCommentReplyRepository = threadCommentReplyRepository;
+    this._threadCommentLikeRepository = threadCommentLikeRepository;
   }
 
   async execute(threadId) {
@@ -27,7 +29,11 @@ class GetThreadDetailUseCase {
 
     const mapThreadComments = await Promise.all(
       threadComments.map(async (comment) => {
-        const threadCommentReplies = await this._threadCommentReplyRepository.getThreadCommentRepliesByCommentId(comment.id);
+        const [threadCommentReplies, threadCommentLikeCount] = await Promise.all([
+          this._threadCommentReplyRepository.getThreadCommentRepliesByCommentId(comment.id),
+          this._threadCommentLikeRepository.getThreadCommentLikeCountByCommentId(comment.id),
+        ]);
+
         const mapThreadCommentReplies = threadCommentReplies.map((reply) => new ThreadCommentReplyDetail({
           id: reply.id,
           username: reply.username,
@@ -45,6 +51,7 @@ class GetThreadDetailUseCase {
             isDelete: comment.is_delete,
           }),
           replies: mapThreadCommentReplies,
+          likeCount: threadCommentLikeCount,
         };
       }),
     );

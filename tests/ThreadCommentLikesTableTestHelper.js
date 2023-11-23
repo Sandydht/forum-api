@@ -3,7 +3,7 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 
 const ThreadCommentLikesTableTestHelper = {
   async addThreadCommentLike({
-    id = 'comment-like-123', threadId = 'thread-123', commentId = 'comment-123', userId = 'user-123', createdAt = new Date().toISOString(),
+    id = 'comment-comment-like-123', threadId = 'thread-123', commentId = 'comment-123', userId = 'user-123', createdAt = new Date().toISOString(),
   }) {
     const query = {
       text: 'INSERT INTO thread_comment_likes VALUES($1, $2, $3, $4, $5)',

@@ -18,13 +18,15 @@ describe('ThreadCommentLikeRepositoryPostgres', () => {
     await UsersTableTestHelper.cleanTable();
   });
 
+  beforeEach(async () => {
+    await UsersTableTestHelper.addUser({ id: 'user-123' });
+    await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+    await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+  });
+
   describe('addThreadCommentLike function', () => {
     it('should persist add thread comment like and return added thread comment like correctly', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
-
       const fakeIdGenerator = () => '123';
       const threadCommentLikeRepositoryPostgres = new ThreadCommentLikeRepositoryPostgres(pool, fakeIdGenerator);
 
@@ -32,16 +34,12 @@ describe('ThreadCommentLikeRepositoryPostgres', () => {
       await threadCommentLikeRepositoryPostgres.addThreadCommentLike('user-123', 'thread-123', 'comment-123');
 
       // Assert
-      const likes = await ThreadCommentLikesTableTestHelper.findThreadCommentLikeById('like-123');
+      const likes = await ThreadCommentLikesTableTestHelper.findThreadCommentLikeById('comment-like-123');
       expect(likes).toHaveLength(1);
     });
 
     it('should return added thread comment like correctly', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
-
       const fakeIdGenerator = () => '123';
       const threadCommentLikeRepositoryPostgres = new ThreadCommentLikeRepositoryPostgres(pool, fakeIdGenerator);
 
@@ -50,7 +48,7 @@ describe('ThreadCommentLikeRepositoryPostgres', () => {
 
       // Assert
       expect(threadCommentLikeRepositoryPostgres).toBeInstanceOf(ThreadCommentLikeRepositoryPostgres);
-      expect(addedThreadCommentLike.id).toEqual('like-123');
+      expect(addedThreadCommentLike.id).toEqual('comment-like-123');
       expect(addedThreadCommentLike.thread_id).toEqual('thread-123');
       expect(addedThreadCommentLike.comment_id).toEqual('comment-123');
       expect(addedThreadCommentLike.user_id).toEqual('user-123');
@@ -60,10 +58,6 @@ describe('ThreadCommentLikeRepositoryPostgres', () => {
   describe('getIdAvailableThreadCommentLike function', () => {
     it('should return null when like not found', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
-
       const threadCommentLikeRepositoryPostgres = new ThreadCommentLikeRepositoryPostgres(pool, {});
 
       // Action & Assert
@@ -72,11 +66,8 @@ describe('ThreadCommentLikeRepositoryPostgres', () => {
 
     it('should return like id correctly', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       await ThreadCommentLikesTableTestHelper.addThreadCommentLike({
-        id: 'like-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+        id: 'comment-like-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
       });
 
       const threadCommentLikeRepositoryPostgres = new ThreadCommentLikeRepositoryPostgres(pool, {});
@@ -85,28 +76,53 @@ describe('ThreadCommentLikeRepositoryPostgres', () => {
       const likeId = await threadCommentLikeRepositoryPostgres.getIdAvailableThreadCommentLike('user-123', 'thread-123', 'comment-123');
 
       // Assert
-      expect(likeId).toEqual('like-123');
+      expect(likeId).toEqual('comment-like-123');
     });
   });
 
   describe('deleteThreadCommentLike function', () => {
     it('should delete thread comment like from database', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       await ThreadCommentLikesTableTestHelper.addThreadCommentLike({
-        id: 'like-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+        id: 'comment-like-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
       });
 
       const threadCommentLikeRepositoryPostgres = new ThreadCommentLikeRepositoryPostgres(pool, {});
 
       // Action
-      await threadCommentLikeRepositoryPostgres.deleteThreadCommentLike('like-123');
+      await threadCommentLikeRepositoryPostgres.deleteThreadCommentLike('comment-like-123');
 
       // Assert
-      const likes = await ThreadCommentLikesTableTestHelper.findThreadCommentLikeById('like-123');
+      const likes = await ThreadCommentLikesTableTestHelper.findThreadCommentLikeById('comment-like-123');
       expect(likes).toHaveLength(0);
+    });
+  });
+
+  describe('getThreadCommentLikeCountByCommentId function', () => {
+    it('should return 0 when like not available', async () => {
+      // Arrange
+      const threadCommentLikeRepositoryPostgres = new ThreadCommentLikeRepositoryPostgres(pool, {});
+
+      // Action
+      const likeCount = await threadCommentLikeRepositoryPostgres.getThreadCommentLikeCountByCommentId('comment-123');
+
+      // Assert
+      expect(likeCount).toEqual(0);
+    });
+
+    it('should not return 0 when like available', async () => {
+      // Arrange
+      await ThreadCommentLikesTableTestHelper.addThreadCommentLike({
+        id: 'comment-like-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
+      });
+
+      const threadCommentLikeRepositoryPostgres = new ThreadCommentLikeRepositoryPostgres(pool, {});
+
+      // Action
+      const likeCount = await threadCommentLikeRepositoryPostgres.getThreadCommentLikeCountByCommentId('comment-123');
+
+      // Assert
+      expect(likeCount).not.toEqual(0);
     });
   });
 });

@@ -8,7 +8,7 @@ class ThreadCommentLikeRepositoryPostgres extends ThreadCommentLikeRepository {
   }
 
   async addThreadCommentLike(userId, threadId, commentId) {
-    const id = `like-${this._idGenerator()}`;
+    const id = `comment-like-${this._idGenerator()}`;
 
     const query = {
       text: 'INSERT INTO thread_comment_likes VALUES($1, $2, $3, $4) RETURNING id, thread_id, comment_id, user_id',
@@ -41,6 +41,16 @@ class ThreadCommentLikeRepositoryPostgres extends ThreadCommentLikeRepository {
     };
 
     await this._pool.query(query);
+  }
+
+  async getThreadCommentLikeCountByCommentId(commentId) {
+    const query = {
+      text: 'SELECT id FROM thread_comment_likes WHERE comment_id = $1',
+      values: [commentId],
+    };
+
+    const result = await this._pool.query(query);
+    return result.rowCount;
   }
 }
 

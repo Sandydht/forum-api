@@ -50,7 +50,7 @@ describe('LikeOrUnlikeThreadCommentUseCase', () => {
 
     mockThreadRepository.verifyAvailableThread = jest.fn(() => Promise.resolve());
     mockThreadCommentRepository.verifyAvailableThreadComment = jest.fn(() => Promise.resolve());
-    mockThreadCommentLikeRepository.getIdAvailableThreadCommentLike = jest.fn(() => Promise.resolve('like-123'));
+    mockThreadCommentLikeRepository.getIdAvailableThreadCommentLike = jest.fn(() => Promise.resolve('comment-like-123'));
     mockThreadCommentLikeRepository.deleteThreadCommentLike = jest.fn(() => Promise.resolve('Unliked'));
 
     const likeOrUnlikeThreadCommentUseCase = new LikeOrUnlikeThreadCommentUseCase({
@@ -66,8 +66,8 @@ describe('LikeOrUnlikeThreadCommentUseCase', () => {
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
     expect(mockThreadCommentRepository.verifyAvailableThreadComment).toBeCalledWith(commentId);
     expect(mockThreadCommentLikeRepository.getIdAvailableThreadCommentLike).toBeCalledWith(userId, threadId, commentId);
-    await expect(mockThreadCommentLikeRepository.getIdAvailableThreadCommentLike()).resolves.toEqual('like-123');
-    expect(mockThreadCommentLikeRepository.deleteThreadCommentLike).toBeCalledWith('like-123');
+    await expect(mockThreadCommentLikeRepository.getIdAvailableThreadCommentLike()).resolves.toEqual('comment-like-123');
+    expect(mockThreadCommentLikeRepository.deleteThreadCommentLike).toBeCalledWith('comment-like-123');
     expect(likedOrUnlikedThreadComment).toEqual('Unliked');
   });
 });

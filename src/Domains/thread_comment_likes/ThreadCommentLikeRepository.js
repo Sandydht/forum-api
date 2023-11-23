@@ -11,6 +11,10 @@ class ThreadCommentLikeRepository {
   async getIdAvailableThreadCommentLike(userId, threadId, commentId) {
     throw new Error('THREAD_COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+
+  async getThreadCommentLikeCountByCommentId(commentId) {
+    throw new Error('THREAD_COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
 }
 
 module.exports = ThreadCommentLikeRepository;

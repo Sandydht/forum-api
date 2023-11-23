@@ -11,5 +11,6 @@ describe('ThreadCommentLikeRepository', () => {
     await expect(threadCommentLikeRepository.addThreadCommentLike('', '', '')).rejects.toThrowError('THREAD_COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     await expect(threadCommentLikeRepository.deleteThreadCommentLike('')).rejects.toThrowError('THREAD_COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     await expect(threadCommentLikeRepository.getIdAvailableThreadCommentLike('', '', '')).rejects.toThrowError('THREAD_COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    await expect(threadCommentLikeRepository.getThreadCommentLikeCountByCommentId('')).rejects.toThrowError('THREAD_COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   });
 });
