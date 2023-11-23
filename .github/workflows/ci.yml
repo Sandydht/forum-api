@@ -19,11 +19,24 @@ jobs:
   test:
     needs: commitlint
     runs-on: ubuntu-latest
+    container: node:10.18-jessie
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     strategy:
       matrix:
         node-version: [14.x]
     steps:
-    - name: Checkout
+    - name: Checkout repository code
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
@@ -35,19 +48,21 @@ jobs:
       run: npm install
     - name: Eslint
       run: npm run lint
+    - name: Connect to PostgreSQL
+      run: 
     - name: npm migrate and test
       run: npm run migrate up && npm run test
       env:
         CI: true
-        PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
-        PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
-        PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
-        PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
-        PGPORT_TEST: ${{ secrets.PGPORT_TEST }}
-        PGHOST: ${{ secrets.PGHOST_TEST }}
-        PGUSER: ${{ secrets.PGUSER_TEST }}
-        PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
-        PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
-        PGPORT: ${{ secrets.PGPORT_TEST }}
+    #     PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
+    #     PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
+    #     PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
+    #     PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
+    #     PGPORT_TEST: ${{ secrets.PGPORT_TEST }}
+    #     PGHOST: ${{ secrets.PGHOST_TEST }}
+    #     PGUSER: ${{ secrets.PGUSER_TEST }}
+    #     PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
+    #     PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
+    #     PGPORT: ${{ secrets.PGPORT_TEST }}
         ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
         REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
