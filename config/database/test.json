@@ -1,7 +1,0 @@
-{
-  "user": "developer",
-  "password": "password",
-  "host": "postgres",
-  "port": 5432,
-  "database": "forumapi_test"
-}
