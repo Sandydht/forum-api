@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
-const EncryptionHelper = require('../PasswordHash');
+const PasswordHash = require('../PasswordHash');
 
-describe('EncryptionHelper interface', () => {
+describe('PasswordHash interface', () => {
   it('should throw error when invoke abstract behavior', async () => {
     // Arrange
-    const encryptionHelper = new EncryptionHelper();
+    const passwordHash = new PasswordHash();
 
     // Action & Assert
-    expect(encryptionHelper).toBeInstanceOf(EncryptionHelper);
-    await expect(encryptionHelper.hash('dummy_password')).rejects.toThrowError('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED');
-    await expect(encryptionHelper.comparePassword('plain', 'encrypted')).rejects.toThrowError('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED');
+    expect(passwordHash).toBeInstanceOf(PasswordHash);
+    await expect(passwordHash.hash('dummy_password')).rejects.toThrowError('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED');
+    await expect(passwordHash.comparePassword('plain', 'encrypted')).rejects.toThrowError('PASSWORD_HASH.METHOD_NOT_IMPLEMENTED');
   });
 });

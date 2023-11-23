@@ -5,8 +5,6 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper');
 const ThreadCommentRepliesTableTestHelper = require('../../../../tests/ThreadCommentRepliesTableTestHelper');
-const AddThreadCommentReply = require('../../../Domains/thread_comment_replies/entities/AddThreadCommentReply');
-const AddedThreadCommentReply = require('../../../Domains/thread_comment_replies/entities/AddedThreadCommentReply');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
@@ -28,14 +26,15 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
       await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
-      const addThreadCommentReply = new AddThreadCommentReply({
+      const payload = {
         content: 'sebuah balasan',
-      });
+      };
+
       const fakeIdGenerator = () => '123';
       const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await threadCommentReplyRepositoryPostgres.addThreadCommentReply('user-123', 'thread-123', 'comment-123', addThreadCommentReply);
+      await threadCommentReplyRepositoryPostgres.addThreadCommentReply('user-123', 'thread-123', 'comment-123', payload);
 
       // Assert
       const replies = await ThreadCommentRepliesTableTestHelper.findThreadCommentReplyById('reply-123');
@@ -47,22 +46,21 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
       await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
-      const addThreadCommentReply = new AddThreadCommentReply({
+      const payload = {
         content: 'sebuah balasan',
-      });
+      };
+
       const fakeIdGenerator = () => '123';
       const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      const addedReply = await threadCommentReplyRepositoryPostgres.addThreadCommentReply('user-123', 'thread-123', 'comment-123', addThreadCommentReply);
+      const addedReply = await threadCommentReplyRepositoryPostgres.addThreadCommentReply('user-123', 'thread-123', 'comment-123', payload);
 
       // Assert
       expect(threadCommentReplyRepositoryPostgres).toBeInstanceOf(ThreadCommentReplyRepositoryPostgres);
-      expect(addedReply).toStrictEqual(new AddedThreadCommentReply({
-        id: 'reply-123',
-        content: 'sebuah balasan',
-        owner: 'user-123',
-      }));
+      expect(addedReply.id).toEqual('reply-123');
+      expect(addedReply.content).toEqual(payload.content);
+      expect(addedReply.user_id).toEqual('user-123');
     });
   });
 
@@ -168,6 +166,7 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
         commentId: 'comment-123',
         userId: 'user-123',
         createdAt: new Date('2023-11-14T13:00:00.000Z'),
+        isDelete: false,
       });
       await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
         id: 'reply-234',
@@ -175,11 +174,9 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
         commentId: 'comment-123',
         userId: 'user-123',
         createdAt: new Date('2023-11-14T12:00:00.000Z'),
+        isDelete: true,
       });
       const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
-
-      // Delete reply
-      await ThreadCommentRepliesTableTestHelper.softDeleteThreadCommentReplyById('reply-234');
 
       // Action
       const replies = await threadCommentReplyRepositoryPostgres.getThreadCommentRepliesByCommentId('comment-123');
@@ -191,13 +188,15 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
       const [reply1, reply2] = replies;
       expect(reply1.id).toEqual('reply-234');
       expect(reply1.username).toEqual('sandy');
-      expect(reply1.date).toEqual(new Date('2023-11-14T12:00:00.000Z').toISOString());
-      expect(reply1.content).toEqual('**balasan telah dihapus**');
+      expect(new Date(reply1.created_at).toISOString()).toEqual(new Date('2023-11-14T12:00:00.000Z').toISOString());
+      expect(reply1.content).toEqual('sebuah balasan');
+      expect(reply1.is_delete).toEqual(true);
 
       expect(reply2.id).toEqual('reply-123');
       expect(reply2.username).toEqual('sandy');
-      expect(reply2.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
+      expect(new Date(reply2.created_at).toISOString()).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(reply2.content).toEqual('sebuah balasan');
+      expect(reply2.is_delete).toEqual(false);
     });
   });
 });

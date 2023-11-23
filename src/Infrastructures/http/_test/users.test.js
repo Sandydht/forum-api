@@ -36,6 +36,9 @@ describe('/users endpoint', () => {
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
       expect(responseJson.data.addedUser).toBeDefined();
+      expect(responseJson.data.addedUser.id).toBeDefined();
+      expect(responseJson.data.addedUser.username).toEqual(requestPayload.username);
+      expect(responseJson.data.addedUser.fullname).toEqual(requestPayload.fullname);
     });
 
     it('should response 400 when request payload not contain needed property', async () => {

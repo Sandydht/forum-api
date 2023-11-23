@@ -15,17 +15,18 @@ describe('AddThreadCommentReplyUseCase', () => {
       content: 'sebuah balasan',
     };
 
+    const mockAddThreadCommentReply = new AddThreadCommentReply(useCasePayload);
     const mockThreadRepository = new ThreadRepository();
     const mockThreadCommentRepository = new ThreadCommentRepository();
     const mockThreadCommentReplyRepository = new ThreadCommentReplyRepository();
 
-    mockThreadRepository.verifyAvailableThread = jest.fn().mockImplementation(() => Promise.resolve());
-    mockThreadCommentRepository.verifyAvailableThreadComment = jest.fn().mockImplementation(() => Promise.resolve());
-    mockThreadCommentReplyRepository.addThreadCommentReply = jest.fn().mockImplementation(() => Promise.resolve(new AddedThreadCommentReply({
+    mockThreadRepository.verifyAvailableThread = jest.fn(() => Promise.resolve());
+    mockThreadCommentRepository.verifyAvailableThreadComment = jest.fn(() => Promise.resolve());
+    mockThreadCommentReplyRepository.addThreadCommentReply = jest.fn(() => Promise.resolve({
       id: 'reply-123',
       content: 'sebuah balasan',
-      owner: 'user-123',
-    })));
+      user_id: 'user-123',
+    }));
 
     const addThreadCommentReplyUseCase = new AddThreadCommentReplyUseCase({
       threadRepository: mockThreadRepository,
@@ -39,14 +40,12 @@ describe('AddThreadCommentReplyUseCase', () => {
     // Assert
     expect(mockThreadRepository.verifyAvailableThread).toBeCalledWith(threadId);
     expect(mockThreadCommentRepository.verifyAvailableThreadComment).toBeCalledWith(commentId);
-    expect(mockThreadCommentReplyRepository.addThreadCommentReply).toBeCalledWith(userId, threadId, commentId, new AddThreadCommentReply({
-      content: 'sebuah balasan',
-    }));
+    expect(mockThreadCommentReplyRepository.addThreadCommentReply).toBeCalledWith(userId, threadId, commentId, mockAddThreadCommentReply);
     expect(addThreadCommentReplyUseCase).toBeInstanceOf(AddThreadCommentReplyUseCase);
     expect(addedReply).toStrictEqual(new AddedThreadCommentReply({
       id: 'reply-123',
-      content: 'sebuah balasan',
-      owner: 'user-123',
+      content: mockAddThreadCommentReply.content,
+      owner: userId,
     }));
   });
 });

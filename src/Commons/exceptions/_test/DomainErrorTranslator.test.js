@@ -12,11 +12,11 @@ describe('DomainErrorTranslator', () => {
     expect(DomainErrorTranslator.translate(new Error('USER_LOGIN.NOT_CONTAIN_NEEDED_PROPERTY'))).toStrictEqual(new InvariantError('harus mengirimkan username dan password'));
     expect(DomainErrorTranslator.translate(new Error('USER_LOGIN.NOT_MEET_DATA_TYPE_SPECIFICATION'))).toStrictEqual(new InvariantError('username dan password harus string'));
 
-    expect(DomainErrorTranslator.translate(new Error('REFRESH_AUTHENTICATION_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN'))).toStrictEqual(new InvariantError('harus mengirimkan token refresh'));
-    expect(DomainErrorTranslator.translate(new Error('REFRESH_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION'))).toStrictEqual(new InvariantError('refresh token harus string'));
+    expect(DomainErrorTranslator.translate(new Error('REFRESH_AUTH.NOT_CONTAIN_NEEDED_PROPERTY'))).toStrictEqual(new InvariantError('harus mengirimkan token refresh'));
+    expect(DomainErrorTranslator.translate(new Error('REFRESH_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION'))).toStrictEqual(new InvariantError('refresh token harus string'));
 
-    expect(DomainErrorTranslator.translate(new Error('LOGOUT_USER_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN'))).toStrictEqual(new InvariantError('harus mengirimkan token refresh'));
-    expect(DomainErrorTranslator.translate(new Error('LOGOUT_USER_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION'))).toStrictEqual(new InvariantError('refresh token harus string'));
+    expect(DomainErrorTranslator.translate(new Error('LOGOUT_AUTH.NOT_CONTAIN_NEEDED_PROPERTY'))).toStrictEqual(new InvariantError('harus mengirimkan token refresh'));
+    expect(DomainErrorTranslator.translate(new Error('LOGOUT_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION'))).toStrictEqual(new InvariantError('refresh token harus string'));
 
     expect(DomainErrorTranslator.translate(new Error('ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY'))).toStrictEqual(new InvariantError('tidak dapat membuat thread baru karena properti yang dibutuhkan tidak ada'));
     expect(DomainErrorTranslator.translate(new Error('ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION'))).toStrictEqual(new InvariantError('tidak dapat membuat thread baru karena tipe data tidak sesuai'));

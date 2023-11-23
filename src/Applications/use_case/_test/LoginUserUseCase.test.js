@@ -25,12 +25,12 @@ describe('GetAuthenticationUseCase', () => {
     const mockAuthenticationTokenManager = new AuthenticationTokenManager();
     const mockPasswordHash = new PasswordHash();
 
-    mockUserRepository.getPasswordByUsername = jest.fn().mockImplementation(() => Promise.resolve('encrypted_password'));
-    mockPasswordHash.comparePassword = jest.fn().mockImplementation(() => Promise.resolve());
-    mockAuthenticationTokenManager.createAccessToken = jest.fn().mockImplementation(() => Promise.resolve('access_token'));
-    mockAuthenticationTokenManager.createRefreshToken = jest.fn().mockImplementation(() => Promise.resolve('refresh_token'));
-    mockUserRepository.getIdByUsername = jest.fn().mockImplementation(() => Promise.resolve('user-123'));
-    mockAuthenticationRepository.addToken = jest.fn().mockImplementation(() => Promise.resolve());
+    mockUserRepository.getPasswordByUsername = jest.fn(() => Promise.resolve('encrypted_password'));
+    mockPasswordHash.comparePassword = jest.fn(() => Promise.resolve());
+    mockAuthenticationTokenManager.createAccessToken = jest.fn(() => Promise.resolve('access_token'));
+    mockAuthenticationTokenManager.createRefreshToken = jest.fn(() => Promise.resolve('refresh_token'));
+    mockUserRepository.getIdByUsername = jest.fn(() => Promise.resolve('user-123'));
+    mockAuthenticationRepository.addToken = jest.fn(() => Promise.resolve());
 
     const loginUserUseCase = new LoginUserUseCase({
       userRepository: mockUserRepository,
@@ -40,10 +40,10 @@ describe('GetAuthenticationUseCase', () => {
     });
 
     // Action
-    const loggedIn = await loginUserUseCase.execute(mockUserLogin);
+    const loggedIn = await loginUserUseCase.execute(useCasePayload);
 
     // Assert
-    expect(mockUserRepository.getIdByUsername).toBeCalledWith(mockUserLogin.username);
+    expect(mockUserRepository.getPasswordByUsername).toBeCalledWith(mockUserLogin.username);
     expect(mockPasswordHash.comparePassword).toBeCalledWith(mockUserLogin.password, 'encrypted_password');
     expect(mockAuthenticationTokenManager.createAccessToken).toBeCalledWith({ id: 'user-123', username: mockUserLogin.username });
     expect(mockAuthenticationTokenManager.createRefreshToken).toBeCalledWith({ id: 'user-123', username: mockUserLogin.username });

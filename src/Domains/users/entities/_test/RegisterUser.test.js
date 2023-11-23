@@ -5,8 +5,8 @@ describe('a RegisterUser entities', () => {
   it('should throw error when payload did not contain needed property', () => {
     // Arrange
     const payload = {
-      username: 'abc',
-      password: 'abc',
+      username: 'sandy',
+      password: 'secret',
     };
 
     // Action & Assert
@@ -18,7 +18,7 @@ describe('a RegisterUser entities', () => {
     const payload = {
       username: 123,
       fullname: true,
-      password: 'abc',
+      password: 'secret',
     };
 
     // Action & Assert
@@ -28,9 +28,9 @@ describe('a RegisterUser entities', () => {
   it('should throw error when username contains more than 50 character', () => {
     // Arrange
     const payload = {
-      username: 'dicodingindonesiadicodingindonesiadicodingindonesiadicoding',
-      fullname: 'Dicoding Indonesia',
-      password: 'abc',
+      username: 'sandysandysandysandysandysandysandysandysandysandysandysandy',
+      fullname: 'Sandy Dwi',
+      password: 'secret',
     };
 
     // Action & Assert
@@ -40,9 +40,9 @@ describe('a RegisterUser entities', () => {
   it('should throw error when username contains restricted character', () => {
     // Arrange
     const payload = {
-      username: 'dico ding',
-      fullname: 'dicoding',
-      password: 'abc',
+      username: 'san dy',
+      fullname: 'Sandy Dwi',
+      password: 'secret',
     };
 
     // Action & Assert
@@ -52,9 +52,9 @@ describe('a RegisterUser entities', () => {
   it('should create registerUser object correctly', () => {
     // Arrange
     const payload = {
-      username: 'dicoding',
-      fullname: 'Dicoding Indonesia',
-      password: 'abc',
+      username: 'sandy',
+      fullname: 'Sandy Dwi',
+      password: 'secret',
     };
 
     // Action
