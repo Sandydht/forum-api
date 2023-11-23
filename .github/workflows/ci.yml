@@ -48,8 +48,6 @@ jobs:
       run: npm install
     - name: Eslint
       run: npm run lint
-    - name: Connect to PostgreSQL
-      run: 
     - name: npm migrate and test
       run: npm run migrate up && npm run test
       env:
