@@ -131,3 +131,6 @@ dist
 
 # Key
 forum-api.pem
+
+# Database config
+config/database

@@ -21,7 +21,7 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: 'Sandy Dwi',
       };
-      // eslint-disable-next-line no-undef
+
       const server = await createServer(container);
 
       // Action
@@ -36,6 +36,9 @@ describe('/users endpoint', () => {
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
       expect(responseJson.data.addedUser).toBeDefined();
+      expect(responseJson.data.addedUser.id).toBeDefined();
+      expect(responseJson.data.addedUser.username).toEqual(requestPayload.username);
+      expect(responseJson.data.addedUser.fullname).toEqual(requestPayload.fullname);
     });
 
     it('should response 400 when request payload not contain needed property', async () => {
@@ -44,6 +47,7 @@ describe('/users endpoint', () => {
         fullname: 'Sandy Dwi',
         password: 'secret',
       };
+
       const server = await createServer(container);
 
       // Action
@@ -67,6 +71,7 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: ['Sandy Dwi'],
       };
+
       const server = await createServer(container);
 
       // Action
@@ -90,6 +95,7 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: 'Sandy Dwi',
       };
+
       const server = await createServer(container);
 
       // Action
@@ -113,6 +119,7 @@ describe('/users endpoint', () => {
         password: 'secret',
         fullname: 'Sandy Dwi',
       };
+
       const server = await createServer(container);
 
       // Action
@@ -137,6 +144,7 @@ describe('/users endpoint', () => {
         fullname: 'Sandy Dwi',
         password: 'secret',
       };
+
       const server = await createServer(container);
 
       // Action

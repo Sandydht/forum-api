@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
-const RegisterUser = require('../../../Domains/users/entities/RegisterUser');
-const RegisteredUser = require('../../../Domains/users/entities/RegisteredUser');
 const pool = require('../../database/postgres/pool');
 const UserRepositoryPostgres = require('../UserRepositoryPostgres');
 
@@ -37,16 +35,17 @@ describe('UserRepositoryPostgres', () => {
   describe('addUser function', () => {
     it('should persist register user and return registered user correctly', async () => {
       // Arrange
-      const registerUser = new RegisterUser({
+      const payload = {
         username: 'sandy',
-        password: 'secret',
         fullname: 'Sandy Dwi',
-      });
-      const fakeIdGenerator = () => '123'; // stub!
+        password: 'secret',
+      };
+
+      const fakeIdGenerator = () => '123';
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await userRepositoryPostgres.addUser(registerUser);
+      await userRepositoryPostgres.addUser(payload);
 
       // Assert
       const users = await UsersTableTestHelper.findUsersById('user-123');
@@ -55,45 +54,46 @@ describe('UserRepositoryPostgres', () => {
 
     it('should return registered user correctly', async () => {
       // Arrange
-      const registerUser = new RegisterUser({
+      const payload = {
         username: 'sandy',
-        password: 'secret',
         fullname: 'Sandy Dwi',
-      });
-      const fakeIdGenerator = () => '123'; // stub!
+        password: 'secret',
+      };
+
+      const fakeIdGenerator = () => '123';
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      const registeredUser = await userRepositoryPostgres.addUser(registerUser);
+      const registeredUser = await userRepositoryPostgres.addUser(payload);
 
       // Assert
-      expect(registeredUser).toStrictEqual(new RegisteredUser({
-        id: 'user-123',
-        username: registerUser.username,
-        fullname: registerUser.fullname,
-      }));
+      expect(registeredUser.id).toEqual('user-123');
+      expect(registeredUser.username).toEqual(payload.username);
+      expect(registeredUser.fullname).toEqual(payload.fullname);
     });
   });
 
   describe('getPasswordByUsername function', () => {
-    it('should throw InvariantError when user not found', () => {
+    it('should throw InvariantError when user not found', async () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
       // Action & Assert
-      return expect(userRepositoryPostgres.getPasswordByUsername('sandy')).rejects.toThrowError(InvariantError);
+      await expect(userRepositoryPostgres.getPasswordByUsername('sandy')).rejects.toThrowError(InvariantError);
     });
 
-    it('should return username password when user is found', async () => {
+    it('should return password when user is found', async () => {
       // Arrange
-      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
       await UsersTableTestHelper.addUser({
         username: 'sandy',
         password: 'secret',
       });
+      const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
-      // Action & Assert
+      // Action
       const password = await userRepositoryPostgres.getPasswordByUsername('sandy');
+
+      // Assert
       expect(password).toBe('secret');
     });
   });

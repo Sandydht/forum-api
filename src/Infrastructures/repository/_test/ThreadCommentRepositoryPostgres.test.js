@@ -4,8 +4,6 @@ const pool = require('../../database/postgres/pool');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper');
-const AddThreadComment = require('../../../Domains/thread_comments/entities/AddThreadComment');
-const AddedThreadComment = require('../../../Domains/thread_comments/entities/AddedThreadComment');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 
@@ -25,14 +23,15 @@ describe('ThreadCommentRepositoryPostgres', () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      const addThreadComment = new AddThreadComment({
+      const payload = {
         content: 'sebuah comment',
-      });
+      };
+
       const fakeIdGenerator = () => '123';
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', addThreadComment);
+      await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', payload);
 
       // Assert
       const comments = await ThreadCommentsTableTestHelper.findThreadCommentById('comment-123');
@@ -43,22 +42,21 @@ describe('ThreadCommentRepositoryPostgres', () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      const addThreadComment = new AddThreadComment({
+      const payload = {
         content: 'sebuah comment',
-      });
+      };
+
       const fakeIdGenerator = () => '123';
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      const addedComment = await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', addThreadComment);
+      const addedComment = await threadCommentRepositoryPostgres.addThreadComment('user-123', 'thread-123', payload);
 
       // Assert
       expect(threadCommentRepositoryPostgres).toBeInstanceOf(ThreadCommentRepositoryPostgres);
-      expect(addedComment).toStrictEqual(new AddedThreadComment({
-        id: 'comment-123',
-        content: 'sebuah comment',
-        owner: 'user-123',
-      }));
+      expect(addedComment.id).toEqual('comment-123');
+      expect(addedComment.content).toEqual(payload.content);
+      expect(addedComment.user_id).toEqual('user-123');
     });
   });
 
@@ -148,17 +146,18 @@ describe('ThreadCommentRepositoryPostgres', () => {
         threadId: 'thread-123',
         userId: 'user-123',
         createdAt: new Date('2023-11-14T13:00:00.000Z'),
+        content: 'sebuah comment',
+        isDelete: false,
       });
       await ThreadCommentsTableTestHelper.addThreadComment({
         id: 'comment-234',
         threadId: 'thread-123',
         userId: 'user-123',
         createdAt: new Date('2023-11-14T12:00:00.000Z'),
+        content: 'sebuah comment',
+        isDelete: true,
       });
       const threadCommentRepositoryPostgres = new ThreadCommentRepositoryPostgres(pool, {});
-
-      // Delete comment
-      await ThreadCommentsTableTestHelper.softDeleteThreadCommentById('comment-234');
 
       // Action
       const comments = await threadCommentRepositoryPostgres.getThreadCommentsByThreadId('thread-123');
@@ -170,13 +169,15 @@ describe('ThreadCommentRepositoryPostgres', () => {
       const [comment1, comment2] = comments;
       expect(comment1.id).toEqual('comment-234');
       expect(comment1.username).toEqual('sandy');
-      expect(comment1.date).toEqual(new Date('2023-11-14T12:00:00.000Z').toISOString());
-      expect(comment1.content).toEqual('**komentar telah dihapus**');
+      expect(new Date(comment1.created_at).toISOString()).toEqual(new Date('2023-11-14T12:00:00.000Z').toISOString());
+      expect(comment1.content).toEqual('sebuah comment');
+      expect(comment1.is_delete).toEqual(true);
 
       expect(comment2.id).toEqual('comment-123');
       expect(comment2.username).toEqual('sandy');
-      expect(comment2.date).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
+      expect(new Date(comment2.created_at).toISOString()).toEqual(new Date('2023-11-14T13:00:00.000Z').toISOString());
       expect(comment2.content).toEqual('sebuah comment');
+      expect(comment2.is_delete).toEqual(false);
     });
   });
 });

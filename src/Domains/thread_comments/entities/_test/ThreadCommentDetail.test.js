@@ -8,7 +8,6 @@ describe('a ThreadCommentDetail entities', () => {
       id: 'comment-123',
       username: 'sandy',
       date: new Date('2023-10-14'),
-      content: 'sebuah comment',
     };
 
     // Action & Assert

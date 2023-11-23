@@ -31,8 +31,6 @@ const ThreadCommentReplyRepositoryPostgres = require('./repository/ThreadComment
 const DeleteThreadCommentUseCase = require('../Applications/use_case/DeleteThreadCommentUseCase');
 const DeleteThreadCommentReplyUseCase = require('../Applications/use_case/DeleteThreadCommentReplyUseCase');
 const GetThreadDetailUseCase = require('../Applications/use_case/GetThreadDetailUseCase');
-const GetThreadCommentByThreadUseCase = require('../Applications/use_case/GetThreadCommentByThreadUseCase');
-const GetThreadCommentRepliesByCommentUseCase = require('../Applications/use_case/GetThreadCommentRepliesCommentUseCase');
 
 const container = createContainer();
 
@@ -300,32 +298,6 @@ container.register([
           name: 'threadRepository',
           internal: ThreadRepository.name,
         },
-      ],
-    },
-  },
-  {
-    key: GetThreadCommentByThreadUseCase.name,
-    Class: GetThreadCommentByThreadUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
-        {
-          name: 'threadRepository',
-          internal: ThreadRepository.name,
-        },
-        {
-          name: 'threadCommentRepository',
-          internal: ThreadCommentRepository.name,
-        },
-      ],
-    },
-  },
-  {
-    key: GetThreadCommentRepliesByCommentUseCase.name,
-    Class: GetThreadCommentRepliesByCommentUseCase,
-    parameter: {
-      injectType: 'destructuring',
-      dependencies: [
         {
           name: 'threadCommentRepository',
           internal: ThreadCommentRepository.name,
