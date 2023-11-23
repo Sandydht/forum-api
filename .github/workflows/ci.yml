@@ -24,7 +24,6 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
           POSTGRES_USER: developer
           POSTGRES_PASSWORD: password
@@ -44,6 +43,10 @@ jobs:
         run: |
           apt-get update
           apt-get install --yes postgresql-client
+      - name: Setup database
+        run: psql -h postgres -U developer -c 'CREATE DATABASE "forumapi_test";'
+        env:
+          PGPASSWORD: password
       - name: Checkout repository code
         uses: actions/checkout@v2
         with:
@@ -60,7 +63,6 @@ jobs:
         run: npm run migrate up && npm run test
         env:
           CI: true
-          PGHOST_TEST: localhost
           PGPORT_TEST: 5432
           PGUSER_TEST: developer
           PGPASSWORD_TEST: password
