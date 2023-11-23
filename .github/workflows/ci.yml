@@ -43,8 +43,8 @@ jobs:
         run: |
           apt-get update
           apt-get install --yes postgresql-client
-      - name: Setup database
-        run: psql --username postgres --password password -c 'CREATE DATABASE "forumapi_test";'
+      - name: Query database
+        run: psql -h postgres -d forumapi_test -U developer -c 'SELECT 1;'
         env:
           PGPASSWORD: password
       - name: Checkout repository code
