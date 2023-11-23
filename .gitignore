@@ -133,4 +133,4 @@ dist
 forum-api.pem
 
 # Database config
-config/database
+config
