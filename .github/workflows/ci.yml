@@ -60,7 +60,7 @@ jobs:
       - name: Eslint
         run: npm run lint
       - name: npm migrate and test
-        run: npm run migrate up && npm run test
+        run: npm run migrate:test up && npm run test
         env:
           CI: true
           PGHOST_TEST: postgres
