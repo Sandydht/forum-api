@@ -19,7 +19,7 @@ jobs:
   test:
     needs: commitlint
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
+    container: node:latest
     services:
       postgres:
         image: postgres
