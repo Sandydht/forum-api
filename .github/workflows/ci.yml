@@ -24,10 +24,9 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_PORT: 5432
-          POSTGRES_USER: developer
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: forumapi_test
+          POSTGRES_USER: ${{ secrets.PGUSER_TEST }}
+          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD_TEST }}
+          POSTGRES_DB: ${{ secrets.PGDATABASE_TEST }}
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -39,14 +38,6 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-      - name: Install PostgreSQL client
-        run: |
-          apt-get update
-          apt-get install --yes postgresql-client
-      - name: Query database
-        run: psql -h postgres -d forumapi_test -U developer -c 'SELECT 1;'
-        env:
-          PGPASSWORD: password
       - name: Checkout repository code
         uses: actions/checkout@v2
         with:
@@ -60,13 +51,18 @@ jobs:
       - name: Eslint
         run: npm run lint
       - name: npm migrate and test
-        run: npm run migrate:test up && npm run test
+        run: npm run migrate up && npm run test
         env:
           CI: true
-          PGHOST_TEST: postgres
-          PGPORT_TEST: 5432
-          PGUSER_TEST: developer
-          PGPASSWORD_TEST: password
-          PGDATABASE_TEST: forumapi_test
+          PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
+          PGPORT_TEST: ${{ secrets.PGPORT_TEST }}
+          PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
+          PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
+          PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
+          PGHOST: ${{ secrets.PGHOST_TEST }}
+          PGPORT: ${{ secrets.PGPORT_TEST }}
+          PGUSER: ${{ secrets.PGUSER_TEST }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
+          PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
           ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
           REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
