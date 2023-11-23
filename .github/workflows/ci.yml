@@ -52,15 +52,10 @@ jobs:
       run: npm run migrate up && npm run test
       env:
         CI: true
-    #     PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
-    #     PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
-    #     PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
-    #     PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
-    #     PGPORT_TEST: ${{ secrets.PGPORT_TEST }}
-    #     PGHOST: ${{ secrets.PGHOST_TEST }}
-        PGUSER: password
-        PGDATABASE: forumapi_test
-        PGPASSWORD: password
-        PGPORT: 5432
+        PGHOST_TEST: localhost
+        PGPORT_TEST: 5432
+        PGUSER_TEST: postgres
+        PGPASSWORD_TEST: password
+        PGDATABASE_TEST: forumapi_test
         ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
         REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
