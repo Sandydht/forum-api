@@ -63,6 +63,7 @@ jobs:
         run: npm run migrate up && npm run test
         env:
           CI: true
+          PGHOST_TEST: postgres
           PGPORT_TEST: 5432
           PGUSER_TEST: developer
           PGPASSWORD_TEST: password
