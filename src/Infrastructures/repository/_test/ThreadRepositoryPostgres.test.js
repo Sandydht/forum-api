@@ -15,10 +15,13 @@ describe('ThreadRepositoryPostgres', () => {
     await UsersTableTestHelper.cleanTable();
   });
 
+  beforeEach(async () => {
+    await UsersTableTestHelper.addUser({ id: 'user-123' });
+  });
+
   describe('addThread function', () => {
     it('should persist add thread and return added thread correctly', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
       const payload = {
         title: 'sebuah thread',
         body: 'sebuah body thread',
@@ -37,7 +40,6 @@ describe('ThreadRepositoryPostgres', () => {
 
     it('should return added thread correctly', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
       const payload = {
         title: 'sebuah thread',
         body: 'sebuah body thread',
@@ -68,7 +70,6 @@ describe('ThreadRepositoryPostgres', () => {
 
     it('should not throw NotFoundError when thread available', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
@@ -80,7 +81,6 @@ describe('ThreadRepositoryPostgres', () => {
   describe('getThreadById function', () => {
     it('should throw NotFoundError when thread not found', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & Assert
@@ -89,7 +89,6 @@ describe('ThreadRepositoryPostgres', () => {
 
     it('should return thread detail when thread is found', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
       await ThreadsTableTestHelper.addThread({
         id: 'thread-123',
         title: 'sebuah thread',

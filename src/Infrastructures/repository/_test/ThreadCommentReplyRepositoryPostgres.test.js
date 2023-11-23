@@ -20,12 +20,15 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
     await UsersTableTestHelper.cleanTable();
   });
 
+  beforeEach(async () => {
+    await UsersTableTestHelper.addUser({ id: 'user-123' });
+    await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
+    await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
+  });
+
   describe('addThreadCommentReply function', () => {
     it('should persist add thread comment reply and return added thread comment reply correctly', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       const payload = {
         content: 'sebuah balasan',
       };
@@ -43,9 +46,6 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
 
     it('should return added thread comment reply correctly', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       const payload = {
         content: 'sebuah balasan',
       };
@@ -67,9 +67,6 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
   describe('verifyAvailableThreadCommentReplyByUser function', () => {
     it('should throw AuthorizationError when thread comment reply not available', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
 
       // Action & Assert
@@ -78,9 +75,6 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
 
     it('should not throw AuthorizationError when thread comment reply available', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
         id: 'reply-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
       });
@@ -94,9 +88,6 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
   describe('verifyAvailableThreadCommentReply function', () => {
     it('should throw NotFoundError when thread comment reply not available', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
 
       // Action & Assert
@@ -105,9 +96,6 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
 
     it('should not throw NotFoundError when thread comment reply available', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
         id: 'reply-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
       });
@@ -121,9 +109,6 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
   describe('deleteThreadCommentReply function', () => {
     it('should update thread comment reply', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
         id: 'reply-123', threadId: 'thread-123', commentId: 'comment-123', userId: 'user-123',
       });
@@ -142,9 +127,6 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
   describe('getThreadCommentRepliesByCommentId function', () => {
     it('should return empty array when replies not found', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       const threadCommentReplyRepositoryPostgres = new ThreadCommentReplyRepositoryPostgres(pool, {});
 
       // Action
@@ -157,9 +139,6 @@ describe('ThreadCommentReplyRepositoryPostgres', () => {
 
     it('should return replies correctly', async () => {
       // Arrange
-      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'sandy' });
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', userId: 'user-123' });
-      await ThreadCommentsTableTestHelper.addThreadComment({ id: 'comment-123', threadId: 'thread-123', userId: 'user-123' });
       await ThreadCommentRepliesTableTestHelper.addThreadCommentReply({
         id: 'reply-123',
         threadId: 'thread-123',

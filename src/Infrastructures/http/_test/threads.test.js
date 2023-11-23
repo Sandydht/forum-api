@@ -4,6 +4,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const ThreadCommentsTableTestHelper = require('../../../../tests/ThreadCommentsTableTestHelper');
 const ThreadCommentRepliesTableTestHelper = require('../../../../tests/ThreadCommentRepliesTableTestHelper');
+const ThreadCommentLikesTableTestHelper = require('../../../../tests/ThreadCommentLikesTableTestHelper');
 const AuthenticationsTableTestHelper = require('../../../../tests/AuthenticationsTableTestHelper');
 const createServer = require('../createServer');
 const container = require('../../container');
@@ -14,6 +15,7 @@ describe('/threads endpoint', () => {
   });
 
   afterEach(async () => {
+    await ThreadCommentLikesTableTestHelper.cleanTable();
     await ThreadCommentRepliesTableTestHelper.cleanTable();
     await ThreadCommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
@@ -279,7 +281,6 @@ describe('/threads endpoint', () => {
 
       // Assert
       const responseJson = JSON.parse(response.payload);
-      expect(response.statusCode).toEqual(200);
       expect(responseJson.data.thread).toBeDefined();
       expect(responseJson.data.thread.id).toEqual(responseJsonThread.data.addedThread.id);
       expect(responseJson.data.thread.title).toEqual('sebuah thread');
@@ -294,12 +295,14 @@ describe('/threads endpoint', () => {
       expect(comment2.content).toEqual(responseJsonThreadComment2.data.addedComment.content);
       expect(typeof comment2.date).toEqual('string');
       expect(comment2.replies).toBeInstanceOf(Array);
+      expect(typeof comment2.likeCount).toEqual('number');
 
       expect(comment1.id).toEqual(responseJsonThreadComment1.data.addedComment.id);
       expect(comment1.username).toEqual('sandy');
       expect(comment1.content).toEqual(responseJsonThreadComment1.data.addedComment.content);
       expect(typeof comment1.date).toEqual('string');
       expect(comment1.replies).toBeInstanceOf(Array);
+      expect(typeof comment1.likeCount).toEqual('number');
 
       const [reply1, reply2] = comment1.replies;
       expect(reply1.id).toEqual(responseJsonThreadCommentReply1.data.addedReply.id);

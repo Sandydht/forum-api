@@ -6,6 +6,7 @@ const ThreadCommentReplyRepository = require('../../../Domains/thread_comment_re
 const ThreadDetail = require('../../../Domains/threads/entities/ThreadDetail');
 const ThreadCommentDetail = require('../../../Domains/thread_comments/entities/ThreadCommentDetail');
 const ThreadCommentReplyDetail = require('../../../Domains/thread_comment_replies/entities/ThreadCommentReplyDetail');
+const ThreadCommentLikeRepository = require('../../../Domains/thread_comment_likes/ThreadCommentLikeRepository');
 
 describe('GetThreadDetailUseCase', () => {
   it('should orchestrating the get thread detail action correctly', async () => {
@@ -36,6 +37,7 @@ describe('GetThreadDetailUseCase', () => {
     const mockThreadRepository = new ThreadRepository();
     const mockThreadCommentRepository = new ThreadCommentRepository();
     const mockThreadCommentReplyRepository = new ThreadCommentReplyRepository();
+    const mockThreadCommentLikeRepository = new ThreadCommentLikeRepository();
 
     mockThreadRepository.getThreadById = jest.fn(() => Promise.resolve({
       id: 'thread-123',
@@ -76,11 +78,13 @@ describe('GetThreadDetailUseCase', () => {
         is_delete: true,
       },
     ]));
+    mockThreadCommentLikeRepository.getThreadCommentLikeCountByCommentId = jest.fn(() => Promise.resolve(0));
 
     const getThreadDetailUseCase = new GetThreadDetailUseCase({
       threadRepository: mockThreadRepository,
       threadCommentRepository: mockThreadCommentRepository,
       threadCommentReplyRepository: mockThreadCommentReplyRepository,
+      threadCommentLikeRepository: mockThreadCommentLikeRepository,
     });
 
     // Action
@@ -104,7 +108,9 @@ describe('GetThreadDetailUseCase', () => {
     expect(comment1.username).toEqual(mockThreadCommentDetail1.username);
     expect(comment1.date).toEqual(mockThreadCommentDetail1.date);
     expect(comment1.content).toEqual(mockThreadCommentDetail1.content);
+    expect(comment1.likeCount).toEqual(0);
     expect(mockThreadCommentReplyRepository.getThreadCommentRepliesByCommentId).toBeCalledWith(comment1.id);
+    expect(mockThreadCommentLikeRepository.getThreadCommentLikeCountByCommentId).toBeCalledWith(comment1.id);
 
     expect(comment1.replies).toBeInstanceOf(Array);
     const [comment1Reply1, comment1Reply2] = comment1.replies;
@@ -127,7 +133,9 @@ describe('GetThreadDetailUseCase', () => {
     expect(comment2.username).toEqual(mockThreadCommentDetail2.username);
     expect(comment2.date).toEqual(mockThreadCommentDetail2.date);
     expect(comment2.content).toEqual(mockThreadCommentDetail2.content);
+    expect(comment2.likeCount).toEqual(0);
     expect(mockThreadCommentReplyRepository.getThreadCommentRepliesByCommentId).toBeCalledWith(comment2.id);
+    expect(mockThreadCommentLikeRepository.getThreadCommentLikeCountByCommentId).toBeCalledWith(comment2.id);
 
     expect(comment2.replies).toBeInstanceOf(Array);
     const [comment2Reply1, comment2Reply2] = comment2.replies;
