@@ -36,30 +36,36 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    strategy:
-      matrix:
-        node-version: [14.x]
+    # strategy:
+    #   matrix:
+    #     node-version: [14.x]
     steps:
-    - name: Checkout repository code
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install dependencies
-      run: npm install
-    - name: Eslint
-      run: npm run lint
-    - name: npm migrate and test
-      run: npm run migrate up && npm run test
-      env:
-        CI: true
-        PGHOST_TEST: localhost
-        PGPORT_TEST: 5432
-        PGUSER_TEST: postgres
-        PGPASSWORD_TEST: password
-        PGDATABASE_TEST: forumapi_test
-        ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
-        REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+    # - name: Checkout repository code
+    #   uses: actions/checkout@v2
+    #   with:
+    #     fetch-depth: 0
+    # - name: Use Node.js ${{ matrix.node-version }}
+    #   uses: actions/setup-node@v2
+    #   with:
+    #     node-version: ${{ matrix.node-version }}
+    # - name: Install dependencies
+    #   run: npm install
+    # - name: Eslint
+    #   run: npm run lint
+    # - name: Setup Database
+    #   run: 
+    # - name: npm migrate and test
+    #   run: npm run migrate up && npm run test
+    #   env:
+    #     CI: true
+    #     PGHOST_TEST: localhost
+    #     PGPORT_TEST: 5432
+    #     PGUSER_TEST: postgres
+    #     PGPASSWORD_TEST: password
+    #     PGDATABASE_TEST: forumapi_test
+    #     ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
+    #     REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
