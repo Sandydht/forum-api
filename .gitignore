@@ -134,3 +134,6 @@ forum-api.pem
 
 # Database config
 config/database
+
+# Nginx config
+nginx.conf
